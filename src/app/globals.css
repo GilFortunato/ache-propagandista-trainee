@@ -1104,3 +1104,495 @@ body{min-height:100vh}
     padding-right:6vw;
   }
 }
+
+/* Potenc.IA — identidade oficial e storytelling */
+.potenciaExperience{
+  --p-bg:#070812;
+  --p-bg-soft:#0d0c1d;
+  --p-panel:#15122a;
+  --p-panel-2:#1c1537;
+  --p-violet:#7a5cff;
+  --p-purple:#4d38c8;
+  --p-cyan:#29d9ff;
+  --p-pink:#ff3f9a;
+  --p-text:#f6f4ff;
+  --p-muted:#b9b5ca;
+  min-height:100vh;
+  background:var(--p-bg);
+  color:var(--p-text);
+  overflow:hidden;
+}
+.potenciaExperienceHeader{
+  background:rgba(7,8,18,.92);
+  color:#fff;
+  border-bottom:1px solid rgba(122,92,255,.18);
+}
+.potenciaBack{
+  color:#fff;
+  border:1px solid rgba(122,92,255,.42);
+  background:rgba(122,92,255,.08);
+}
+.potenciaHeroNew{
+  min-height:calc(100vh - 84px);
+  position:relative;
+  display:flex;
+  align-items:center;
+  isolation:isolate;
+  overflow:hidden;
+}
+.potenciaHeroBg{
+  object-fit:cover;
+  object-position:center;
+  z-index:-3;
+  opacity:.96;
+}
+.potenciaHeroNew:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-2;
+  background:
+    radial-gradient(circle at 78% 45%,rgba(41,217,255,.12),transparent 26%),
+    radial-gradient(circle at 60% 75%,rgba(255,63,154,.12),transparent 32%),
+    linear-gradient(90deg,rgba(5,5,15,.15),rgba(5,5,15,.62));
+}
+.potenciaHeroInner{
+  width:min(1500px,100%);
+  margin:0 auto;
+  padding:6rem 6vw;
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  align-items:center;
+  gap:3rem;
+}
+.potenciaHeroCopyNew{
+  max-width:780px;
+}
+.potenciaOfficialLogo{
+  width:min(360px,70vw);
+  height:auto;
+  display:block;
+  margin-bottom:2rem;
+  filter:drop-shadow(0 0 22px rgba(122,92,255,.18));
+}
+.potenciaEyebrow,
+.potenciaSectionIntro>span,
+.potenciaWhatCopy>span,
+.potenciaImpactHeadline>span,
+.potenciaProject>div:first-child>span,
+.potenciaMovementCopy>span{
+  display:inline-block;
+  color:#a996ff;
+  font-size:.76rem;
+  font-weight:900;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+.potenciaHeroCopyNew h1{
+  font-size:clamp(4rem,6.8vw,7.3rem);
+  line-height:.88;
+  letter-spacing:-.055em;
+  margin:.7rem 0 1.4rem;
+  max-width:900px;
+}
+.potenciaHeroCopyNew h1 em{
+  font-style:normal;
+  background:linear-gradient(90deg,#9c87ff 0%,#35d8ff 48%,#ff4f9d 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+.potenciaLead{
+  max-width:700px;
+  color:#d0cde0;
+  font-size:1.12rem;
+  line-height:1.7;
+}
+.potenciaPrimaryCta{
+  margin-top:1.6rem;
+  display:inline-flex;
+  align-items:center;
+  gap:.6rem;
+  padding:1rem 1.25rem;
+  border-radius:999px;
+  font-weight:900;
+  color:#fff;
+  border:1px solid rgba(61,212,255,.48);
+  background:linear-gradient(90deg,rgba(122,92,255,.22),rgba(41,217,255,.12));
+  box-shadow:0 0 30px rgba(74,70,220,.13);
+}
+.potenciaHeroPeople{
+  position:relative;
+  min-height:520px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+}
+.potenciaGlow{
+  position:absolute;
+  width:480px;
+  height:480px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(48,211,255,.22),rgba(112,67,255,.14) 45%,rgba(255,62,149,.08) 62%,transparent 72%);
+  filter:blur(8px);
+}
+.potenciaWomen{
+  position:relative;
+  z-index:2;
+  width:min(520px,100%);
+  height:auto;
+  filter:drop-shadow(0 28px 60px rgba(0,0,0,.35));
+}
+.sectionPotencia{
+  padding:7rem 7vw;
+}
+.potenciaSectionIntro{
+  max-width:980px;
+  margin-bottom:2.7rem;
+}
+.potenciaSectionIntro h2,
+.potenciaWhatCopy h2,
+.potenciaImpactHeadline h2,
+.potenciaProject h2,
+.potenciaMovementCopy h2{
+  font-size:clamp(2.8rem,5vw,5.5rem);
+  line-height:.94;
+  letter-spacing:-.045em;
+  margin:.75rem 0 1.2rem;
+}
+.potenciaSectionIntro p,
+.potenciaWhatCopy p,
+.potenciaImpactHeadline p,
+.potenciaProject>div:first-child>p,
+.potenciaMovementCopy p{
+  color:var(--p-muted);
+  font-size:1.08rem;
+  line-height:1.7;
+  max-width:850px;
+}
+.potenciaWhy{
+  background:
+    radial-gradient(circle at 90% 0,rgba(122,92,255,.13),transparent 28%),
+    var(--p-bg);
+}
+.potenciaWhyGrid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1rem;
+}
+.potenciaWhyGrid article{
+  min-height:290px;
+  padding:1.6rem;
+  border-radius:24px;
+  background:linear-gradient(155deg,rgba(29,23,57,.94),rgba(13,13,31,.96));
+  border:1px solid rgba(122,92,255,.22);
+}
+.potenciaCardIcon{
+  width:54px;
+  height:54px;
+  border-radius:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#081018;
+  background:linear-gradient(135deg,#7c66ff,#30dfff);
+  margin-bottom:1.3rem;
+}
+.potenciaWhyGrid h3{
+  font-size:1.35rem;
+  margin:.3rem 0 .7rem;
+}
+.potenciaWhyGrid p{
+  color:#bcb8cc;
+  line-height:1.6;
+}
+.potenciaWhat{
+  display:grid;
+  grid-template-columns:.85fr 1.15fr;
+  gap:4rem;
+  align-items:center;
+  background:linear-gradient(180deg,#090a14,#0d0b1c);
+}
+.potenciaWhatVisual{
+  min-height:470px;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.potenciaOrbit{
+  position:absolute;
+  border-radius:50%;
+  border:1px solid rgba(71,210,255,.18);
+}
+.orbitA{width:420px;height:420px}
+.orbitB{width:290px;height:290px;border-color:rgba(255,70,155,.18)}
+.potenciaWhatCenter{
+  width:240px;
+  height:240px;
+  border-radius:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(21,18,42,.82);
+  border:1px solid rgba(122,92,255,.3);
+  box-shadow:0 0 70px rgba(97,69,255,.14);
+  backdrop-filter:blur(12px);
+}
+.potenciaWhatCenter img{
+  width:190px;
+  height:auto;
+}
+.potenciaWhatCopy strong{color:#fff}
+.potenciaPillRow{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.65rem;
+  margin-top:1.4rem;
+}
+.potenciaPillRow span{
+  display:flex;
+  align-items:center;
+  gap:.45rem;
+  padding:.75rem .9rem;
+  border-radius:999px;
+  background:#17132c;
+  border:1px solid rgba(122,92,255,.22);
+  color:#d7d2e7;
+  font-size:.9rem;
+  font-weight:800;
+}
+.potenciaPillRow svg{color:#8f7cff}
+.potenciaImpactNew{
+  display:grid;
+  grid-template-columns:.9fr 1.1fr;
+  gap:3rem;
+  align-items:center;
+  background:
+    radial-gradient(circle at 15% 45%,rgba(55,217,255,.11),transparent 30%),
+    linear-gradient(145deg,#0c1020,#120b25);
+}
+.potenciaImpactHeadline>strong{
+  display:block;
+  font-size:clamp(6rem,12vw,12rem);
+  line-height:.78;
+  letter-spacing:-.07em;
+  margin:1.4rem 0 .8rem;
+  background:linear-gradient(90deg,#fff,#8d78ff 52%,#38dfff);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+.potenciaImpactHeadline h2{
+  font-size:clamp(2rem,3vw,3.5rem);
+  margin:.4rem 0 1rem;
+}
+.potenciaImpactCards{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:1rem;
+}
+.potenciaImpactCards article{
+  padding:1.5rem 1.7rem;
+  border-radius:22px;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(122,92,255,.2);
+}
+.potenciaImpactCards span{
+  display:block;
+  font-size:2.8rem;
+  font-weight:900;
+  color:#9c88ff;
+  margin-bottom:.4rem;
+}
+.potenciaImpactCards svg{color:#37dfff;margin-bottom:.7rem}
+.potenciaImpactCards p{
+  color:#beb9ce;
+  line-height:1.55;
+  margin:0;
+}
+.potenciaLevelsNew{
+  background:#080912;
+}
+.potenciaLevelGridNew{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1rem;
+}
+.potenciaLevelGridNew article{
+  padding:1.6rem;
+  border-radius:24px;
+  background:linear-gradient(155deg,#1d1739,#100d20);
+  border:1px solid rgba(122,92,255,.25);
+}
+.potenciaLevelTop{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1rem;
+}
+.potenciaLevelTop>span{
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#6c51ec;
+  font-weight:900;
+}
+.potenciaLevelTop small{
+  color:#a99cff;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.09em;
+}
+.potenciaLevelGridNew h3{
+  font-size:1.6rem;
+  margin:1.2rem 0 .6rem;
+}
+.potenciaLevelGridNew>article>p{
+  color:#b8b4c8;
+  line-height:1.55;
+  min-height:75px;
+}
+.potenciaLevelGridNew ul{
+  list-style:none;
+  padding:0;
+  margin:1.3rem 0 0;
+}
+.potenciaLevelGridNew li{
+  display:flex;
+  gap:.55rem;
+  align-items:flex-start;
+  color:#dedbea;
+  margin:.7rem 0;
+  line-height:1.4;
+}
+.potenciaLevelGridNew li svg{
+  flex:0 0 auto;
+  color:#33d7ff;
+  margin-top:.08rem;
+}
+.potenciaJourneyNew{
+  background:linear-gradient(180deg,#0b0c18,#0f0b21);
+}
+.potenciaJourneyRailNew{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1rem;
+}
+.potenciaJourneyRailNew article{
+  min-height:220px;
+  padding:1.5rem;
+  border-radius:22px;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(122,92,255,.19);
+}
+.potenciaJourneyRailNew article>span{
+  color:#7d68fa;
+  font-weight:900;
+}
+.potenciaJourneyRailNew h3{
+  font-size:1.25rem;
+  margin:1rem 0 .55rem;
+}
+.potenciaJourneyRailNew p{
+  color:#b9b5ca;
+  line-height:1.55;
+}
+.potenciaProject{
+  display:grid;
+  grid-template-columns:.85fr 1.15fr;
+  gap:3rem;
+  align-items:center;
+  background:
+    radial-gradient(circle at 100% 50%,rgba(255,58,153,.12),transparent 32%),
+    #080912;
+}
+.potenciaProjectSteps{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:1rem;
+}
+.potenciaProjectSteps article{
+  padding:1.4rem;
+  min-height:170px;
+  border-radius:22px;
+  background:linear-gradient(150deg,#19132f,#111020);
+  border:1px solid rgba(122,92,255,.2);
+}
+.potenciaProjectSteps span{
+  color:#8f7cff;
+  text-transform:uppercase;
+  font-size:.72rem;
+  font-weight:900;
+  letter-spacing:.1em;
+}
+.potenciaProjectSteps strong{
+  display:block;
+  font-size:1.35rem;
+  margin:.75rem 0 .4rem;
+}
+.potenciaProjectSteps p{
+  color:#b7b3c6;
+  margin:0;
+}
+.potenciaMovement{
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:3rem;
+  align-items:center;
+  background:linear-gradient(145deg,#171034,#090914);
+}
+.potenciaMovementQuote{
+  padding:2rem;
+  border-radius:26px;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(122,92,255,.22);
+}
+.potenciaMovementQuote img{
+  width:210px;
+  height:auto;
+  margin-bottom:1.5rem;
+}
+.potenciaMovementQuote blockquote{
+  margin:0;
+  font-size:1.55rem;
+  line-height:1.35;
+  color:#fff;
+}
+@media(max-width:1100px){
+  .potenciaHeroInner,
+  .potenciaWhat,
+  .potenciaImpactNew,
+  .potenciaProject,
+  .potenciaMovement{
+    grid-template-columns:1fr;
+  }
+  .potenciaHeroPeople{
+    min-height:360px;
+  }
+  .potenciaWhyGrid,
+  .potenciaLevelGridNew,
+  .potenciaJourneyRailNew{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+@media(max-width:720px){
+  .sectionPotencia{padding:4.5rem 6vw}
+  .potenciaHeroInner{padding:4.5rem 6vw}
+  .potenciaHeroCopyNew h1{font-size:clamp(3.5rem,15vw,5.2rem)}
+  .potenciaHeroPeople{min-height:260px}
+  .potenciaWhyGrid,
+  .potenciaLevelGridNew,
+  .potenciaJourneyRailNew,
+  .potenciaProjectSteps{
+    grid-template-columns:1fr;
+  }
+  .potenciaWhatVisual{min-height:340px}
+  .orbitA{width:300px;height:300px}
+  .orbitB{width:210px;height:210px}
+  .potenciaWhatCenter{width:190px;height:190px}
+  .potenciaImpactHeadline>strong{font-size:7rem}
+}
