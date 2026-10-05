@@ -1596,3 +1596,20 @@ body{min-height:100vh}
   .potenciaWhatCenter{width:190px;height:190px}
   .potenciaImpactHeadline>strong{font-size:7rem}
 }
+
+/* Logo Aché com assinatura nos headers */
+.acheHeaderLogo{
+  width:140px;
+  height:auto;
+  display:block;
+  object-fit:contain;
+  flex:0 0 auto;
+}
+.potenciaExperienceHeader .acheHeaderLogo{
+  width:145px;
+}
+@media(max-width:700px){
+  .acheHeaderLogo{
+    width:118px;
+  }
+}
