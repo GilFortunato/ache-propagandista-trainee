@@ -343,3 +343,54 @@ body{min-height:100vh}
   .acheSectionNav{justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap}
   .acheSectionNav a{white-space:nowrap}
 }
+
+/* Vagas / Trabalhe no Aché */
+.vagasLanding{background:#fff8fb;color:var(--ink)}
+.vagasHeader{background:rgba(255,255,255,.95);border-bottom:1px solid rgba(176,24,103,.1)}
+.vagasHeader .backNexus{background:#fff;border:1px solid rgba(176,24,103,.18);color:var(--wine)}
+.vagasHero{padding-top:6.2rem;padding-bottom:4.2rem;background:linear-gradient(145deg,#fff 0%,#fff0f6 70%,#ffe8df 100%)}
+.vagasHeroCopy{max-width:900px}
+.vagasHero h1{font-size:clamp(4rem,7vw,7.2rem);line-height:.9;letter-spacing:-.055em;margin:.6rem 0 1.2rem}
+.vagasHero h1 span{color:var(--magenta)}
+.vagasHero p{max-width:720px;font-size:1.15rem;line-height:1.65;color:var(--muted)}
+.vagasEntry{padding-top:3rem;background:#fff}
+.vagasCards{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;max-width:1180px;margin:0 auto}
+.vagaChoice{min-height:330px;border-radius:28px;padding:1.8rem;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;position:relative;overflow:hidden;transition:.22s ease}
+.vagaChoice.active{background:linear-gradient(145deg,#b01867 0%,#d92d69 62%,#f47a35 100%);color:#fff;box-shadow:0 22px 55px rgba(176,24,103,.18)}
+.vagaChoice.active:hover{transform:translateY(-5px);box-shadow:0 28px 65px rgba(176,24,103,.24)}
+.vagaChoice.exclusive{background:linear-gradient(145deg,#fff3f7,#fff9fb);border:1px solid #efd7e2;color:var(--wine)}
+.vagaChoiceIcon{width:58px;height:58px;border-radius:18px;display:flex;align-items:center;justify-content:center;margin-bottom:1.4rem}
+.vagaChoice.active .vagaChoiceIcon{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2)}
+.vagaChoice.exclusive .vagaChoiceIcon{background:#ffe4ef;color:var(--magenta)}
+.vagaChoiceTag{text-transform:uppercase;letter-spacing:.11em;font-size:.72rem;font-weight:900;opacity:.85}
+.vagaChoice h2{font-size:2.2rem;margin:.6rem 0 .7rem}
+.vagaChoice p{line-height:1.6;max-width:500px;margin:0}
+.vagaChoice.active p{color:rgba(255,255,255,.88)}
+.vagaChoice.exclusive p{color:var(--muted)}
+.vagaChoiceCta{margin-top:auto;display:inline-flex;align-items:center;gap:.55rem;font-weight:900;padding-top:1.6rem}
+.vagaChoiceCta.disabled{color:#a98d9e}
+.generationSection{background:#fff7fa}
+.vagasValues{margin-top:2rem}
+.vagasNumbers{background:#fff}
+.vagasNumbers .acheStats article{background:#fff5f8}
+.vagasNumbers .acheStats strong{font-size:2rem}
+.vagasBenefits{background:linear-gradient(145deg,#8e104f,#b01867 58%,#d45374);color:#fff}
+.vagasBenefits .sectionHeading p{color:rgba(255,255,255,.86)}
+.benefitGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.benefitGrid article{min-height:220px;padding:1.5rem;border-radius:22px;background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.18)}
+.benefitGrid svg{color:#ffd8e7}
+.benefitGrid h3{font-size:1.25rem;margin:1rem 0 .5rem}
+.benefitGrid p{color:rgba(255,255,255,.85);line-height:1.55;margin:0}
+.diversitySection{background:#fff8fb}
+.diversityBanner{display:grid;grid-template-columns:.9fr 1.1fr;gap:2rem;align-items:center;padding:1.8rem 2rem;border-radius:26px;background:linear-gradient(135deg,#fff,#ffe8f1);border:1px solid #eed6e1}
+.diversityBanner>div{display:flex;align-items:center;gap:1rem;color:var(--magenta)}
+.diversityBanner strong{font-size:1.45rem;line-height:1.2}
+.diversityBanner p{color:var(--muted);line-height:1.6;margin:0}
+@media(max-width:900px){
+  .vagasCards,.diversityBanner{grid-template-columns:1fr}
+  .benefitGrid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:600px){
+  .vagasHero h1{font-size:clamp(3.8rem,18vw,5.2rem)}
+  .vagasCards,.benefitGrid{grid-template-columns:1fr}
+}
