@@ -76,15 +76,18 @@ export default function LetramentoPage() {
         </div>
       </section>
 
-      <nav className="accessMenu" aria-label="Navegação do letramento">
-        <a href="#mudanca">Mudança de chave</a>
-        <a href="#linguagem">Linguagem</a>
-        <a href="#tipos">Tipos de deficiência</a>
-        <a href="#acessibilidade">Acessibilidade</a>
-        <a href="#capacitismo">Capacitismo</a>
-        <a href="#praticas">Boas práticas</a>
-      </nav>
+      <div className="accessBodyLayout">
+        <aside className="accessMenu" aria-label="Navegação do letramento">
+          <span className="accessMenuLabel">Navegue</span>
+          <a href="#mudanca"><span>01</span>Mudança de chave</a>
+          <a href="#linguagem"><span>02</span>Linguagem</a>
+          <a href="#tipos"><span>03</span>Tipos de deficiência</a>
+          <a href="#acessibilidade"><span>04</span>Acessibilidade</a>
+          <a href="#capacitismo"><span>05</span>Capacitismo</a>
+          <a href="#praticas"><span>06</span>Boas práticas</a>
+        </aside>
 
+        <div className="accessBodyContent">
       <section id="mudanca" className="landingSection accessLight">
         <div className="sectionHeading">
           <span className="accessNumber">01</span>
@@ -227,6 +230,8 @@ export default function LetramentoPage() {
           <p>garantir acessibilidade</p>
         </div>
       </section>
+        </div>
+      </div>
     </main>
   );
 }
