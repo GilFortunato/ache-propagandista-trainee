@@ -31,11 +31,11 @@ export default function HomePage() {
       <header className="topbar">
         <div>
           <Image
-            src="/brand/ache-logo.png"
+            src="/brand/ache-logo-tagline.webp"
             alt="Aché"
             width={115}
             height={69}
-            className="acheLogoSmall"
+            className="acheHeaderLogo"
             priority
           />
           <span>Programa PcD – Propagandista Trainee</span>
