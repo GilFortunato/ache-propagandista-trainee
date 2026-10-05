@@ -106,3 +106,165 @@ body{min-height:100vh}
   .nexus{grid-template-columns:1fr}
   .hero h1{font-size:3.5rem}
 }
+
+
+/* Branded experience landing pages */
+.experiencePage{min-height:100vh;overflow:hidden}
+.experienceHeader{height:84px;padding:0 4.5vw;display:flex;align-items:center;justify-content:space-between;gap:2rem;position:relative;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.2)}
+.experienceBrand{display:flex;align-items:center;gap:1rem;font-weight:800}
+.backNexus{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.15rem;border-radius:999px;font-weight:800;transition:.2s ease}
+.backNexus:hover{transform:translateX(-2px)}
+.landingSection{padding:6.5rem 7vw}
+.sectionTag,.potenciaTag{display:inline-flex;align-items:center;font-size:.78rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
+.sectionHeading{max-width:900px;margin-bottom:2.4rem}
+.sectionHeading h2{font-size:clamp(2.2rem,4vw,4.5rem);line-height:.98;margin:.6rem 0 1rem;letter-spacing:-.04em}
+.sectionHeading p{font-size:1.08rem;line-height:1.7}
+
+/* Prosper */
+.prosperLanding{background:linear-gradient(160deg,#ff0757 0%,#d71589 38%,#6e2df4 100%);color:#fff}
+.prosperLanding .experienceHeader{background:rgba(40,14,70,.26);border-bottom:1px solid rgba(255,255,255,.14);color:#fff}
+.prosperLanding .backNexus{border:1px solid rgba(255,255,255,.34);background:rgba(255,255,255,.08)}
+.prosperLanding .sectionTag{background:#ff174d;color:#fff;padding:.55rem .82rem;border-radius:4px}
+.prosperHero{min-height:calc(100vh - 84px);display:grid;grid-template-columns:1.08fr .92fr;align-items:center;gap:4rem;position:relative}
+.prosperHero:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 72% 38%,rgba(30,255,214,.12),transparent 30%),linear-gradient(120deg,transparent,rgba(255,255,255,.05));pointer-events:none}
+.prosperHeroCopy{position:relative;z-index:2;max-width:780px}
+.prosperKicker{font-size:1rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;margin:1.6rem 0 .7rem;color:#38f0d2}
+.prosperHero h1{font-size:clamp(4rem,7vw,7.4rem);line-height:.88;letter-spacing:-.055em;margin:.2rem 0 1.5rem}
+.prosperHero h1 em{font-style:normal;color:#38f0d2}
+.prosperHero .lead{max-width:690px;font-size:1.15rem;line-height:1.65;color:rgba(255,255,255,.9)}
+.landingCta{margin-top:1.7rem;display:inline-flex;align-items:center;gap:.65rem;padding:1rem 1.25rem;border:1px solid #38f0d2;border-radius:999px;font-weight:900;background:rgba(56,240,210,.08)}
+.prosperSignal{height:520px;position:relative}
+.signalOrb{position:absolute;border-radius:50%;filter:blur(1px)}
+.signalOrb1{width:360px;height:360px;right:0;top:45px;background:radial-gradient(circle at 35% 30%,#ff5f9a,#6e2df4 55%,rgba(17,7,41,.8))}
+.signalOrb2{width:220px;height:220px;left:30px;bottom:30px;background:radial-gradient(circle,#38f0d2 0%,rgba(56,240,210,.05) 68%);filter:blur(8px);opacity:.35}
+.signalLine{position:absolute;left:17%;right:7%;top:51%;height:3px;background:linear-gradient(90deg,#38f0d2,#fff,#ff3d84);transform:rotate(-18deg);box-shadow:0 0 22px rgba(56,240,210,.8)}
+.signalCard{position:absolute;width:96px;height:96px;border-radius:24px;background:rgba(20,9,56,.6);border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;box-shadow:0 25px 55px rgba(20,0,60,.28)}
+.signalCardA{left:6%;top:48%}.signalCardB{left:45%;top:27%}.signalCardC{right:3%;top:8%}
+.prosperStatement{background:rgba(22,9,64,.18);text-align:center}
+.prosperStatement h2{font-size:clamp(3rem,6vw,6.5rem);line-height:.9;margin:1.2rem auto;max-width:1100px}
+.prosperStatement h2 strong{display:block;color:#38f0d2}
+.prosperStatement p{font-size:1.25rem;max-width:820px;margin:1.5rem auto 0;line-height:1.6;color:rgba(255,255,255,.88)}
+.prosperEcosystem{background:linear-gradient(180deg,rgba(54,17,124,.65),rgba(25,5,76,.6))}
+.ecosystemGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+.glassPanel{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);border-top:3px solid #38f0d2;border-radius:22px;padding:1.6rem;backdrop-filter:blur(12px)}
+.glassPanel h3{font-size:1.45rem;color:#38f0d2;margin:.2rem 0 .8rem}
+.glassPanel p,.glassPanel li{color:rgba(255,255,255,.87);line-height:1.55}
+.glassPanel ul{padding-left:1.1rem}
+.ecosystemBottom{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem}
+.ecosystemBottom article{background:#4510ba;border-radius:18px;padding:1.25rem 1.4rem;display:flex;flex-direction:column;gap:.3rem}
+.ecosystemBottom strong{color:#38f0d2;font-size:1.2rem}
+.prosperSolutions{background:linear-gradient(180deg,#321077,#5f20d1)}
+.solutionGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem}
+.solutionCard{min-height:245px;padding:1.5rem;border-radius:22px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);transition:.2s ease}
+.solutionCard:hover{transform:translateY(-5px);background:rgba(255,255,255,.14)}
+.solutionIcon{width:54px;height:54px;border-radius:16px;background:#38f0d2;color:#29105f;display:flex;align-items:center;justify-content:center;margin-bottom:1.2rem}
+.solutionCard h3{font-size:1.35rem;margin:0 0 .7rem}
+.solutionCard p{color:rgba(255,255,255,.82);line-height:1.55}
+.clientStrip{background:linear-gradient(160deg,#e81978,#6b2ef3)}
+.clientStrip h2{font-size:clamp(2.5rem,4.5vw,5rem);max-width:900px;margin:1rem 0 2.2rem}
+.clientWords{display:flex;flex-wrap:wrap;gap:.8rem}
+.clientWords span{padding:.8rem 1rem;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);font-weight:800}
+
+/* Letramento */
+.letramentoLanding{min-height:100vh;background:linear-gradient(165deg,#6427fb 0%,#8b38f3 45%,#ef185f 100%);color:#fff}
+.letramentoLanding .experienceHeader{background:rgba(61,20,135,.34);color:#fff;border-bottom:1px solid rgba(255,255,255,.13)}
+.letramentoLanding .backNexus{border:1px solid rgba(255,255,255,.34);background:rgba(255,255,255,.08)}
+.letramentoLanding .sectionTag{background:#ff174d;color:#fff;padding:.55rem .8rem;border-radius:4px}
+.letramentoHero{display:grid;grid-template-columns:120px 1fr;gap:2rem;align-items:start;padding-top:7.5rem;padding-bottom:4rem}
+.letramentoHeroIcon{width:105px;height:105px;border:2px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.letramentoHero h1{font-size:clamp(3.2rem,6vw,6.3rem);line-height:.93;margin:1rem 0 1.5rem;letter-spacing:-.05em;max-width:1150px}
+.letramentoHero h1 em{font-style:normal;color:#2bf0c9}
+.letramentoHero .lead{max-width:820px;font-size:1.2rem;line-height:1.65;color:rgba(255,255,255,.88)}
+.letramentoCore{padding-top:2rem}
+.letramentoGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+.letramentoCard{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);border-radius:22px;padding:1.6rem;min-height:330px}
+.letramentoCard>svg{color:#2bf0c9;margin-bottom:.8rem}
+.letramentoCard h2{color:#2bf0c9;font-size:1.5rem;margin:.3rem 0 .8rem}
+.letramentoCard strong{display:block;font-size:1.03rem;margin-bottom:.65rem}
+.letramentoCard p{line-height:1.6;color:rgba(255,255,255,.86)}
+.letramentoCard ul{list-style:none;padding:0;margin:1rem 0 0}
+.letramentoCard li{display:flex;gap:.55rem;align-items:flex-start;margin:.7rem 0;line-height:1.45}
+.letramentoCard li svg{flex:0 0 auto;color:#2bf0c9;margin-top:.08rem}
+.letramentoBenefits{display:grid;grid-template-columns:1.2fr .8fr;gap:1.4rem;background:rgba(45,10,111,.24)}
+.letramentoBenefits h2{font-size:clamp(2.8rem,5vw,5.3rem);line-height:.94;margin:1rem 0 1.5rem}
+.letramentoBenefits ul{list-style:none;padding:0}
+.letramentoBenefits li{display:flex;gap:.7rem;align-items:center;font-size:1.08rem;margin:.85rem 0}
+.letramentoBenefits li svg{color:#2bf0c9}
+.formatCard{background:rgba(255,255,255,.1);border:1px solid #2bf0c9;border-radius:24px;padding:1.8rem;display:flex;flex-direction:column;gap:1.25rem}
+.formatCard>div{display:flex;flex-direction:column;gap:.25rem;padding-bottom:1rem;border-bottom:1px solid rgba(255,255,255,.14)}
+.formatCard>div:last-child{border-bottom:0}
+.formatCard strong{font-size:1.05rem;color:#2bf0c9}
+.formatCard span{color:rgba(255,255,255,.88)}
+
+/* Potenc.IA */
+.potenciaLanding{background:#070811;color:#fff}
+.potenciaLanding .experienceHeader{background:rgba(7,8,17,.92);border-bottom:1px solid rgba(114,77,255,.16);color:#fff}
+.potenciaLanding .backNexus{border:1px solid #5e49df;background:rgba(83,59,189,.08)}
+.potenciaHero{min-height:calc(100vh - 84px);display:grid;grid-template-columns:1fr .92fr;gap:3rem;align-items:center;background:radial-gradient(circle at 72% 34%,rgba(71,38,172,.35),transparent 30%),radial-gradient(circle at 36% 65%,rgba(20,105,255,.14),transparent 34%)}
+.potenciaBrand{font-size:1.5rem;font-weight:900;background:linear-gradient(90deg,#fff,#8e79ff);-webkit-background-clip:text;color:transparent}
+.potenciaHero h1{font-size:clamp(4rem,7vw,7.2rem);line-height:.88;letter-spacing:-.055em;margin:1.2rem 0 1.5rem;max-width:850px}
+.potenciaHero h1 em{font-style:normal;background:linear-gradient(90deg,#744dff,#17c9ff,#ff2f91);-webkit-background-clip:text;color:transparent}
+.potenciaHero p{max-width:690px;color:#c9c8dc;font-size:1.17rem;line-height:1.65}
+.potenciaCta{display:inline-flex;align-items:center;gap:.6rem;margin-top:1.5rem;padding:1rem 1.2rem;border:1px solid #6c53f4;border-radius:999px;font-weight:900;background:linear-gradient(90deg,rgba(108,83,244,.15),rgba(255,47,145,.08))}
+.potenciaVisual{height:520px;position:relative}
+.neonMesh{position:absolute;inset:8% 0 5% 8%;border-radius:50% 44% 58% 42%;background:radial-gradient(circle at 55% 45%,rgba(29,212,255,.55),rgba(115,69,255,.42) 28%,rgba(255,38,145,.23) 48%,transparent 67%);filter:blur(1px);box-shadow:inset 0 0 70px rgba(31,214,255,.2),0 0 80px rgba(102,70,255,.12)}
+.neonMesh:before,.neonMesh:after{content:"";position:absolute;inset:14%;border:1px solid rgba(65,215,255,.34);border-radius:48%;transform:rotate(18deg)}
+.neonMesh:after{inset:27%;border-color:rgba(255,49,150,.34);transform:rotate(-22deg)}
+.aiBadge{position:absolute;left:40%;top:33%;width:145px;height:145px;border-radius:36px;background:rgba(20,17,58,.8);border:1px solid rgba(94,210,255,.35);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.4rem;box-shadow:0 0 40px rgba(60,154,255,.16);backdrop-filter:blur(12px)}
+.aiBadge span{font-weight:900;letter-spacing:.18em}
+.neonDot{position:absolute;width:13px;height:13px;border-radius:50%;background:#fff;box-shadow:0 0 18px #35d6ff}
+.dot1{left:18%;top:28%}.dot2{right:12%;top:30%}.dot3{right:24%;bottom:18%}
+.potenciaImpact{display:grid;grid-template-columns:auto 1fr auto;align-items:end;gap:2rem;background:linear-gradient(90deg,#161029,#0b0c18);border-top:1px solid rgba(112,81,255,.2);border-bottom:1px solid rgba(112,81,255,.2)}
+.impactNumber{font-size:clamp(5rem,10vw,11rem);font-weight:900;line-height:.78;letter-spacing:-.07em;background:linear-gradient(90deg,#fff,#7d5fff);-webkit-background-clip:text;color:transparent}
+.potenciaImpact>div:nth-child(2) span{font-size:2rem;font-weight:900}
+.potenciaImpact>div:nth-child(2) p{max-width:460px;color:#b6b3cb;line-height:1.5}
+.impactGauge{min-width:180px;padding:1.4rem;border:1px solid #704fff;border-radius:28px;background:rgba(81,55,171,.13);text-align:center}
+.impactGauge strong{display:block;font-size:2.6rem;color:#8b72ff}
+.impactGauge span{font-size:.85rem;color:#b7b2cb}
+.potenciaProposal{background:radial-gradient(circle at 95% 0,rgba(115,63,255,.18),transparent 28%)}
+.potenciaTag{color:#9c87ff}
+.potenciaProposal .sectionHeading p,.potenciaJourney .sectionHeading p{color:#aaa8c0}
+.potenciaDiffGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem}
+.potenciaDiffGrid article{min-height:150px;padding:1.4rem;border-radius:20px;background:linear-gradient(160deg,#1a1436,#120f26);border:1px solid #2b2253;display:flex;flex-direction:column;justify-content:space-between}
+.potenciaDiffGrid span{color:#6e55ff;font-weight:900}
+.potenciaDiffGrid strong{font-size:1.08rem}
+.potenciaJourney{background:linear-gradient(180deg,#0b0c16,#100b21)}
+.journeyRail{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:1rem;align-items:center}
+.journeyRail article{min-height:240px;padding:1.6rem;border-radius:24px;background:linear-gradient(160deg,#241650,#17102e);border:1px solid rgba(104,77,238,.4)}
+.journeyRail article>span{display:inline-flex;width:40px;height:40px;border-radius:50%;align-items:center;justify-content:center;background:#6a4df0;font-weight:900}
+.journeyRail h3{font-size:1.35rem;margin:1rem 0 .65rem}
+.journeyRail p{color:#b8b4ca;line-height:1.55}
+.railArrow{color:#6c53f4}
+.journeySupport{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:1.25rem}
+.journeySupport span{display:flex;align-items:center;gap:.5rem;padding:.75rem 1rem;border-radius:999px;background:#171228;border:1px solid #332763;color:#cbc6dd}
+.journeySupport svg{color:#7d67fa}
+.potenciaLevels{background:radial-gradient(circle at 10% 50%,rgba(18,142,255,.1),transparent 25%),#070811}
+.levelGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.15rem}
+.levelCard{padding:1.6rem;border-radius:24px;background:linear-gradient(160deg,#211448,#100d20);border:1px solid #352769}
+.levelNumber{display:inline-flex;width:44px;height:44px;border-radius:50%;align-items:center;justify-content:center;background:#6d51ef;font-weight:900}
+.levelCard h3{font-size:1.55rem;margin:1.1rem 0 .25rem}
+.levelCard>strong{color:#9d8aff}
+.levelCard p{color:#b8b5c8;line-height:1.55;min-height:72px}
+.levelCard ul{padding-left:1.2rem;color:#d8d6e4;line-height:1.8}
+
+@media(max-width:1050px){
+  .prosperHero,.potenciaHero{grid-template-columns:1fr}
+  .prosperSignal,.potenciaVisual{height:380px}
+  .ecosystemGrid,.solutionGrid,.letramentoGrid,.levelGrid{grid-template-columns:repeat(2,1fr)}
+  .potenciaDiffGrid{grid-template-columns:repeat(3,1fr)}
+  .journeyRail{grid-template-columns:1fr}
+  .railArrow{display:none}
+  .potenciaImpact{grid-template-columns:1fr}
+}
+@media(max-width:760px){
+  .experienceHeader{height:auto;padding:1rem 5vw;align-items:flex-start}
+  .experienceBrand strong{display:none}
+  .backNexus{font-size:.9rem}
+  .landingSection{padding:4.5rem 6vw}
+  .prosperHero h1,.potenciaHero h1{font-size:clamp(3.5rem,15vw,5rem)}
+  .prosperSignal,.potenciaVisual{height:300px}
+  .ecosystemGrid,.solutionGrid,.letramentoGrid,.levelGrid,.potenciaDiffGrid,.ecosystemBottom,.letramentoBenefits{grid-template-columns:1fr}
+  .letramentoHero{grid-template-columns:1fr}
+  .letramentoHeroIcon{width:80px;height:80px}
+  .clientWords{gap:.55rem}
+}
