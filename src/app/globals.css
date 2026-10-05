@@ -4,6 +4,7 @@
   --orange:#f47a35;
   --rose:#fff1f6;
   --ink:#2c1830;
+  --wine:#4a1635;
   --muted:#745d70;
   --white:#fff;
 }
@@ -11,9 +12,13 @@
 html,body{margin:0;padding:0;font-family:Arial,Helvetica,sans-serif;background:var(--rose);color:var(--ink)}
 a{text-decoration:none;color:inherit}
 body{min-height:100vh}
-.acheWordmark{display:inline-flex;align-items:center;justify-content:center;background:var(--magenta);color:#fff;border-radius:999px;padding:.5rem 1rem;font-weight:800;font-size:2rem;letter-spacing:-.08em}
-.acheWordmark.small{font-size:1.25rem;padding:.35rem .75rem}
-.eyebrow{text-transform:uppercase;letter-spacing:.16em;font-size:.78rem;font-weight:800;color:var(--magenta)}
+.eyebrow{text-transform:uppercase;letter-spacing:.18em;font-size:.78rem;font-weight:800;color:var(--magenta)}
+
+.acheLogoLogin{width:128px;height:auto;display:block;margin-bottom:1rem}
+.acheLogoCard{width:98px;height:auto;display:block;margin-bottom:1.2rem}
+.acheLogoSmall{width:86px;height:auto;display:block}
+.acheLogoCore{width:108px;height:auto;display:block}
+
 .loginPage{min-height:100vh;display:grid;grid-template-columns:1.2fr .8fr;gap:4rem;align-items:center;padding:6vw;position:relative;overflow:hidden;background:linear-gradient(135deg,#fff 0%,#fff1f6 58%,#ffe8df 100%)}
 .organic{position:absolute;border-radius:45% 55% 62% 38%/44% 38% 62% 56%;filter:blur(.2px);opacity:.95}
 .organicOne{width:38vw;height:38vw;background:var(--magenta);left:-18vw;bottom:-15vw}
@@ -22,25 +27,38 @@ body{min-height:100vh}
 .loginBrand h1{font-size:clamp(3.2rem,7vw,7rem);line-height:.9;margin:.5rem 0 1.4rem;max-width:780px}
 .programSlogan{font-size:1.5rem;max-width:560px}
 .brandSlogan{font-weight:800;color:var(--magenta)}
-.loginCard{background:rgba(255,255,255,.86);backdrop-filter:blur(18px);padding:2.2rem;border-radius:32px;box-shadow:0 30px 80px rgba(125,15,75,.15);border:1px solid rgba(176,24,103,.1)}
-.badge{display:inline-block;background:#ffe2ee;color:var(--magenta-dark);padding:.45rem .8rem;border-radius:999px;font-size:.8rem;font-weight:800}
-.loginCard h2{font-size:2rem;margin:1rem 0 .5rem}
+.loginCard{background:rgba(255,255,255,.88);backdrop-filter:blur(18px);padding:2.2rem;border-radius:32px;box-shadow:0 30px 80px rgba(125,15,75,.15);border:1px solid rgba(176,24,103,.1)}
+.loginCard h2{font-size:2rem;margin:.4rem 0 .5rem}
 .loginCard p{color:var(--muted);line-height:1.6}
-.googleButton{display:flex;align-items:center;justify-content:center;margin-top:1.5rem;background:var(--ink);color:#fff;padding:1rem 1.25rem;border-radius:16px;font-weight:800}
+.googleButton{display:flex;align-items:center;justify-content:center;margin-top:1.5rem;background:var(--ink);color:#fff;padding:1rem 1.25rem;border-radius:16px;font-weight:800;transition:.2s ease}
+.googleButton:hover{transform:translateY(-2px);background:var(--wine)}
 .loginCard small{display:block;margin-top:1rem;color:var(--muted)}
-.homePage{min-height:100vh;padding:1.25rem 5vw 5rem;background:radial-gradient(circle at 50% 38%,#fff 0%,#fff3f7 42%,#fde9ef 100%);overflow:hidden}
-.topbar,.simpleHeader{display:flex;align-items:center;justify-content:space-between;gap:2rem}
+
+.homePage{min-height:100vh;padding:1.15rem 4vw 3rem;background:radial-gradient(circle at 58% 42%,#fff 0%,#fff4f8 45%,#fde9ef 100%);overflow:hidden}
+.topbar,.simpleHeader{display:flex;align-items:center;justify-content:space-between;gap:2rem;position:relative;z-index:10}
 .topbar>div,.simpleHeader>div{display:flex;align-items:center;gap:1rem;font-weight:700}
-.adminLink,.simpleHeader a{padding:.7rem 1rem;border-radius:999px;border:1px solid rgba(176,24,103,.2);background:#fff}
-.hero{text-align:center;max-width:760px;margin:4rem auto 1rem}
-.hero h1{font-size:clamp(3rem,6vw,6rem);line-height:.93;margin:.6rem 0 1rem}
-.hero>p:last-child{color:var(--muted);font-size:1.1rem}
-.nexus{width:min(820px,92vw);height:min(820px,92vw);margin:0 auto;position:relative}
-.nexus:before,.nexus:after{content:"";position:absolute;inset:15%;border:1px solid rgba(176,24,103,.14);border-radius:50%}
+.adminIcon{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;border-radius:14px;background:rgba(255,255,255,.92);border:1px solid rgba(176,24,103,.14);color:var(--magenta);box-shadow:0 8px 22px rgba(125,15,75,.08);transition:.2s ease}
+.adminIcon:hover{transform:translateY(-2px);background:#fff;border-color:rgba(176,24,103,.28);box-shadow:0 12px 28px rgba(125,15,75,.13)}
+.simpleHeader a{padding:.7rem 1rem;border-radius:999px;border:1px solid rgba(176,24,103,.2);background:#fff}
+
+.homeContent{display:grid;grid-template-columns:minmax(330px,.78fr) minmax(650px,1.22fr);align-items:center;gap:1.5rem;max-width:1500px;margin:0 auto;min-height:calc(100vh - 88px)}
+.hero{text-align:left;max-width:520px;margin:0;transform:translateY(-48px)}
+.hero h1{font-size:clamp(3.7rem,5.3vw,6rem);line-height:.91;margin:.65rem 0 1.35rem;letter-spacing:-.045em}
+.hero>p:last-child{color:var(--muted);font-size:1.05rem;line-height:1.55;max-width:470px}
+.nexusWrap{display:flex;align-items:center;justify-content:center;min-width:0}
+
+.nexus{width:min(760px,54vw);height:min(760px,54vw);min-width:690px;min-height:690px;position:relative}
+.nexus:before,.nexus:after{content:"";position:absolute;inset:15%;border:1px solid rgba(176,24,103,.13);border-radius:50%}
 .nexus:after{inset:29%}
-.nexusCore{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:190px;height:190px;border-radius:44% 56% 48% 52%/51% 44% 56% 49%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8rem;box-shadow:0 22px 60px rgba(125,15,75,.18);z-index:3;text-align:center;font-weight:800}
-.nexusPetal{position:absolute;left:50%;top:50%;width:170px;height:110px;margin:-55px 0 0 -85px;border-radius:52% 48% 58% 42%/48% 55% 45% 52%;background:linear-gradient(135deg,#fff,#ffe4ef);border:1px solid rgba(176,24,103,.13);display:flex;align-items:center;justify-content:center;gap:.6rem;font-weight:800;box-shadow:0 15px 35px rgba(125,15,75,.09);transition:.22s ease;z-index:2}
-.nexusPetal:hover{transform:var(--pos) scale(1.08);background:linear-gradient(135deg,var(--magenta),var(--orange));color:#fff;box-shadow:0 20px 45px rgba(125,15,75,.25)}
+.nexusCore{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:190px;height:190px;border-radius:46% 54% 48% 52%/51% 45% 55% 49%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.65rem;box-shadow:0 22px 60px rgba(125,15,75,.16);z-index:3;text-align:center;font-weight:800;color:var(--wine)}
+.nexusCore span{font-size:1.02rem;line-height:1.25}
+
+.nexusPetal{position:absolute;left:50%;top:50%;width:170px;height:110px;margin:-55px 0 0 -85px;border-radius:52% 48% 58% 42%/48% 55% 45% 52%;background:linear-gradient(135deg,rgba(255,255,255,.98),rgba(255,235,243,.92));border:1px solid rgba(176,24,103,.13);display:flex;align-items:center;justify-content:center;gap:.72rem;color:var(--wine);font-size:1rem;font-weight:650;letter-spacing:-.01em;box-shadow:0 15px 35px rgba(125,15,75,.075);transition:transform .22s ease,background .22s ease,color .22s ease,box-shadow .22s ease,border-color .22s ease;z-index:2}
+.nexusPetal svg{color:var(--magenta);flex:0 0 auto;transition:color .22s ease,transform .22s ease}
+.nexusPetal:hover{transform:var(--pos) scale(1.075);background:linear-gradient(135deg,#b71967 0%,#d92b63 55%,#f47a35 100%);border-color:transparent;color:#fff;box-shadow:0 20px 42px rgba(183,25,103,.19)}
+.nexusPetal:hover svg{color:#fff;transform:scale(1.06)}
+.nexusPetal span{max-width:105px;line-height:1.2}
+
 .petal0{--pos:translate(-50%,-320px);transform:var(--pos)}
 .petal1{--pos:translate(170px,-230px);transform:var(--pos)}
 .petal2{--pos:translate(260px,-50%);transform:var(--pos)}
@@ -49,6 +67,7 @@ body{min-height:100vh}
 .petal5{--pos:translate(-340px,140px);transform:var(--pos)}
 .petal6{--pos:translate(-430px,-50%);transform:var(--pos)}
 .petal7{--pos:translate(-340px,-230px);transform:var(--pos)}
+
 .adminPage{min-height:100vh;padding:2rem 5vw 5rem;background:#fff8fb}
 .adminHero{max-width:760px;margin:5rem 0 2rem}
 .adminHero h1{font-size:clamp(3rem,6vw,5.5rem);line-height:.95;margin:.5rem 0 1rem}
@@ -56,14 +75,6 @@ body{min-height:100vh}
 .adminGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.2rem}
 .adminGrid article{background:#fff;border:1px solid #f2dce6;border-radius:24px;padding:1.5rem;box-shadow:0 15px 35px rgba(125,15,75,.06)}
 .adminGrid p{color:var(--muted)}
-@media(max-width:900px){
-  .loginPage{grid-template-columns:1fr;padding:2rem}
-  .organicOne{width:70vw;height:70vw}
-  .nexus{height:auto;display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-top:2rem}
-  .nexus:before,.nexus:after,.nexusCore{display:none}
-  .nexusPetal{position:static;transform:none!important;width:auto;height:120px;margin:0}
-  .adminGrid{grid-template-columns:1fr}
-}
 
 .modulePage{min-height:100vh;padding:2rem 5vw 5rem;background:linear-gradient(160deg,#fff 0%,#fff1f6 70%,#ffece5 100%)}
 .moduleHero{max-width:900px;margin:7rem auto 0}
@@ -71,3 +82,27 @@ body{min-height:100vh}
 .moduleHero>p{font-size:1.25rem;line-height:1.7;color:var(--muted);max-width:720px}
 .modulePlaceholder{margin-top:3rem;background:#fff;border:1px solid #f0d4e1;border-radius:28px;padding:2rem;display:flex;flex-direction:column;gap:.7rem;box-shadow:0 18px 45px rgba(125,15,75,.07)}
 .modulePlaceholder span{color:var(--muted)}
+
+@media(max-width:1180px){
+  .homeContent{grid-template-columns:360px 1fr;gap:.5rem}
+  .hero h1{font-size:clamp(3.5rem,5.4vw,5rem)}
+  .nexus{transform:scale(.88)}
+}
+@media(max-width:960px){
+  .loginPage{grid-template-columns:1fr;padding:2rem}
+  .organicOne{width:70vw;height:70vw}
+  .homePage{overflow:auto}
+  .homeContent{display:block;min-height:auto}
+  .hero{text-align:center;max-width:760px;margin:4rem auto 2rem;transform:none}
+  .hero>p:last-child{margin-left:auto;margin-right:auto}
+  .nexusWrap{display:block}
+  .nexus{height:auto;min-width:0;min-height:0;width:100%;display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin:2rem auto 0;transform:none}
+  .nexus:before,.nexus:after,.nexusCore{display:none}
+  .nexusPetal{position:static;transform:none!important;width:auto;height:120px;margin:0}
+  .adminGrid{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+  .topbar>div span{display:none}
+  .nexus{grid-template-columns:1fr}
+  .hero h1{font-size:3.5rem}
+}
