@@ -56,7 +56,7 @@ export default function LetramentoPage() {
     <main className="accessLanding">
       <header className="experienceHeader accessHeader">
         <div className="experienceBrand">
-          <Image src="/brand/ache-logo.png" alt="Aché" width={115} height={69} className="acheLogoSmall" priority />
+          <Image src="/brand/ache-logo-tagline.webp" alt="Aché" width={115} height={69} className="acheHeaderLogo" priority />
           <strong>Programa PcD – Propagandista Trainee</strong>
         </div>
         <Link href="/home" className="backNexus"><ArrowLeft size={17}/>Voltar ao Nexus</Link>
