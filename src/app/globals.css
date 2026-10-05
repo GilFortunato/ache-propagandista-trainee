@@ -268,3 +268,78 @@ body{min-height:100vh}
   .letramentoHeroIcon{width:80px;height:80px}
   .clientWords{gap:.55rem}
 }
+
+/* Aché institutional page */
+.acheLanding{background:#fff7fa;color:var(--ink)}
+.acheHeader{background:rgba(255,255,255,.94);border-bottom:1px solid rgba(176,24,103,.1)}
+.acheHeader .backNexus{background:#fff;border:1px solid rgba(176,24,103,.18);color:var(--wine)}
+.acheHero{min-height:640px;display:grid;grid-template-columns:1fr .85fr;align-items:center;gap:4rem;background:linear-gradient(150deg,#fff 0%,#fff1f6 66%,#ffe9df 100%)}
+.acheHero h1{font-size:clamp(4.5rem,8vw,8.5rem);line-height:.84;letter-spacing:-.06em;margin:.7rem 0 1.5rem}
+.acheHero h1 em{font-style:normal;color:var(--magenta)}
+.acheHero p{font-size:1.2rem;line-height:1.65;color:var(--muted);max-width:650px}
+.acheTag{color:var(--magenta)}
+.acheHeroArt{height:460px;position:relative}
+.acheBlob{position:absolute;border-radius:45% 55% 58% 42%/48% 41% 59% 52%}
+.magentaBlob{width:330px;height:330px;background:var(--magenta);right:12%;top:70px}
+.orangeBlob{width:230px;height:230px;background:var(--orange);right:2%;top:20px;opacity:.92}
+.acheHeroLogo{position:absolute;width:155px;height:auto;right:28%;top:190px;z-index:3;filter:drop-shadow(0 14px 28px rgba(74,22,53,.12))}
+.acheSectionNav{position:sticky;top:0;z-index:18;display:flex;justify-content:center;gap:.65rem;flex-wrap:wrap;padding:1rem 4vw;background:rgba(255,255,255,.94);backdrop-filter:blur(18px);border-top:1px solid #f3dce6;border-bottom:1px solid #f3dce6}
+.acheSectionNav a{padding:.7rem 1rem;border-radius:999px;color:var(--wine);font-weight:800}
+.acheSectionNav a:hover{background:#ffe5ef;color:var(--magenta)}
+.acheSectionNumber{display:inline-block;font-size:3.8rem;font-weight:900;line-height:1;color:rgba(176,24,103,.12);margin-right:.8rem;vertical-align:middle}
+.acheSectionNumber.light{color:rgba(255,255,255,.14)}
+.acheAbout{background:#fff}
+.acheAbout .sectionHeading p,.acheConduct .sectionHeading p{color:var(--muted)}
+.acheStats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin:2.2rem 0 3rem}
+.acheStats article{background:#fff3f7;border:1px solid #f1d8e4;border-radius:24px;padding:1.6rem}
+.acheStats strong{display:block;font-size:2.4rem;color:var(--magenta);margin-bottom:.35rem}
+.acheStats span{color:var(--muted);font-weight:700}
+.acheValuesGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem}
+.acheValuesGrid article{min-height:150px;border-radius:22px;padding:1.25rem;background:linear-gradient(145deg,#fff7fa,#ffe9f1);border:1px solid #f0d8e3;display:flex;flex-direction:column;justify-content:space-between}
+.acheValuesGrid svg{color:var(--magenta)}
+.acheValuesGrid strong{line-height:1.35}
+.acheGovernance{background:linear-gradient(145deg,#8f104f,#b01867 58%,#d75272);color:#fff}
+.acheGovernance .sectionHeading p,.acheSustainability .sectionHeading p{color:rgba(255,255,255,.86)}
+.lightTag{color:#ffd3e5}
+.governanceGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+.governanceGrid article{min-height:155px;padding:1.4rem;border-radius:22px;background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.2);display:flex;flex-direction:column;justify-content:space-between}
+.governanceGrid svg{color:#ffd6e8}
+.acheMilestones{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.2rem}
+.acheMilestones div{padding:1.3rem 1.4rem;border-left:3px solid #f49a65;background:rgba(255,255,255,.07)}
+.acheMilestones span{font-size:1.35rem;font-weight:900}
+.acheMilestones p{margin:.45rem 0 0;color:rgba(255,255,255,.84);line-height:1.5}
+.acheConduct{background:#fff8fb}
+.conductFeature{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+.conductFeature article{padding:1.5rem;border-radius:22px;background:#fff;border:1px solid #efd6e1;box-shadow:0 14px 34px rgba(125,15,75,.06)}
+.conductFeature svg{color:var(--magenta)}
+.conductFeature h3{margin:1rem 0 .45rem}
+.conductFeature p{color:var(--muted);line-height:1.5;margin:0}
+.conductQuote{margin-top:1.2rem;padding:1.6rem 1.8rem;border-radius:24px;background:linear-gradient(135deg,#b01867,#f47a35);color:#fff}
+.conductQuote strong{font-size:1.35rem}
+.conductQuote p{max-width:900px;line-height:1.55;margin:.55rem 0 0}
+.acheSustainability{background:#241225;color:#fff}
+.sustainabilityGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+.sustainabilityGrid article{padding:1.45rem;border-radius:22px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);display:flex;flex-direction:column;gap:.65rem;min-height:180px}
+.sustainabilityGrid svg{color:#f59b65}
+.sustainabilityGrid strong{font-size:1.2rem}
+.sustainabilityGrid span{color:#d7c8d5;line-height:1.5}
+.acheFuture{margin-top:1.4rem;padding:1.6rem 1.8rem;border-radius:26px;background:linear-gradient(110deg,#b01867,#f47a35);display:flex;align-items:baseline;gap:1rem;flex-wrap:wrap}
+.acheFuture strong{font-size:clamp(3.3rem,6vw,6rem);letter-spacing:-.05em}
+.acheFuture span{font-size:1.25rem;font-weight:800}
+@media(max-width:1050px){
+  .acheHero{grid-template-columns:1fr}
+  .acheHeroArt{height:340px}
+  .acheStats,.governanceGrid,.conductFeature,.sustainabilityGrid{grid-template-columns:repeat(2,1fr)}
+  .acheValuesGrid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:650px){
+  .acheHero{padding-top:4rem}
+  .acheHero h1{font-size:clamp(4rem,18vw,6rem)}
+  .acheHeroArt{height:280px}
+  .magentaBlob{width:240px;height:240px}
+  .orangeBlob{width:170px;height:170px}
+  .acheHeroLogo{width:120px;right:24%;top:145px}
+  .acheStats,.governanceGrid,.conductFeature,.sustainabilityGrid,.acheValuesGrid,.acheMilestones{grid-template-columns:1fr}
+  .acheSectionNav{justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap}
+  .acheSectionNav a{white-space:nowrap}
+}
