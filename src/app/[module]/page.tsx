@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const data: Record<string, { title: string; description: string }> = {
@@ -19,11 +20,18 @@ export default async function ModulePage({ params }: { params: Promise<{ module:
     <main className="modulePage">
       <header className="simpleHeader">
         <div>
-          <div className="acheWordmark small" aria-label="Aché">aché</div>
+          <Image
+            src="/brand/ache-logo.png"
+            alt="Aché"
+            width={115}
+            height={69}
+            className="acheLogoSmall"
+          />
           <strong>Programa PcD – Propagandista Trainee</strong>
         </div>
         <Link href="/home">Voltar ao Nexus</Link>
       </header>
+
       <section className="moduleHero">
         <p className="eyebrow">Experiência</p>
         <h1>{item.title}</h1>
