@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 
 export default function LoginPage() {
@@ -7,15 +8,30 @@ export default function LoginPage() {
     <main className="loginPage">
       <div className="organic organicOne" />
       <div className="organic organicTwo" />
+
       <section className="loginBrand">
-        <div className="acheWordmark" aria-label="Aché">aché</div>
+        <Image
+          src="/brand/ache-logo.png"
+          alt="Aché"
+          width={115}
+          height={69}
+          className="acheLogoLogin"
+          priority
+        />
         <p className="eyebrow">Programa PcD</p>
         <h1>Propagandista Trainee</h1>
         <p className="programSlogan">Mais que contratar, queremos incluir.</p>
         <p className="brandSlogan">Mais vida pra você</p>
       </section>
+
       <section className="loginCard">
-        <span className="badge">Aché Experience</span>
+        <Image
+          src="/brand/ache-logo.png"
+          alt="Aché"
+          width={115}
+          height={69}
+          className="acheLogoCard"
+        />
         <h2>Bem-vinda(o) à sua jornada</h2>
         <p>Acesse conteúdos, experiências e ferramentas do programa.</p>
         <Link className="googleButton" href="/home">Continuar com Google</Link>
