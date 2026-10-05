@@ -69,11 +69,11 @@ export default function PotenciaPage() {
       <header className="experienceHeader potenciaExperienceHeader">
         <div className="experienceBrand">
           <Image
-            src="/brand/ache-logo.png"
+            src="/brand/ache-logo-tagline.webp"
             alt="Aché"
             width={115}
             height={69}
-            className="acheLogoSmall"
+            className="acheHeaderLogo"
             priority
           />
           <strong>Programa PcD – Propagandista Trainee</strong>
