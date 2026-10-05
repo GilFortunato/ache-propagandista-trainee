@@ -62,7 +62,7 @@ export default function HomePage() {
           <section className="nexus" aria-label="Nexus do programa">
             <div className="nexusCore">
               <Image
-                src="/brand/ache-logo-clean.webp"
+                src="/brand/ache-logo-clean-fixed.webp"
                 alt="Aché"
                 width={220}
                 height={92}
