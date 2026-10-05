@@ -30,7 +30,7 @@ export default function AchePage() {
         <div className="acheHeroArt" aria-hidden="true">
           <span className="acheBlob magentaBlob"/>
           <span className="acheBlob orangeBlob"/>
-          <Image src="/brand/ache-logo.png" alt="" width={150} height={90} className="acheHeroLogo"/>
+          <Image src="/brand/ache-logo-clean.webp" alt="Aché" width={220} height={92} className="acheHeroLogoClean" priority/>
         </div>
       </section>
 
