@@ -848,3 +848,121 @@ body{min-height:100vh}
     justify-content:flex-start;
   }
 }
+
+/* Letramento: navegação lateral sticky */
+.accessBodyLayout{
+  display:grid;
+  grid-template-columns:230px minmax(0,1fr);
+  align-items:start;
+  background:#fff8f8;
+}
+.accessBodyContent{
+  min-width:0;
+}
+.accessMenu{
+  position:sticky;
+  top:24px;
+  align-self:start;
+  z-index:16;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  gap:.45rem;
+  overflow:visible;
+
+  margin:2rem 0 2rem 1.5rem;
+  padding:1.35rem 1rem 1.35rem 1.2rem;
+
+  background:rgba(255,255,255,.96);
+  backdrop-filter:blur(18px);
+
+  border:1px solid #efd7df;
+  border-radius:22px;
+  box-shadow:0 16px 40px rgba(125,15,75,.08);
+}
+.accessMenuLabel{
+  padding:.2rem .72rem .7rem;
+  color:#a98d9e;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  font-size:.68rem;
+  font-weight:900;
+}
+.accessMenu a{
+  display:flex;
+  align-items:center;
+  gap:.7rem;
+  white-space:normal;
+
+  padding:.8rem .85rem;
+  border-radius:14px;
+
+  color:#5f2141;
+  font-size:.94rem;
+  font-weight:800;
+  line-height:1.2;
+
+  transition:.18s ease;
+}
+.accessMenu a>span{
+  width:28px;
+  height:28px;
+  flex:0 0 28px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:9px;
+  background:#fff0f5;
+  color:#d00067;
+
+  font-size:.72rem;
+  font-weight:900;
+}
+.accessMenu a:hover{
+  background:#fbe5ed;
+  color:#d00067;
+  transform:translateX(3px);
+}
+.accessBodyContent .landingSection{
+  padding-left:5vw;
+  padding-right:6vw;
+  scroll-margin-top:24px;
+}
+@media(max-width:980px){
+  .accessBodyLayout{
+    display:block;
+  }
+  .accessMenu{
+    position:sticky;
+    top:0;
+    z-index:22;
+
+    margin:0;
+    padding:.8rem 5vw;
+    border-radius:0;
+    border-left:0;
+    border-right:0;
+
+    flex-direction:row;
+    justify-content:flex-start;
+    overflow-x:auto;
+    box-shadow:0 8px 24px rgba(125,15,75,.06);
+  }
+  .accessMenuLabel{
+    display:none;
+  }
+  .accessMenu a{
+    flex:0 0 auto;
+    white-space:nowrap;
+  }
+  .accessMenu a:hover{
+    transform:none;
+  }
+  .accessBodyContent .landingSection{
+    padding-left:6vw;
+    padding-right:6vw;
+    scroll-margin-top:72px;
+  }
+}
