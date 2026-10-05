@@ -7,11 +7,11 @@ export default function AdminPage() {
       <header className="simpleHeader">
         <div>
           <Image
-            src="/brand/ache-logo.png"
+            src="/brand/ache-logo-tagline.webp"
             alt="Aché"
             width={115}
             height={69}
-            className="acheLogoSmall"
+            className="acheHeaderLogo"
           />
           <strong>Administração</strong>
         </div>
