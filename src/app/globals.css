@@ -1613,3 +1613,28 @@ body{min-height:100vh}
     width:118px;
   }
 }
+
+/* Logo Aché sem assinatura: Nexus e hero institucional */
+.acheLogoCoreClean{
+  width:132px;
+  height:auto;
+  display:block;
+  object-fit:contain;
+}
+.acheHeroLogoClean{
+  position:absolute;
+  width:185px;
+  height:auto;
+  right:24%;
+  top:188px;
+  z-index:3;
+  object-fit:contain;
+  filter:drop-shadow(0 14px 28px rgba(74,22,53,.12));
+}
+@media(max-width:650px){
+  .acheHeroLogoClean{
+    width:145px;
+    right:22%;
+    top:150px;
+  }
+}
