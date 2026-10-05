@@ -15,12 +15,12 @@ import {
 } from "lucide-react";
 
 const modules = [
-  { label: "Prosper", href: "/prosper", icon: Sparkles },
   { label: "Aché", href: "/ache", icon: HeartPulse },
   { label: "Letramento", href: "/letramento", icon: BookOpenCheck },
   { label: "Cultura", href: "/cultura", icon: Landmark },
   { label: "Vagas", href: "/vagas", icon: BriefcaseBusiness },
   { label: "Potenc.IA", href: "/potencia", icon: BrainCircuit },
+  { label: "Prosper", href: "/prosper", icon: Sparkles },
   { label: "Comunidade", href: "/comunidade", icon: UsersRound },
   { label: "ReBrand Pessoal", href: "/rebrand", icon: UserRoundPen },
 ];
