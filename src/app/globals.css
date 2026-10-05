@@ -394,3 +394,88 @@ body{min-height:100vh}
   .vagasHero h1{font-size:clamp(3.8rem,18vw,5.2rem)}
   .vagasCards,.benefitGrid{grid-template-columns:1fr}
 }
+
+/* Aché sidebar navigation */
+.acheBodyLayout{
+  display:grid;
+  grid-template-columns:220px minmax(0,1fr);
+  align-items:start;
+  background:#fff;
+}
+.acheBodyContent{min-width:0}
+.acheSectionNav{
+  position:sticky;
+  top:24px;
+  align-self:start;
+  z-index:16;
+  display:flex;
+  flex-direction:column;
+  gap:.4rem;
+  padding:1.4rem 1rem 1.4rem 1.25rem;
+  margin:2rem 0 2rem 1.5rem;
+  background:rgba(255,255,255,.94);
+  backdrop-filter:blur(18px);
+  border:1px solid #f0d8e3;
+  border-radius:22px;
+  box-shadow:0 16px 40px rgba(125,15,75,.08);
+}
+.acheMenuLabel{
+  padding:.2rem .8rem .7rem;
+  color:#a98d9e;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  font-size:.68rem;
+  font-weight:900;
+}
+.acheSectionNav a{
+  display:flex;
+  align-items:center;
+  gap:.7rem;
+  padding:.8rem .85rem;
+  border-radius:14px;
+  color:var(--wine);
+  font-weight:800;
+  line-height:1.25;
+  transition:.18s ease;
+}
+.acheSectionNav a>span{
+  width:28px;
+  height:28px;
+  flex:0 0 28px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:9px;
+  background:#fff0f5;
+  color:var(--magenta);
+  font-size:.72rem;
+  font-weight:900;
+}
+.acheSectionNav a:hover{
+  background:#ffe7f0;
+  color:var(--magenta);
+  transform:translateX(3px);
+}
+.acheBodyContent .landingSection{
+  padding-left:5vw;
+  padding-right:6vw;
+}
+@media(max-width:980px){
+  .acheBodyLayout{display:block}
+  .acheSectionNav{
+    position:sticky;
+    top:0;
+    margin:0;
+    border-radius:0;
+    border-left:0;
+    border-right:0;
+    flex-direction:row;
+    overflow-x:auto;
+    padding:.8rem 5vw;
+    box-shadow:0 8px 24px rgba(125,15,75,.06);
+  }
+  .acheMenuLabel{display:none}
+  .acheSectionNav a{white-space:nowrap;flex:0 0 auto}
+  .acheSectionNav a:hover{transform:none}
+  .acheBodyContent .landingSection{padding-left:6vw;padding-right:6vw}
+}
