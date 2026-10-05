@@ -34,13 +34,16 @@ export default function AchePage() {
         </div>
       </section>
 
-      <nav className="acheSectionNav">
-        <a href="#sobre">Sobre o Aché</a>
-        <a href="#governanca">Governança</a>
-        <a href="#conduta">Código de Conduta</a>
-        <a href="#sustentabilidade">Sustentabilidade</a>
-      </nav>
+      <div className="acheBodyLayout">
+        <aside className="acheSectionNav" aria-label="Navegação da página Aché">
+          <span className="acheMenuLabel">Navegue</span>
+          <a href="#sobre"><span>01</span>Sobre o Aché</a>
+          <a href="#governanca"><span>02</span>Governança</a>
+          <a href="#conduta"><span>03</span>Código de Conduta</a>
+          <a href="#sustentabilidade"><span>04</span>Sustentabilidade</a>
+        </aside>
 
+        <div className="acheBodyContent">
       <section id="sobre" className="landingSection acheAbout">
         <div className="sectionHeading">
           <span className="acheSectionNumber">01</span>
@@ -110,6 +113,8 @@ export default function AchePage() {
         </div>
         <div className="acheFuture"><strong>100 mi</strong><span>pessoas por ano até 2030</span></div>
       </section>
+        </div>
+      </div>
     </main>
   );
 }
