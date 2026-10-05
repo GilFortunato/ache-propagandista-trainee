@@ -572,3 +572,279 @@ body{min-height:100vh}
   .termsGrid article>div:last-child{grid-column:2}
   .accessHero h1{font-size:clamp(3.5rem,17vw,5rem)}
 }
+
+/* Refinamento do Letramento Acessibilidade — isolado da identidade Prosper */
+.accessLanding{
+  background:#fff8f8;
+  color:#3d3339;
+}
+.accessLanding .landingSection{
+  padding:4.6rem max(5vw,48px);
+}
+.accessLanding .sectionHeading{
+  max-width:980px;
+  margin:0 auto 2rem;
+}
+.accessLanding .sectionHeading h2{
+  color:#3c3338;
+  font-size:clamp(2.2rem,3.5vw,4.2rem);
+  line-height:1;
+}
+.accessLanding .sectionHeading p{
+  color:#62565d;
+}
+.accessHero{
+  min-height:500px;
+  max-width:none;
+  padding-top:5rem!important;
+  padding-bottom:5rem!important;
+  background:
+    radial-gradient(circle at 22% 30%,rgba(211,0,103,.08),transparent 28%),
+    radial-gradient(circle at 78% 66%,rgba(255,94,0,.07),transparent 30%),
+    #fff7f7;
+}
+.accessHeroCopy{
+  max-width:780px;
+  margin-left:auto;
+}
+.accessHero h1{
+  max-width:760px;
+  font-size:clamp(3.7rem,6.3vw,6.7rem);
+  color:#d00067;
+}
+.accessHero p{
+  font-size:1.12rem;
+  max-width:610px;
+}
+.accessHeroMark{
+  max-width:430px;
+  margin-right:auto;
+}
+.accessHeroMark svg{
+  width:82px;
+  height:82px;
+  color:#d00067;
+}
+.accessRing{
+  border-color:rgba(208,0,103,.13);
+}
+.accessMenu{
+  justify-content:center;
+  padding:.7rem 3vw;
+  background:rgba(255,250,250,.96);
+  border-color:#efd7df;
+}
+.accessMenu a{
+  font-size:.92rem;
+  color:#5f2141;
+  padding:.62rem .82rem;
+}
+.accessMenu a:hover{
+  background:#fbe5ed;
+  color:#d00067;
+}
+.accessLight,
+.accessSoft{
+  background:#fff8f8;
+}
+.accessLight:nth-of-type(even),
+.accessSoft:nth-of-type(even){
+  background:#fff4f2;
+}
+.accessNumber{
+  font-size:2.8rem;
+  color:rgba(208,0,103,.11);
+}
+.accessTag{
+  color:#d00067;
+}
+.shiftGrid,
+.disabilityGrid,
+.accessibilityGrid,
+.ableismGrid,
+.practiceGrid,
+.repertoireGrid{
+  max-width:1180px;
+  margin:0 auto;
+}
+.shiftGrid article,
+.disabilityGrid article,
+.ableismGrid article,
+.practiceGrid article,
+.repertoireGrid article{
+  border-radius:18px;
+  box-shadow:none;
+}
+.shiftGrid article{
+  min-height:200px;
+}
+.shiftGrid article:nth-child(1){
+  background:#fff8fb;
+}
+.shiftGrid article:nth-child(2){
+  background:#fff0df;
+}
+.shiftGrid article.featured{
+  background:#d00067;
+}
+.accessCallout{
+  max-width:1180px;
+  margin:1.25rem auto 0;
+  border-radius:14px;
+  background:#d00067;
+  font-size:1.05rem;
+  padding:1.1rem 1.4rem;
+}
+.accessCallout.outline{
+  background:#fff;
+  color:#d00067;
+  border-color:#d00067;
+}
+.termsGrid{
+  max-width:1180px;
+  margin:0 auto;
+}
+.termsGrid article{
+  border-radius:16px;
+  background:#fff;
+  box-shadow:none;
+}
+.disabilityGrid article{
+  background:#fff;
+  border-color:#ecd9e0;
+}
+.disabilityGrid article:nth-child(even){
+  background:#fff0df;
+  border-color:#efd4ba;
+}
+.disabilityGrid h3{
+  color:#d00067;
+}
+.accessMagenta{
+  background:#fff7f7;
+  color:#3d3339;
+}
+.accessMagenta .sectionHeading h2{
+  color:#d00067;
+}
+.accessMagenta .sectionHeading p{
+  color:#62565d;
+}
+.accessMagenta .accessNumber.light{
+  color:rgba(208,0,103,.11);
+}
+.accessMagenta .lightTag{
+  color:#d00067;
+}
+.accessibilityGrid{
+  grid-template-columns:repeat(2,1fr);
+}
+.accessibilityGrid article{
+  min-height:170px;
+  background:#fff;
+  color:#3d3339;
+  border:1px solid #ead7de;
+}
+.accessibilityGrid article:nth-child(even){
+  background:#fff0df;
+  border-color:#efcfb1;
+}
+.accessibilityGrid article>div{
+  color:#d00067;
+}
+.accessibilityGrid p{
+  color:#62565d;
+}
+.accessCallout.lightCallout{
+  background:#fff;
+  color:#d00067;
+  border:2px solid #d00067;
+}
+.ableismGrid article{
+  background:#fff;
+}
+.languageExamples{
+  background:#fff8f8;
+}
+.phraseColumns{
+  max-width:1100px;
+  margin:0 auto;
+}
+.phraseColumns article{
+  border-radius:18px;
+  background:#fff!important;
+}
+.phraseColumns article:first-child{
+  border-top:5px solid #9c0b4b;
+}
+.phraseColumns article:last-child{
+  border-top:5px solid #ff5c00;
+}
+.practiceGrid article{
+  min-height:155px;
+  background:#fff;
+}
+.practiceGrid article:nth-child(even){
+  background:#fff0df;
+}
+.repertoireSection{
+  background:#fff7f7;
+}
+.repertoireGrid article{
+  background:#fff;
+}
+.accessFinal{
+  background:#fff7f7;
+  color:#3d3339;
+  grid-template-columns:1fr 1fr;
+}
+.accessFinal .lightTag{
+  color:#d00067;
+}
+.accessFinal h2{
+  color:#d00067;
+  font-size:clamp(3rem,5vw,5.2rem);
+}
+.minimumCard{
+  background:#fff;
+  border:1px solid #ead6df;
+  color:#3d3339;
+  box-shadow:none;
+}
+.minimumCard h3{
+  color:#d00067;
+}
+.minimumCard p{
+  background:#fff0f5;
+  color:#5a2141;
+}
+@media(max-width:900px){
+  .accessHero{
+    grid-template-columns:1fr;
+    min-height:auto;
+    text-align:left;
+  }
+  .accessHeroCopy{
+    margin:0;
+  }
+  .accessHeroMark{
+    display:none;
+  }
+  .accessibilityGrid{
+    grid-template-columns:1fr;
+  }
+  .accessFinal{
+    grid-template-columns:1fr;
+  }
+}
+@media(max-width:700px){
+  .accessLanding .landingSection{
+    padding:3.6rem 6vw;
+  }
+  .accessHero h1{
+    font-size:clamp(3.2rem,15vw,4.8rem);
+  }
+  .accessMenu{
+    justify-content:flex-start;
+  }
+}
