@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export default function AdminPage() {
@@ -5,7 +6,13 @@ export default function AdminPage() {
     <main className="adminPage">
       <header className="simpleHeader">
         <div>
-          <div className="acheWordmark small" aria-label="Aché">aché</div>
+          <Image
+            src="/brand/ache-logo.png"
+            alt="Aché"
+            width={115}
+            height={69}
+            className="acheLogoSmall"
+          />
           <strong>Administração</strong>
         </div>
         <Link href="/home">Voltar para Home</Link>
