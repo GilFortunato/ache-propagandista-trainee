@@ -1638,3 +1638,29 @@ body{min-height:100vh}
     top:150px;
   }
 }
+
+/* Correção de camada/visibilidade da marca Aché */
+.nexusCore{
+  overflow:visible;
+}
+.acheLogoCoreClean{
+  position:relative;
+  z-index:5;
+  width:132px;
+  height:auto;
+  display:block;
+  object-fit:contain;
+}
+.acheHeroArt{
+  isolation:isolate;
+}
+.acheHeroArt .acheBlob{
+  z-index:1;
+}
+.acheHeroLogoClean{
+  z-index:6;
+  width:185px;
+  height:auto;
+  display:block;
+  object-fit:contain;
+}
