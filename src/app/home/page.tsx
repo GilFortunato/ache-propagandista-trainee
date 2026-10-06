@@ -61,14 +61,16 @@ export default function HomePage() {
         <div className="nexusWrap">
           <section className="nexus" aria-label="Nexus do programa">
             <div className="nexusCore">
-              <Image
-                src="/brand/ache-logo-clean-fixed.webp"
-                alt="Aché"
-                width={220}
-                height={92}
-                className="acheLogoCoreClean"
-                priority
-              />
+              <div className="acheWordmarkCrop acheWordmarkCropNexus" aria-label="Aché">
+                <Image
+                  src="/brand/ache-logo-tagline.webp"
+                  alt="Aché"
+                  fill
+                  sizes="132px"
+                  className="acheWordmarkCropImage"
+                  priority
+                />
+              </div>
               <span>Propagandista<br />Trainee</span>
             </div>
 
