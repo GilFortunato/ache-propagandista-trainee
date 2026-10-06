@@ -1858,3 +1858,58 @@ body{min-height:100vh}
     padding:4.5rem 6vw 5rem !important;
   }
 }
+
+/* ReBrand Pessoal / Diagnóstico de LinkedIn */
+.rebrandPage{min-height:100vh;background:#fff8fb;color:var(--ink)}
+.rebrandHeader{background:rgba(255,255,255,.97);border-bottom:1px solid rgba(176,24,103,.12)}
+.rebrandHero{padding:5.5rem 7vw 4rem;display:grid;grid-template-columns:1.15fr .85fr;gap:3rem;align-items:center;background:linear-gradient(145deg,#fff 0%,#fff0f5 68%,#ffe9df 100%)}
+.rebrandHeroCopy{max-width:880px}
+.rebrandHero h1{font-size:clamp(3.3rem,6vw,6.2rem);line-height:.92;letter-spacing:-.05em;margin:.75rem 0 1.2rem}
+.rebrandHero p{max-width:760px;font-size:1.08rem;line-height:1.7;color:var(--muted)}
+.rebrandHeroSignals{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem}
+.rebrandHeroSignals span{min-height:105px;padding:1rem;border-radius:20px;background:rgba(255,255,255,.78);border:1px solid #efd7e1;display:flex;align-items:center;gap:.8rem;font-weight:900;color:var(--wine)}
+.rebrandHeroSignals svg{color:var(--magenta)}
+.rebrandIntro{padding:2rem 7vw 4rem;display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;background:#fff}
+.rebrandIntro>div{padding:1.3rem;border:1px solid #efd8e2;border-radius:20px;background:#fff9fb}
+.rebrandIntro span{display:inline-flex;width:34px;height:34px;align-items:center;justify-content:center;border-radius:10px;background:#ffe8f1;color:var(--magenta);font-size:.75rem;font-weight:900}
+.rebrandIntro h3{margin:.9rem 0 .45rem;color:var(--wine)}
+.rebrandIntro p{margin:0;color:var(--muted);line-height:1.5}
+.rebrandWorkspace{padding:4rem 7vw 6rem;background:#fff6f9}
+.rebrandDiagnostic{display:grid;grid-template-columns:380px minmax(0,1fr);gap:1.5rem;align-items:start;max-width:1450px;margin:0 auto}
+.rebrandFormCard{position:sticky;top:24px;padding:1.5rem;border-radius:24px;background:#fff;border:1px solid #ead2dc;box-shadow:0 14px 40px rgba(96,22,58,.07)}
+.rebrandCardIcon{width:54px;height:54px;border-radius:17px;background:#ffe8f1;color:var(--magenta);display:flex;align-items:center;justify-content:center;margin-bottom:1rem}
+.rebrandFormCard h2{font-size:1.85rem;line-height:1.05;margin:.65rem 0 .8rem}
+.rebrandFormCard>p{color:var(--muted);line-height:1.55;margin-bottom:1.25rem}
+.rebrandFormCard label{display:block;margin-top:1rem;color:var(--wine);font-size:.82rem;font-weight:900}
+.rebrandFormCard textarea,.rebrandInputWrap{margin-top:.4rem}
+.rebrandInputWrap{display:flex;align-items:center;gap:.5rem;padding:.8rem;border:1px solid #e5cfd9;border-radius:12px;background:#fff}
+.rebrandInputWrap svg{color:var(--magenta);flex:0 0 auto}
+.rebrandInputWrap input{width:100%;border:0;outline:0;background:transparent;color:var(--ink)}
+.rebrandFormCard textarea{width:100%;resize:vertical;padding:.8rem;border:1px solid #e5cfd9;border-radius:12px;background:#fff;color:var(--ink);font:inherit}
+.rebrandError{margin-top:1rem;padding:.85rem 1rem;border-radius:12px;background:#fff0f0;color:#9b1c31;font-size:.88rem;font-weight:700}
+.rebrandRun{width:100%;margin-top:1.2rem;padding:.95rem 1rem;border:0;border-radius:999px;background:linear-gradient(90deg,#a90f5d,#cf176c);color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center;gap:.5rem;cursor:pointer}
+.rebrandRun:disabled{opacity:.5;cursor:not-allowed}
+.spin{animation:rebrandSpin 1s linear infinite}@keyframes rebrandSpin{to{transform:rotate(360deg)}}
+.rebrandResultArea{min-width:0}
+.rebrandEmpty{min-height:430px;border:1px dashed #dcbfcd;border-radius:24px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;color:var(--muted)}
+.rebrandEmpty svg{color:var(--magenta);margin-bottom:1rem}
+.rebrandEmpty h3{color:var(--wine);font-size:1.7rem;margin:.2rem 0 .5rem}
+.rebrandScoreCard{display:flex;justify-content:space-between;gap:2rem;align-items:center;padding:1.6rem;border-radius:24px;background:#fff;border:1px solid #ead2dc}
+.rebrandScoreCard h2{font-size:2rem;margin:.5rem 0 .4rem}
+.rebrandScoreCard p{margin:0;color:var(--muted)}
+.rebrandScore{min-width:150px;text-align:center;padding:1rem;border-radius:20px;background:#fff0f5;color:var(--magenta)}
+.rebrandScore strong{font-size:3.2rem;line-height:1}.rebrandScore>span{font-weight:900}.rebrandScore small{display:block;margin-top:.4rem;color:var(--wine);font-weight:900}
+.rebrandSummary{margin-top:1rem;padding:1.25rem 1.4rem;border-radius:18px;background:linear-gradient(135deg,#a90f5d,#c81a68);color:#fff;display:flex;gap:.8rem;align-items:flex-start}
+.rebrandSummary p{margin:0;line-height:1.65}
+.rebrandDimensions{margin-top:1rem;display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
+.rebrandDimensions article{padding:1.2rem;border:1px solid #ead2dc;border-radius:18px;background:#fff}
+.rebrandDimensions article>div:first-child{display:flex;justify-content:space-between;gap:1rem}.rebrandDimensions article>div:first-child span{color:var(--magenta);font-weight:900}
+.rebrandMeter{height:8px;background:#f4e3ea;border-radius:99px;overflow:hidden;margin:.8rem 0}.rebrandMeter i{display:block;height:100%;background:linear-gradient(90deg,#b01867,#f47a35);border-radius:99px}
+.rebrandDimensions p{color:var(--muted);line-height:1.5}.rebrandDimensions small{display:block;color:var(--wine);font-weight:800;line-height:1.45}
+.rebrandLists{margin-top:1rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.rebrandLists article{padding:1.2rem;border-radius:18px;background:#fff;border:1px solid #ead2dc}
+.rebrandLists h3{margin-top:0;color:var(--wine)}.rebrandLists p{display:flex;gap:.55rem;align-items:flex-start;color:var(--muted);line-height:1.45}.rebrandLists svg{color:var(--magenta);flex:0 0 auto;margin-top:.15rem}
+.rebrandNextAction{margin-top:1rem;padding:1.5rem 1.6rem;border-radius:22px;background:#2b1526;color:#fff}.rebrandNextAction>span{color:#ffb7d5;text-transform:uppercase;letter-spacing:.11em;font-size:.72rem;font-weight:900}.rebrandNextAction h3{font-size:1.8rem;margin:.6rem 0}.rebrandNextAction p{color:#eadbe4;line-height:1.55}.rebrandNextAction li{margin:.65rem 0;line-height:1.5}
+.adminRebrandCard{grid-column:span 2}.adminRebrandKeys{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0}.adminRebrandKeys code{padding:.5rem .65rem;border-radius:9px;background:#fff0f5;color:var(--magenta);font-size:.75rem}.adminRebrandNote{font-size:.83rem!important;color:#7a6872!important}
+@media(max-width:1000px){.rebrandHero{grid-template-columns:1fr}.rebrandIntro{grid-template-columns:repeat(2,1fr)}.rebrandDiagnostic{grid-template-columns:1fr}.rebrandFormCard{position:static}.rebrandLists{grid-template-columns:1fr}.adminRebrandCard{grid-column:auto}}
+@media(max-width:700px){.rebrandHero,.rebrandIntro,.rebrandWorkspace{padding-left:6vw;padding-right:6vw}.rebrandIntro,.rebrandDimensions{grid-template-columns:1fr}.rebrandHeroSignals{grid-template-columns:1fr}.rebrandScoreCard{align-items:flex-start;flex-direction:column}.rebrandScore{width:100%}}
