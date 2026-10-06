@@ -28,7 +28,21 @@ export default function AdminPage() {
 
       <section className="adminGrid">
         <article><h2>Usuários</h2><p>Gerencie participantes e administradores.</p></article>
-        <article><h2>Comunidade</h2><p>Cadastre links do YouTube, títulos, categorias e destaques.</p></article>
+        <article className="adminCommunityCard">
+          <h2>Comunidade</h2>
+          <p>Cadastre links do YouTube, títulos, categorias e destaques.</p>
+          <div className="adminVideoCurrent">
+            <span>Vídeo cadastrado</span>
+            <strong>Comunidade Aché — Vídeo 01</strong>
+            <a href="https://youtu.be/RewY7L3wcyg" target="_blank" rel="noreferrer">Abrir no YouTube</a>
+          </div>
+          <div className="adminVideoFields" aria-label="Estrutura preparada para novos vídeos">
+            <label>Link do YouTube<input value="https://youtu.be/RewY7L3wcyg" readOnly /></label>
+            <label>Título<input value="Comunidade Aché — Vídeo 01" readOnly /></label>
+            <label>Categoria<input value="Comunidade" readOnly /></label>
+          </div>
+          <Link href="/comunidade" className="adminCommunityLink">Ver página da Comunidade</Link>
+        </article>
         <article><h2>Vagas</h2><p>Publique e organize oportunidades.</p></article>
         <article><h2>LinkedIn</h2><p>Acompanhe diagnósticos de marca profissional para propagandistas.</p></article>
       </section>
