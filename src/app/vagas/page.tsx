@@ -29,14 +29,16 @@ export default function VagasPage() {
     <main className="vagasLanding">
       <header className="experienceHeader vagasHeader">
         <div className="experienceBrand">
-          <Image
-            src="/brand/ache-logo-tagline.webp"
-            alt="Aché"
-            width={115}
-            height={69}
-            className="acheHeaderLogo"
-            priority
-          />
+          <Link href="/home" aria-label="Ir para Home" className="headerLogoLink">
+            <Image
+              src="/brand/ache-logo-tagline.webp"
+              alt="Aché"
+              width={115}
+              height={69}
+              className="acheHeaderLogo"
+              priority
+            />
+          </Link>
           <strong>Programa PcD – Propagandista Trainee</strong>
         </div>
         <Link href="/home" className="backNexus">
