@@ -44,7 +44,16 @@ export default function AdminPage() {
           <Link href="/comunidade" className="adminCommunityLink">Ver página da Comunidade</Link>
         </article>
         <article><h2>Vagas</h2><p>Publique e organize oportunidades.</p></article>
-        <article><h2>LinkedIn</h2><p>Acompanhe diagnósticos de marca profissional para propagandistas.</p></article>
+        <article className="adminRebrandCard">
+          <h2>ReBrand / LinkedIn</h2>
+          <p>Diagnóstico independente do projeto comercial, com conectores próprios para análise pública do LinkedIn e IA.</p>
+          <div className="adminRebrandKeys">
+            <code>ACHE_REBRAND_APIFY_TOKEN</code>
+            <code>ACHE_REBRAND_GEMINI_API_KEY</code>
+          </div>
+          <p className="adminRebrandNote">As credenciais devem ser cadastradas somente neste projeto/Vercel. Não reutilize as chaves do Diagnóstico Comercial.</p>
+          <Link href="/rebrand" className="adminCommunityLink">Abrir ReBrand Pessoal</Link>
+        </article>
       </section>
     </main>
   );
