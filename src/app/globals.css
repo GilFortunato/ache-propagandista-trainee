@@ -1696,3 +1696,30 @@ body{min-height:100vh}
     top:150px;
   }
 }
+
+/* Ajuste fino final do recorte da marca Aché sem assinatura */
+.acheWordmarkCropImage{
+  object-fit:cover;
+  object-position:center 30%;
+}
+.acheWordmarkCropNexus{
+  width:132px;
+  height:34px;
+  z-index:6;
+}
+.acheWordmarkCropHero{
+  position:absolute;
+  width:185px;
+  height:48px;
+  right:24%;
+  top:188px;
+  z-index:7;
+}
+@media(max-width:650px){
+  .acheWordmarkCropHero{
+    width:145px;
+    height:38px;
+    right:22%;
+    top:150px;
+  }
+}
