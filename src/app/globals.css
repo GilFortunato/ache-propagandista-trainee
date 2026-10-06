@@ -1826,3 +1826,35 @@ body{min-height:100vh}
   .communityHero,.communityFeatured,.communityLibrary{padding-left:6vw;padding-right:6vw}
   .communityVideoGrid{grid-template-columns:1fr}
 }
+
+/* Aché — mais respiro na seção magenta de Governança */
+.acheBodyContent .acheGovernance{
+  box-sizing:border-box;
+  padding:6rem clamp(2.75rem,4.5vw,5rem) 6.5rem !important;
+  min-height:720px;
+}
+.acheBodyContent .acheGovernance .sectionHeading{
+  max-width:980px;
+  margin-bottom:2.5rem;
+}
+.acheBodyContent .acheGovernance .sectionHeading h2{
+  max-width:920px;
+  margin-bottom:1.3rem;
+}
+.acheBodyContent .acheGovernance .sectionHeading p{
+  max-width:900px;
+  line-height:1.7;
+}
+.acheBodyContent .acheGovernance .governanceGrid{
+  margin-top:2.25rem;
+  gap:1.15rem;
+}
+.acheBodyContent .acheGovernance .acheMilestones{
+  margin-top:1.5rem;
+}
+@media(max-width:900px){
+  .acheBodyContent .acheGovernance{
+    min-height:auto;
+    padding:4.5rem 6vw 5rem !important;
+  }
+}
