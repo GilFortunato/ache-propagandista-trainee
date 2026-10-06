@@ -1765,3 +1765,19 @@ body{min-height:100vh}
     top:150px;
   }
 }
+
+.headerLogoLink{
+  display:inline-flex;
+  align-items:center;
+  border-radius:12px;
+  cursor:pointer;
+  transition:transform .18s ease, opacity .18s ease;
+}
+.headerLogoLink:hover{
+  transform:translateY(-1px);
+  opacity:.92;
+}
+.headerLogoLink:focus-visible{
+  outline:2px solid var(--magenta);
+  outline-offset:4px;
+}
