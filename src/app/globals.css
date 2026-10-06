@@ -1664,3 +1664,35 @@ body{min-height:100vh}
   display:block;
   object-fit:contain;
 }
+
+/* Correção definitiva: usa a marca aprovada com assinatura e recorta apenas o slogan */
+.acheWordmarkCrop{
+  position:relative;
+  overflow:hidden;
+  flex:0 0 auto;
+}
+.acheWordmarkCropImage{
+  object-fit:cover;
+  object-position:center 39%;
+}
+.acheWordmarkCropNexus{
+  width:132px;
+  height:39px;
+  z-index:6;
+}
+.acheWordmarkCropHero{
+  position:absolute;
+  width:185px;
+  height:54px;
+  right:24%;
+  top:188px;
+  z-index:7;
+}
+@media(max-width:650px){
+  .acheWordmarkCropHero{
+    width:145px;
+    height:42px;
+    right:22%;
+    top:150px;
+  }
+}
