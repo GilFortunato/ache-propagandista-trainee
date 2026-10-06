@@ -30,14 +30,16 @@ export default function HomePage() {
     <main className="homePage">
       <header className="topbar">
         <div>
-          <Image
-            src="/brand/ache-logo-tagline.webp"
-            alt="Aché"
-            width={115}
-            height={69}
-            className="acheHeaderLogo"
-            priority
-          />
+          <Link href="/home" aria-label="Ir para Home" className="headerLogoLink">
+            <Image
+              src="/brand/ache-logo-tagline.webp"
+              alt="Aché"
+              width={115}
+              height={69}
+              className="acheHeaderLogo"
+              priority
+            />
+          </Link>
           <span>Programa PcD – Propagandista Trainee</span>
         </div>
 
