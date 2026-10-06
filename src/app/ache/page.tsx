@@ -15,7 +15,9 @@ export default function AchePage() {
     <main className="acheLanding">
       <header className="experienceHeader acheHeader">
         <div className="experienceBrand">
-          <Image src="/brand/ache-logo-tagline.webp" alt="Aché" width={115} height={69} className="acheHeaderLogo" priority />
+          <Link href="/home" aria-label="Ir para Home" className="headerLogoLink">
+            <Image src="/brand/ache-logo-tagline.webp" alt="Aché" width={115} height={69} className="acheHeaderLogo" priority />
+          </Link>
           <strong>Programa PcD – Propagandista Trainee</strong>
         </div>
         <Link href="/home" className="backNexus"><ArrowLeft size={17}/>Voltar ao Nexus</Link>
