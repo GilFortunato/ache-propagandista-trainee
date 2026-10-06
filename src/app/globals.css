@@ -1742,3 +1742,26 @@ body{min-height:100vh}
     top:150px;
   }
 }
+
+/* Correção da hero Aché: usa a marca aprovada e converte para branco via CSS */
+.acheWordmarkCropHeroWhite{
+  width:185px;
+  height:46px;
+  right:24%;
+  top:188px;
+  z-index:8;
+  overflow:hidden;
+}
+.acheWordmarkCropImageWhite{
+  object-fit:cover;
+  object-position:center 28%;
+  filter:brightness(0) invert(1);
+}
+@media(max-width:650px){
+  .acheWordmarkCropHeroWhite{
+    width:145px;
+    height:36px;
+    right:22%;
+    top:150px;
+  }
+}
