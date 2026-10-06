@@ -6,13 +6,15 @@ export default function AdminPage() {
     <main className="adminPage">
       <header className="simpleHeader">
         <div>
-          <Image
-            src="/brand/ache-logo-tagline.webp"
-            alt="Aché"
-            width={115}
-            height={69}
-            className="acheHeaderLogo"
-          />
+          <Link href="/home" aria-label="Ir para Home" className="headerLogoLink">
+            <Image
+              src="/brand/ache-logo-tagline.webp"
+              alt="Aché"
+              width={115}
+              height={69}
+              className="acheHeaderLogo"
+            />
+          </Link>
           <strong>Administração</strong>
         </div>
         <Link href="/home">Voltar para Home</Link>
