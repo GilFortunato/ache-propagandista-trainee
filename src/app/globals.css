@@ -1723,3 +1723,22 @@ body{min-height:100vh}
     top:150px;
   }
 }
+
+/* Hero Aché — wordmark branco */
+.acheHeroLogoWhite{
+  position:absolute;
+  width:185px;
+  height:auto;
+  right:24%;
+  top:188px;
+  z-index:7;
+  object-fit:contain;
+  filter:drop-shadow(0 10px 24px rgba(74,22,53,.18));
+}
+@media(max-width:650px){
+  .acheHeroLogoWhite{
+    width:145px;
+    right:22%;
+    top:150px;
+  }
+}
