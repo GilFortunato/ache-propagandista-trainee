@@ -12,10 +12,10 @@ import {
 
 // Módulos visíveis no Nexus. Os demais permanecem preservados em suas rotas.
 const modules = [
-  { label: "Aché", href: "/ache", icon: HeartPulse, position: "petal0" },
-  { label: "Vagas", href: "/vagas", icon: BriefcaseBusiness, position: "petal2" },
-  { label: "Prosper", href: "/prosper", icon: Sparkles, position: "petal4" },
-  { label: "ReBrand Pessoal", href: "/rebrand", icon: UserRoundPen, position: "petal6" },
+  { label: "ReBrand Pessoal", href: "/rebrand", icon: UserRoundPen, position: "petal0" },
+  { label: "Aché", href: "/ache", icon: HeartPulse, position: "petal2" },
+  { label: "Vagas", href: "/vagas", icon: BriefcaseBusiness, position: "petal4" },
+  { label: "Prosper", href: "/prosper", icon: Sparkles, position: "petal6" },
 ];
 
 export default function HomePage() {
