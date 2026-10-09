@@ -14,7 +14,7 @@ import {
 const modules = [
   { label: "ReBrand Pessoal", href: "/rebrand", icon: UserRoundPen, position: "petal0" },
   { label: "Aché", href: "/ache", icon: HeartPulse, position: "petal2" },
-  { label: "Vagas", href: "/vagas", icon: BriefcaseBusiness, position: "petal4" },
+  { label: "Vagas", href: "/ache#vagas", icon: BriefcaseBusiness, position: "petal4" },
   { label: "Prosper", href: "/prosper", icon: Sparkles, position: "petal6" },
 ];
 
