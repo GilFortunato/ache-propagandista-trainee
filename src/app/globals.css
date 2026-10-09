@@ -2297,3 +2297,82 @@ body{min-height:100vh}
   .prosperAboutCard{padding:1.3rem}
   .prosperAboutNote,.prosperAboutPotenciaBrand{padding:1.5rem}
 }
+
+/* Aché — página unificada: oportunidades antes do conteúdo institucional */
+.acheBodyContent.acheUnifiedContent > .landingSection{
+  box-sizing:border-box;
+  padding:clamp(3.25rem,4.5vw,5rem) clamp(1.75rem,3.3vw,3.5rem);
+  scroll-margin-top:1.5rem;
+}
+.acheUnifiedContent .vagasHero{
+  min-height:350px;
+  display:flex;
+  align-items:center;
+}
+.acheUnifiedContent .vagasHero h1{
+  max-width:850px;
+  font-size:clamp(3rem,5.15vw,5.65rem);
+  line-height:.97;
+}
+.acheUnifiedContent .vagasEntry{padding-top:2.5rem;padding-bottom:3.5rem}
+.acheUnifiedContent .vagasCards{max-width:none}
+.acheUnifiedContent .vagaChoice{min-height:290px}
+.acheUnifiedContent .vagasBenefits .sectionHeading h2{
+  font-size:clamp(2.3rem,3.5vw,4rem);
+  line-height:1.02;
+}
+.acheUnifiedContent .benefitGrid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.acheUnifiedContent .diversitySection{background:#fff8fb}
+.acheUnifiedContent .diversityBanner{
+  grid-template-columns:1fr;
+  gap:1rem;
+}
+.acheUnifiedContent > .acheHero{
+  min-height:530px;
+  grid-template-columns:minmax(0,1fr) minmax(260px,.8fr);
+  gap:clamp(1.5rem,3vw,3rem);
+}
+.acheUnifiedContent > .acheHero h1{
+  font-size:clamp(3.15rem,5vw,5.8rem);
+}
+.acheUnifiedContent > .acheHero .acheHeroArt{
+  min-width:0;
+  height:350px;
+}
+.acheUnifiedContent .acheValuesGrid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.acheUnifiedContent .governanceGrid,
+.acheUnifiedContent .conductFeature,
+.acheUnifiedContent .sustainabilityGrid{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+@media(max-width:1200px){
+  .acheUnifiedContent > .acheHero{
+    grid-template-columns:1fr;
+    gap:0;
+  }
+  .acheUnifiedContent > .acheHero .acheHeroArt{height:295px}
+  .acheUnifiedContent .benefitGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .acheUnifiedContent .acheValuesGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:900px){
+  .acheBodyContent.acheUnifiedContent > .landingSection{
+    padding:3.5rem 6vw;
+    scroll-margin-top:4.5rem;
+  }
+  .acheUnifiedContent .vagasHero{min-height:auto}
+  .acheUnifiedContent .vagasHero h1{font-size:clamp(3rem,8vw,4.8rem)}
+  .acheUnifiedContent > .acheHero{min-height:auto}
+  .acheUnifiedContent > .acheHero h1{font-size:clamp(3.5rem,9vw,5.5rem)}
+}
+@media(max-width:650px){
+  .acheUnifiedContent .vagasCards,
+  .acheUnifiedContent .benefitGrid,
+  .acheUnifiedContent .acheValuesGrid,
+  .acheUnifiedContent .acheStats,
+  .acheUnifiedContent .governanceGrid,
+  .acheUnifiedContent .conductFeature,
+  .acheUnifiedContent .sustainabilityGrid{grid-template-columns:1fr}
+  .acheUnifiedContent .vagasHero h1{font-size:clamp(2.75rem,11vw,4rem)}
+  .acheUnifiedContent > .acheHero h1{font-size:clamp(3.25rem,13vw,4.6rem)}
+  .acheUnifiedContent > .acheHero .acheHeroArt{height:270px}
+}
