@@ -49,216 +49,101 @@ function Header() {
 }
 
 function ProsperPage() {
-  const companyJourney = [
-    { n: "01", title: "Entender", text: "Criar repertório digital, reduzir barreiras e identificar onde tecnologia e IA podem apoiar o trabalho.", accent: "Inic.IA + Letramento Digital" },
-    { n: "02", title: "Aplicar", text: "Levar IA para processos, decisões e rotinas reais de RH, liderança e operações.", accent: "AI for Business" },
-    { n: "03", title: "Construir", text: "Transformar desafios do negócio em protótipos e soluções funcionais desenvolvidas pelos próprios times.", accent: "AI Builders" },
-  ];
-
-  const careerBenefits = [
-    { icon: Target, title: "Clareza de caminho", text: "Aprender deixa de ser uma coleção de cursos e passa a fazer sentido dentro de uma trajetória profissional." },
-    { icon: BrainCircuit, title: "Habilidades do futuro", text: "Competências digitais e IA entram no repertório de forma prática, acessível e conectada ao trabalho." },
-    { icon: Rocket, title: "Aprender fazendo", text: "Projetos, mentorias e desafios reais transformam conhecimento em experiência e confiança para aplicar." },
-    { icon: Network, title: "Mais possibilidades", text: "Desenvolvimento, empregabilidade, mobilidade e conexão com oportunidades caminham juntos." },
-  ];
-
-  const businessBenefits = [
-    "Capacitar públicos técnicos e não técnicos sem separar aprendizagem da realidade do negócio.",
-    "Aumentar autonomia e produtividade antes de escalar soluções mais complexas.",
-    "Criar capacidade interna para aplicar IA em processos, decisões e rotinas.",
-    "Conectar desenvolvimento de talentos, diversidade, inovação e geração de valor.",
-  ];
-
-  const ecosystem = [
-    { icon: GraduationCap, title: "Aquisição + formação", text: "Education Recruiting conecta atração, seleção, desenvolvimento e contratação em uma única jornada." },
-    { icon: Lightbulb, title: "Habilidades digitais", text: "Letramento Digital e Inic.IA criam a base para novas formas de trabalho e adoção consciente de tecnologia." },
-    { icon: BriefcaseBusiness, title: "IA aplicada ao negócio", text: "AI for Business leva IA para RH, liderança e operações usando problemas reais das áreas." },
-    { icon: Rocket, title: "Construção de soluções", text: "AI Builders desenvolve protótipos funcionais e capacidade interna de inovação." },
-    { icon: Sparkles, title: "Impacto + inclusão", text: "Potenc.IA conecta formação em IA, talentos, empregabilidade e agenda de diversidade." },
-    { icon: Gauge, title: "Escala e mensuração", text: "Prosper Sprints organiza jornadas, assessments, projetos, mentorias e acompanhamento de evolução." },
+  const areas = [
+    {
+      title: "Letramento Digital e Inic.IA",
+      description: "Formação acessível para desenvolver competências digitais e começar a usar inteligência artificial com segurança e propósito.",
+      icon: GraduationCap,
+    },
+    {
+      title: "AI for Business",
+      description: "Capacitação de equipes para aplicar IA em processos, rotinas e desafios reais das organizações.",
+      icon: BrainCircuit,
+    },
+    {
+      title: "AI Builders",
+      description: "Aprendizagem prática para que profissionais transformem problemas em protótipos, automações e soluções.",
+      icon: Rocket,
+    },
+    {
+      title: "Education Recruiting",
+      description: "Jornadas que conectam atração de talentos, qualificação e oportunidades de desenvolvimento profissional.",
+      icon: BriefcaseBusiness,
+    },
   ];
 
   return (
-    <main className="experiencePage prosperLanding prosperStory">
+    <main className="experiencePage prosperLanding prosperAboutPage">
       <Header />
 
-      <section className="prosperStoryHero">
-        <div className="prosperStoryHeroCopy">
-          <span className="prosperStoryEyebrow">PROSPER DIGITAL SKILLS</span>
-          <h1>Quando pessoas desenvolvem novas habilidades, <em>o negócio também evolui.</em></h1>
+      <section className="prosperAboutIntro" aria-labelledby="prosper-about-title">
+        <div className="prosperAboutIntroContent">
+          <span className="prosperAboutLabel">SOBRE A PROSPER DIGITAL SKILLS</span>
+          <h1 id="prosper-about-title">Desenvolvemos habilidades para o futuro do trabalho.</h1>
           <p>
-            A Prosper é a frente de desenvolvimento de habilidades digitais para o futuro do trabalho da Share People Hub.
-            Mais do que ensinar ferramentas, estruturamos jornadas que ajudam pessoas a crescer e empresas a transformar
-            aprendizagem em autonomia, inovação e geração de valor.
-          </p>
-          <a href="#prosper-story" className="prosperStoryCta">
-            Conheça essa jornada <ArrowRight size={18}/>
-          </a>
-        </div>
-
-        <div className="prosperStoryVisual" aria-hidden="true">
-          <div className="prosperStoryHalo haloOne" />
-          <div className="prosperStoryHalo haloTwo" />
-          <div className="prosperStoryCore"><span>PROSPER</span><small>DIGITAL SKILLS</small></div>
-          <div className="prosperStoryNode nodePeople"><UsersRound/><span>Pessoas</span></div>
-          <div className="prosperStoryNode nodeSkills"><BrainCircuit/><span>Skills</span></div>
-          <div className="prosperStoryNode nodeBusiness"><Building2/><span>Negócio</span></div>
-        </div>
-      </section>
-
-      <section id="prosper-story" className="prosperNarrativeSection">
-        <div className="prosperNarrativeNumber">01</div>
-        <div className="prosperNarrativeCopy">
-          <span>O PONTO DE PARTIDA</span>
-          <h2>O trabalho mudou. E desenvolver pessoas também precisa mudar.</h2>
-          <p>
-            Novas ferramentas surgem o tempo todo. A IA acelera processos, altera funções e cria outras formas de decidir,
-            comunicar e produzir. Só disponibilizar tecnologia, porém, não garante transformação.
-          </p>
-          <p>
-            A Prosper entra justamente nesse espaço: tornar novas habilidades compreensíveis, aplicáveis e conectadas
-            ao contexto real de quem aprende — seja uma pessoa construindo sua carreira, seja uma empresa preparando
-            seus times para o que vem pela frente.
+            A Prosper Digital Skills é a frente de educação e desenvolvimento da Share People Hub.
+            Criamos experiências de aprendizagem em tecnologia, habilidades digitais e inteligência
+            artificial para apoiar a evolução de profissionais e a capacitação de equipes.
           </p>
         </div>
-      </section>
-
-      <section className="prosperCareerSection">
-        <div className="prosperSectionHeading">
-          <span>PARA QUEM ESTÁ CONSTRUINDO UMA CARREIRA</span>
-          <h2>Desenvolvimento que aumenta repertório, autonomia e possibilidade.</h2>
-          <p>
-            A lógica é simples: aprender precisa ajudar a pessoa a fazer algo que antes não fazia, enxergar oportunidades
-            que antes não enxergava e tomar decisões profissionais com mais segurança.
-          </p>
-        </div>
-        <div className="prosperCareerGrid">
-          {careerBenefits.map(({icon: Icon,title,text}) => (
-            <article key={title}>
-              <span><Icon size={25}/></span>
-              <h3>{title}</h3>
-              <p>{text}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="prosperBridgeSection">
-        <div className="prosperBridgeQuote">
-          <span>MAS EXISTE UM SEGUNDO LADO DESSA HISTÓRIA</span>
-          <h2>Empresas não precisam apenas de novas tecnologias. Precisam de pessoas preparadas para usá-las bem.</h2>
-        </div>
-        <div className="prosperBridgeText">
-          <p>
-            É aqui que desenvolvimento de carreira e estratégia de negócio se encontram. Quando a capacitação parte
-            de desafios reais, a empresa não só atualiza conhecimentos: cria capacidade interna.
-          </p>
-          <p>
-            Times ganham mais autonomia, aprendem a identificar oportunidades, aplicam IA em processos e conseguem
-            evoluir de consumidores de tecnologia para protagonistas da transformação.
-          </p>
-        </div>
-      </section>
-
-      <section className="prosperBusinessSection">
-        <div className="prosperSectionHeading">
-          <span>PARA EMPRESAS</span>
-          <h2>Capacitar o time pode ser parte da estratégia — não um evento isolado.</h2>
-          <p>
-            A Prosper estrutura programas personalizados para diferentes níveis de maturidade, áreas e objetivos,
-            com conteúdo aplicado ao contexto real, formatos flexíveis e acompanhamento da evolução.
-          </p>
-        </div>
-
-        <div className="prosperBusinessLayout">
-          <div className="prosperBusinessList">
-            {businessBenefits.map((item,i)=><div key={item}><span>0{i+1}</span><p>{item}</p></div>)}
-          </div>
-          <aside className="prosperBusinessCallout">
-            <span>O QUE MUDA NA PRÁTICA</span>
-            <strong>Aprender deixa de ser consumo de conteúdo e passa a gerar comportamento, projeto e decisão.</strong>
-            <p>O foco está em aplicação, mentoria, problemas reais da área, assessment e evolução de maturidade.</p>
-          </aside>
-        </div>
-      </section>
-
-      <section className="prosperMaturitySection">
-        <div className="prosperSectionHeading">
-          <span>UMA JORNADA DE MATURIDADE</span>
-          <h2>Do entendimento à geração de valor.</h2>
-          <p>
-            A empresa não precisa começar construindo soluções complexas. A jornada pode avançar no ritmo certo,
-            acompanhando a maturidade dos times.
-          </p>
-        </div>
-        <div className="prosperMaturityGrid">
-          {companyJourney.map((item)=>(
-            <article key={item.n}>
-              <span className="prosperMaturityNumber">{item.n}</span>
-              <small>{item.accent}</small>
-              <h3>{item.title}</h3>
-              <p>{item.text}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="prosperEcosystemStory">
-        <div className="prosperSectionHeading">
-          <span>ECOSSISTEMA PROSPER</span>
-          <h2>Uma solução não serve para todo mundo. Por isso o ecossistema é modular.</h2>
-          <p>
-            Da atração de talentos ao desenvolvimento de habilidades, da sensibilização em IA à construção de soluções,
-            os programas podem ser combinados conforme o desafio e o nível de maturidade.
-          </p>
-        </div>
-        <div className="prosperEcosystemStoryGrid">
-          {ecosystem.map(({icon:Icon,title,text})=>(
-            <article key={title}>
-              <span><Icon size={26}/></span>
-              <h3>{title}</h3>
-              <p>{text}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="prosperScaleSection">
-        <div className="prosperScaleCopy">
-          <span>PROSPER SPRINTS</span>
-          <h2>Aprendizagem com estrutura, acompanhamento e escala.</h2>
-          <p>
-            A tecnologia funciona como um hub de entrega e performance: organiza trilhas, assessments, conteúdo assíncrono,
-            projetos, mentorias e dados de evolução. Isso permite manter consistência tanto em grupos pequenos quanto
-            em programas de grande escala.
-          </p>
-        </div>
-        <div className="prosperScaleMetrics">
-          <div><strong>10 → 10.000</strong><span>pessoas com a mesma lógica de jornada</span></div>
-          <div><strong>Dados</strong><span>para acompanhar progresso e maturidade</span></div>
-          <div><strong>Escala</strong><span>sem perder estrutura e acompanhamento</span></div>
-        </div>
-      </section>
-
-      <section className="prosperSoftSellSection">
-        <div>
-          <span>QUANDO DESENVOLVIMENTO E NEGÓCIO ANDAM JUNTOS</span>
-          <h2>Uma empresa preparada para o futuro começa por pessoas preparadas para construí-lo.</h2>
-          <p>
-            Programas de desenvolvimento podem apoiar produtividade, inovação, diversidade, formação de novos talentos
-            e transformação cultural ao mesmo tempo — desde que sejam desenhados a partir da realidade de cada organização.
-          </p>
-        </div>
-        <aside>
-          <strong>É essa ponte que a Prosper constrói.</strong>
-          <p>Pessoas aprendem. Times aplicam. A organização evolui.</p>
+        <aside className="prosperAboutNote">
+          <span>O QUE NOS MOVE</span>
+          <strong>Conhecimento que sai da teoria e ganha espaço na prática.</strong>
+          <p>Aprender, experimentar e aplicar — respeitando diferentes pontos de partida.</p>
         </aside>
       </section>
 
-      <section className="prosperClientsStory">
-        <span>EMPRESAS QUE JÁ CONSTRUÍRAM JORNADAS COM A PROSPER</span>
-        <div>
-          {["AB InBev","CI&T","TotalPass","John Deere","Citi","Alelo","Bosch","Vivo","BNP Paribas","Itaú","Localiza","Suzano","RD","RDI","Pismo","Serasa Experian","Webmotors"].map((name)=><span key={name}>{name}</span>)}
+      <section className="prosperAboutMain" aria-labelledby="prosper-areas-title">
+        <div className="prosperAboutSectionHeading">
+          <span className="prosperAboutLabel">NOSSA ATUAÇÃO</span>
+          <h2 id="prosper-areas-title">O que a Prosper faz</h2>
+          <p>
+            Desenvolvemos programas para pessoas e empresas, combinando formação, projetos práticos
+            e acompanhamento conforme cada necessidade.
+          </p>
+        </div>
+        <div className="prosperAboutGrid">
+          {areas.map(({ title, description, icon: Icon }) => (
+            <article key={title} className="prosperAboutCard">
+              <span className="prosperAboutCardIcon"><Icon size={25} aria-hidden="true" /></span>
+              <div>
+                <h3>{title}</h3>
+                <p>{description}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+        <div className="prosperAboutMethod">
+          <strong>Como trabalhamos</strong>
+          <p>
+            Partimos do diagnóstico das necessidades, organizamos trilhas de aprendizagem e
+            incentivamos a aplicação do conhecimento. Com o Prosper Sprints, podemos acompanhar
+            atividades, projetos e evolução dos participantes.
+          </p>
+        </div>
+      </section>
+
+      <section className="prosperAboutPotencia" aria-labelledby="prosper-potencia-title">
+        <div className="prosperAboutPotenciaCopy">
+          <span className="prosperAboutLabel">PROGRAMA EM DESTAQUE</span>
+          <h2 id="prosper-potencia-title">Potenc.IA</h2>
+          <p>
+            Uma iniciativa de inclusão produtiva da Prosper que amplia o acesso de mulheres
+            à inteligência artificial generativa. A jornada reúne formação prática, mentorias
+            e experiências que conectam novas habilidades a possibilidades de carreira.
+          </p>
+          <Link href="/potencia" className="prosperAboutPotenciaLink">
+            Conhecer o Potenc.IA <ArrowRight size={18} aria-hidden="true" />
+          </Link>
+        </div>
+        <div className="prosperAboutPotenciaBrand">
+          <Image
+            src="/potencia/potencia-logo.webp"
+            alt="Potenc.IA"
+            width={310}
+            height={84}
+          />
+          <p>Inteligência artificial, desenvolvimento e oportunidades para mulheres.</p>
         </div>
       </section>
     </main>
