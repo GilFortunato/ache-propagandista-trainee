@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Building2, HeartPulse, ShieldCheck, Leaf, Sparkles, UsersRound, Scale } from "lucide-react";
+import { ArrowLeft, ArrowRight, BriefcaseBusiness, Building2, Bus, Dumbbell, GraduationCap, HeartPulse, Leaf, Scale, ShieldCheck, Sparkles, Stethoscope, UsersRound, Utensils } from "lucide-react";
 
 const values = [
   { label: "Apaixonados pela vida", Icon: HeartPulse },
@@ -22,6 +22,125 @@ export default function AchePage() {
         </div>
         <Link href="/home" className="backNexus"><ArrowLeft size={17}/>Voltar ao Nexus</Link>
       </header>
+
+      <div className="acheBodyLayout">
+        <aside className="acheSectionNav" aria-label="Navegação da página Aché">
+          <span className="acheMenuLabel">Navegue</span>
+          <a href="#vagas"><span>01</span>Vagas</a>
+          <a href="#beneficios"><span>02</span>Benefícios</a>
+          <a href="#sobre"><span>03</span>Sobre o Aché</a>
+          <a href="#governanca"><span>04</span>Governança</a>
+          <a href="#conduta"><span>05</span>Código de Conduta</a>
+          <a href="#sustentabilidade"><span>06</span>Sustentabilidade</a>
+        </aside>
+
+        <div className="acheBodyContent acheUnifiedContent">
+      <section id="vagas" className="landingSection vagasHero">
+        <div className="vagasHeroCopy">
+          <span className="sectionTag acheTag">Carreiras</span>
+          <h1>Construa sua jornada na <span>Aché</span>.</h1>
+          <p>
+            Um ambiente diverso e inclusivo, com espaço para aprendizagem, desenvolvimento
+            e reconhecimento de talentos que constroem resultados e reputação.
+          </p>
+        </div>
+      </section>
+
+      <section className="vagasEntry landingSection">
+        <div className="vagasCards">
+          <a
+            className="vagaChoice active"
+            href="https://vagasache.gupy.io/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <div className="vagaChoiceIcon"><BriefcaseBusiness size={30} /></div>
+            <span className="vagaChoiceTag">Oportunidades abertas</span>
+            <h2>Vagas Aché</h2>
+            <p>
+              Consulte as oportunidades disponíveis e encontre vagas alinhadas ao seu perfil.
+            </p>
+            <div className="vagaChoiceCta">Ver vagas <ArrowRight size={18} /></div>
+          </a>
+
+          <article className="vagaChoice exclusive">
+            <div className="vagaChoiceIcon"><UsersRound size={30} /></div>
+            <span className="vagaChoiceTag">Programa exclusivo</span>
+            <h2>Vaga Exclusiva Programa</h2>
+            <p>
+              Espaço reservado para oportunidades exclusivas do Programa PcD – Propagandista Trainee.
+            </p>
+            <div className="vagaChoiceCta disabled">Disponível em breve</div>
+          </article>
+        </div>
+      </section>
+
+      <section id="beneficios" className="landingSection vagasBenefits">
+        <div className="sectionHeading">
+          <span className="sectionTag acheTag">Benefícios</span>
+          <h2>Uma jornada pensada para saúde, bem-estar e desenvolvimento.</h2>
+          <p>
+            Os benefícios variam conforme área, modelo de trabalho e unidade, mas a proposta
+            combina cuidado com a saúde, qualidade de vida, desenvolvimento e conveniência.
+          </p>
+        </div>
+
+        <div className="benefitGrid">
+          <article>
+            <Stethoscope size={28} />
+            <h3>Saúde</h3>
+            <p>Assistência médica e odontológica, medicamentos, exames preventivos e iniciativas de cuidado.</p>
+          </article>
+          <article>
+            <Dumbbell size={28} />
+            <h3>Bem-estar</h3>
+            <p>Wellhub, programa de saúde mental e apoio a colaboradoras e famílias.</p>
+          </article>
+          <article>
+            <GraduationCap size={28} />
+            <h3>Desenvolvimento</h3>
+            <p>Parcerias e convênios com bolsas e descontos educacionais.</p>
+          </article>
+          <article>
+            <Utensils size={28} />
+            <h3>Dia a dia</h3>
+            <p>Restaurante ou vale-refeição, vale-alimentação e outras facilidades.</p>
+          </article>
+          <article>
+            <Bus size={28} />
+            <h3>Mobilidade</h3>
+            <p>Vale-transporte, estacionamento ou fretado, conforme elegibilidade.</p>
+          </article>
+          <article>
+            <Building2 size={28} />
+            <h3>Flexibilidade</h3>
+            <p>Benefícios como auxílio home office e Short Friday podem variar conforme a função.</p>
+          </article>
+        </div>
+      </section>
+
+      <section className="landingSection diversitySection">
+        <div className="sectionHeading">
+          <span className="sectionTag acheTag">Diversidade, Equidade & Inclusão</span>
+          <h2>Inclusão como parte da cultura.</h2>
+          <p>
+            O Aché apresenta diversidade, equidade e inclusão como pilares da cultura e cita
+            iniciativas de governança, letramento, grupos de afinidade e uso do nome social
+            desde o recrutamento e seleção.
+          </p>
+        </div>
+
+        <div className="diversityBanner">
+          <div>
+            <UsersRound size={34} />
+            <strong>Mais que contratar, queremos incluir.</strong>
+          </div>
+          <p>
+            A proposta do programa se conecta diretamente a esse compromisso de ampliar
+            oportunidades e criar uma experiência de carreira mais inclusiva.
+          </p>
+        </div>
+      </section>
 
       <section className="acheHero landingSection">
         <div>
@@ -45,19 +164,9 @@ export default function AchePage() {
         </div>
       </section>
 
-      <div className="acheBodyLayout">
-        <aside className="acheSectionNav" aria-label="Navegação da página Aché">
-          <span className="acheMenuLabel">Navegue</span>
-          <a href="#sobre"><span>01</span>Sobre o Aché</a>
-          <a href="#governanca"><span>02</span>Governança</a>
-          <a href="#conduta"><span>03</span>Código de Conduta</a>
-          <a href="#sustentabilidade"><span>04</span>Sustentabilidade</a>
-        </aside>
-
-        <div className="acheBodyContent">
       <section id="sobre" className="landingSection acheAbout">
         <div className="sectionHeading">
-          <span className="acheSectionNumber">01</span>
+          <span className="acheSectionNumber">03</span>
           <span className="sectionTag acheTag">Sobre o Aché</span>
           <h2>Uma trajetória brasileira construída com inovação, saúde e confiança.</h2>
           <p>O Aché está entre as cinco maiores empresas farmacêuticas do Brasil, atua em mais de 157 classes terapêuticas e 30 especialidades médicas, possui quatro plantas industriais e mais de 6 mil colaboradores.</p>
@@ -75,7 +184,7 @@ export default function AchePage() {
 
       <section id="governanca" className="landingSection acheGovernance">
         <div className="sectionHeading">
-          <span className="acheSectionNumber light">02</span>
+          <span className="acheSectionNumber light">04</span>
           <span className="sectionTag acheTag lightTag">Governança</span>
           <h2>Ética e transparência como pilares do negócio.</h2>
           <p>A governança corporativa parte da construção de relações sólidas, transparentes e responsáveis. Ética, integridade e conformidade orientam decisões e fortalecem a confiança.</p>
@@ -95,7 +204,7 @@ export default function AchePage() {
 
       <section id="conduta" className="landingSection acheConduct">
         <div className="sectionHeading">
-          <span className="acheSectionNumber">03</span>
+          <span className="acheSectionNumber">05</span>
           <span className="sectionTag acheTag">Código de Conduta Corporativa</span>
           <h2>Fazer o certo — e do jeito certo.</h2>
           <p>O Código de Conduta funciona como guia de comportamento para colaboradores, lideranças, parceiros e demais públicos que se relacionam com o Aché.</p>
@@ -111,7 +220,7 @@ export default function AchePage() {
 
       <section id="sustentabilidade" className="landingSection acheSustainability">
         <div className="sectionHeading">
-          <span className="acheSectionNumber light">04</span>
+          <span className="acheSectionNumber light">06</span>
           <span className="sectionTag acheTag lightTag">Sustentabilidade</span>
           <h2>Mais pacientes. Mais inovação. Mais impacto. Mais futuro.</h2>
           <p>O relatório anual mais recente coloca o paciente no centro das decisões e conecta ciência, inovação, acesso e impacto positivo.</p>
