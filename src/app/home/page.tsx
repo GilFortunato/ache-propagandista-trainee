@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   Sparkles,
-  HeartPulse,
   BriefcaseBusiness,
   UserRoundPen,
   ShieldCheck,
@@ -12,10 +11,9 @@ import {
 
 // Módulos visíveis no Nexus. Os demais permanecem preservados em suas rotas.
 const modules = [
-  { label: "ReBrand Pessoal", href: "/rebrand", icon: UserRoundPen, position: "petal0" },
-  { label: "Aché", href: "/ache", icon: HeartPulse, position: "petal2" },
-  { label: "Vagas", href: "/ache#vagas", icon: BriefcaseBusiness, position: "petal4" },
-  { label: "Prosper", href: "/prosper", icon: Sparkles, position: "petal6" },
+  { label: "ReBrand Pessoal", href: "/rebrand", icon: UserRoundPen, position: "petalRebrand" },
+  { label: "Prosper", href: "/prosper", icon: Sparkles, position: "petalProsper" },
+  { label: "Vagas", href: "/ache#vagas", icon: BriefcaseBusiness, position: "petalVagas" },
 ];
 
 export default function HomePage() {
