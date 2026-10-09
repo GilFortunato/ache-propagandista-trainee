@@ -47,7 +47,7 @@ body{min-height:100vh}
 .hero>p:last-child{color:var(--muted);font-size:1.05rem;line-height:1.55;max-width:470px}
 .nexusWrap{display:flex;align-items:center;justify-content:center;min-width:0}
 
-.nexus{width:min(760px,54vw);height:min(760px,54vw);min-width:690px;min-height:690px;position:relative}
+.nexus{width:min(710px,50vw);height:min(710px,50vw);min-width:640px;min-height:640px;position:relative}
 .nexus:before,.nexus:after{content:"";position:absolute;inset:15%;border:1px solid rgba(176,24,103,.13);border-radius:50%}
 .nexus:after{inset:29%}
 .nexusCore{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:190px;height:190px;border-radius:46% 54% 48% 52%/51% 45% 55% 49%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.65rem;box-shadow:0 22px 60px rgba(125,15,75,.16);z-index:3;text-align:center;font-weight:800;color:var(--wine)}
@@ -59,13 +59,13 @@ body{min-height:100vh}
 .nexusPetal:hover svg{color:#fff;transform:scale(1.06)}
 .nexusPetal span{max-width:105px;line-height:1.2}
 
-.petal0{--pos:translate(-50%,-320px);transform:var(--pos)}
+.petal0{--pos:translate(0,-255px);transform:var(--pos)}
 .petal1{--pos:translate(170px,-230px);transform:var(--pos)}
-.petal2{--pos:translate(260px,-50%);transform:var(--pos)}
+.petal2{--pos:translate(255px,0);transform:var(--pos)}
 .petal3{--pos:translate(170px,140px);transform:var(--pos)}
-.petal4{--pos:translate(-50%,240px);transform:var(--pos)}
+.petal4{--pos:translate(0,255px);transform:var(--pos)}
 .petal5{--pos:translate(-340px,140px);transform:var(--pos)}
-.petal6{--pos:translate(-430px,-50%);transform:var(--pos)}
+.petal6{--pos:translate(-255px,0);transform:var(--pos)}
 .petal7{--pos:translate(-340px,-230px);transform:var(--pos)}
 
 .adminPage{min-height:100vh;padding:2rem 5vw 5rem;background:#fff8fb}
