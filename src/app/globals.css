@@ -1859,6 +1859,30 @@ body{min-height:100vh}
   }
 }
 
+/* Aché — recuo interno da seção Sustentabilidade.
+   Corrige o reset lateral de .acheBodyContent .landingSection sem afetar outros módulos. */
+.acheBodyContent .acheSustainability{
+  box-sizing:border-box;
+  padding:5rem clamp(1.75rem,3.5vw,3.75rem) 5.5rem;
+}
+.acheBodyContent .acheSustainability .sectionHeading{
+  max-width:980px;
+  margin-bottom:2.6rem;
+}
+.acheBodyContent .acheSustainability .sectionHeading h2{
+  max-width:920px;
+  margin-bottom:1.3rem;
+}
+.acheBodyContent .acheSustainability .sectionHeading p{
+  max-width:900px;
+  line-height:1.7;
+}
+@media(max-width:900px){
+  .acheBodyContent .acheSustainability{
+    padding:4rem 6vw 4.5rem;
+  }
+}
+
 /* ReBrand Pessoal / Diagnóstico de LinkedIn */
 .rebrandPage{min-height:100vh;background:#fff8fb;color:var(--ink)}
 .rebrandHeader{background:rgba(255,255,255,.97);border-bottom:1px solid rgba(176,24,103,.12)}
