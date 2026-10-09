@@ -5,24 +5,17 @@ import Link from "next/link";
 import {
   Sparkles,
   HeartPulse,
-  BookOpenCheck,
-  Landmark,
   BriefcaseBusiness,
-  BrainCircuit,
-  UsersRound,
   UserRoundPen,
   ShieldCheck,
 } from "lucide-react";
 
+// Módulos visíveis no Nexus. Os demais permanecem preservados em suas rotas.
 const modules = [
-  { label: "Aché", href: "/ache", icon: HeartPulse },
-  { label: "Letramento", href: "/letramento", icon: BookOpenCheck },
-  { label: "Cultura", href: "/cultura", icon: Landmark },
-  { label: "Vagas", href: "/vagas", icon: BriefcaseBusiness },
-  { label: "Potenc.IA", href: "/potencia", icon: BrainCircuit },
-  { label: "Prosper", href: "/prosper", icon: Sparkles },
-  { label: "Comunidade", href: "/comunidade", icon: UsersRound },
-  { label: "ReBrand Pessoal", href: "/rebrand", icon: UserRoundPen },
+  { label: "Aché", href: "/ache", icon: HeartPulse, position: "petal0" },
+  { label: "Vagas", href: "/vagas", icon: BriefcaseBusiness, position: "petal2" },
+  { label: "Prosper", href: "/prosper", icon: Sparkles, position: "petal4" },
+  { label: "ReBrand Pessoal", href: "/rebrand", icon: UserRoundPen, position: "petal6" },
 ];
 
 export default function HomePage() {
@@ -76,11 +69,11 @@ export default function HomePage() {
               <span>Propagandista<br />Trainee</span>
             </div>
 
-            {modules.map(({ label, href, icon: Icon }, index) => (
+            {modules.map(({ label, href, icon: Icon, position }) => (
               <Link
                 key={label}
                 href={href}
-                className={"nexusPetal petal" + index}
+                className={"nexusPetal " + position}
               >
                 <Icon size={28} strokeWidth={1.65} aria-hidden="true" />
                 <span>{label}</span>
