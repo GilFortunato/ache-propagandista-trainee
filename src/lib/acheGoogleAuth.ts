@@ -16,7 +16,9 @@ export function googleAuthConfigured() {
 }
 function sign(payload: string) {
   if (!secret()) throw new Error("Google auth is not configured");
-  return createHmac("sha256", secret()).update(payload).digest("base64url");
+  const key = secret();
+  if (!key) throw new Error("Google auth is not configured");
+  return createHmac("sha256", key).update(payload).digest("base64url");
 }
 function validSignature(payload: string, sig: string) {
   const a = Buffer.from(sig), b = Buffer.from(sign(payload));
