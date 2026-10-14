@@ -89,12 +89,14 @@ export function normalizeProfile(data: unknown, postsData: unknown = []): Public
     company: field(item, ["companyName", "company", "organization", "employer"]),
     description: field(item, ["description", "summary", "details"]),
   })).filter((item) => item.role || item.company || item.description).slice(0, 25);
-  const education = records(obj, ["education", "educations"]).map((item) =>
+  const educationObjects = records(obj, ["education", "educations"]).map((item) =>
     [field(item, ["degree", "degreeName"]), field(item, ["field", "fieldOfStudy"]), field(item, ["institution", "schoolName", "school"])].filter(Boolean).join(" · ")
   ).filter(Boolean).slice(0, 15);
-  const certifications = records(obj, ["certifications", "certificates", "licensesAndCertifications"]).map((item) =>
+  const certificationObjects = records(obj, ["certifications", "certificates", "licensesAndCertifications"]).map((item) =>
     [field(item, ["name", "title"]), field(item, ["institution", "issuer", "authority"])].filter(Boolean).join(" · ")
   ).filter(Boolean).slice(0, 15);
+  const education = unique([...educationObjects, ...asList(read(obj, ["education", "educations"]))], 15);
+  const certifications = unique([...certificationObjects, ...asList(read(obj, ["certifications", "certificates", "licensesAndCertifications"]))], 15);
   const posts = (Array.isArray(postsData) ? postsData : []).map(record)
     .filter((item): item is Record<string, unknown> => item !== null)
     .map((item) => ({
