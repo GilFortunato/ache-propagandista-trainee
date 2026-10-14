@@ -162,7 +162,7 @@ export function assessProfile(profile: PublicProfile | null, manualContext: stri
   const evaluatedWeight = evaluated.reduce((sum, item) => sum + item.weight, 0);
   const scoreCoverage = Math.round(100 * evaluatedWeight / totalWeight);
   // Uma URL válida, dados manuais ou uma única seção recuperada não bastam para certificar a nota do LinkedIn.
-  const overallScore = sourced && evaluated.length >= 3 && scoreCoverage >= 55
+  const overallScore = sourced && evaluated.length >= 4 && scoreCoverage >= 70 && (experiences.length > 0 || education.length > 0 || skills.length >= 3)
     ? Math.round(evaluated.reduce((sum, item) => sum + item.score * item.weight, 0) / evaluatedWeight)
     : null;
   const weak = [...evaluated].sort((a, b) => a.score - b.score);
