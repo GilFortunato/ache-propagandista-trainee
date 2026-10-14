@@ -2,9 +2,9 @@
 import { useEffect, useState } from "react";
 import { AlertCircle, CheckCircle2, ExternalLink, KeyRound, RefreshCcw, ShieldCheck, Trash2, LogOut, CircleHelp } from "lucide-react";
 
-type Provider = "apify" | "gemini";
+type Provider = "manus" | "gemini";
 type ProviderStatus = { configured: boolean; origin: string; updatedAt?: string | null };
-type Data = { connected: boolean; apify: ProviderStatus; gemini: ProviderStatus };
+type Data = { connected: boolean; manus: ProviderStatus; gemini: ProviderStatus };
 type Health = {
   status: "connected" | "disconnected" | "not_configured";
   ok: boolean;
@@ -13,7 +13,7 @@ type Health = {
 };
 
 const services: { id: Provider; title: string; description: string; hint: string }[] = [
-  { id: "apify", title: "Apify", description: "Coleta dados públicos de perfis do LinkedIn usados no diagnóstico.", hint: "Token de API da conta Apify" },
+  { id: "manus", title: "Manus", description: "Pesquisa informações profissionais públicas para apoiar o diagnóstico do LinkedIn.", hint: "Chave de API da conta Manus" },
   { id: "gemini", title: "Gemini", description: "Gera a leitura textual e recomendações de desenvolvimento profissional.", hint: "Chave de API do Google AI Studio" },
 ];
 
@@ -42,14 +42,14 @@ function StatusIndicator({ health, checking }: { health: Health | null; checking
 
 export default function AdminIntegrations() {
   const [data, setData] = useState<Data | null>(null);
-  const [keys, setKeys] = useState<Record<Provider, string>>({ apify: "", gemini: "" });
+  const [keys, setKeys] = useState<Record<Provider, string>>({ manus: "", gemini: "" });
   const [busy, setBusy] = useState<Provider | null>(null);
-  const [notice, setNotice] = useState<Record<Provider, string>>({ apify: "", gemini: "" });
+  const [notice, setNotice] = useState<Record<Provider, string>>({ manus: "", gemini: "" });
   const [globalError, setGlobalError] = useState("");
   const [setupHighlighted, setSetupHighlighted] = useState(false);
-  const [show, setShow] = useState<Record<Provider, boolean>>({ apify: false, gemini: false });
-  const [health, setHealth] = useState<Record<Provider, Health | null>>({ apify: null, gemini: null });
-  const [checking, setChecking] = useState<Record<Provider, boolean>>({ apify: false, gemini: false });
+  const [show, setShow] = useState<Record<Provider, boolean>>({ manus: false, gemini: false });
+  const [health, setHealth] = useState<Record<Provider, Health | null>>({ manus: null, gemini: null });
+  const [checking, setChecking] = useState<Record<Provider, boolean>>({ manus: false, gemini: false });
   const [checkingAll, setCheckingAll] = useState(false);
 
   async function refresh() {
@@ -61,17 +61,17 @@ export default function AdminIntegrations() {
 
   async function reconnectAll() {
     setCheckingAll(true);
-    setChecking({ apify: true, gemini: true });
+    setChecking({ manus: true, gemini: true });
     setGlobalError("");
     try {
       const result = await postAction({ action: "reconnect_all" }) as { providers: Record<Provider, Health> };
       setHealth(result.providers);
     } catch (error) {
       setGlobalError(error instanceof Error ? error.message : "Falha ao verificar as conexões.");
-      setHealth({ apify: null, gemini: null });
+      setHealth({ manus: null, gemini: null });
     } finally {
       setCheckingAll(false);
-      setChecking({ apify: false, gemini: false });
+      setChecking({ manus: false, gemini: false });
     }
   }
 
@@ -102,7 +102,7 @@ export default function AdminIntegrations() {
   }
 
   async function change(provider: Provider, action: "save" | "remove" | "test") {
-    if (busy || checkingAll || checking.apify || checking.gemini) return;
+    if (busy || checkingAll || checking.manus || checking.gemini) return;
     if ((action === "save" || action === "remove") && data && !data.connected) {
       // A disabled button hid the actual configuration requirement. Make the
       // missing one-time authorization actionable without sending the key.
@@ -163,7 +163,7 @@ export default function AdminIntegrations() {
 
   const connected = services.filter((service) => health[service.id]?.status === "connected").length;
   const tested = services.filter((service) => health[service.id] !== null).length;
-  const anyChecking = checkingAll || checking.apify || checking.gemini || Boolean(busy);
+  const anyChecking = checkingAll || checking.manus || checking.gemini || Boolean(busy);
 
   return (
     <section className="acheAdminIntegrations">
@@ -171,7 +171,7 @@ export default function AdminIntegrations() {
         <div>
           <span className="acheAdminKicker"><ShieldCheck size={16} /> Configuração protegida</span>
           <h2>Integrações e chaves de API</h2>
-          <p>Veja se cada conexão está funcionando e troque as credenciais do Apify e do Gemini quando precisar.</p>
+          <p>Veja se cada conexão está funcionando e troque as credenciais do Manus e do Gemini quando precisar.</p>
         </div>
         <button className="acheAdminLogout" onClick={() => void logout()}><LogOut size={16} /> Sair do ADM</button>
       </div>
@@ -179,7 +179,7 @@ export default function AdminIntegrations() {
       <div className="acheAdminHealthOverview" aria-live="polite">
         <div>
           <strong>Saúde das integrações</strong>
-          <p>{checkingAll ? "Conferindo Apify e Gemini..." : tested === 2
+          <p>{checkingAll ? "Conferindo Manus e Gemini..." : tested === 2
             ? connected + " de 2 conexões funcionando"
             : "Verifique as conexões para conferir o status atual."}</p>
           <small>Os testes consultam as APIs e não executam diagnósticos pagos.</small>
