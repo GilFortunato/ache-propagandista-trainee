@@ -132,6 +132,75 @@ export type ProviderHealth = {
 
 // This validates provider authentication/endpoint reachability, not a paid
 // LinkedIn extraction or a billed Gemini content generation.
+type ApiError = {
+  status?: unknown;
+  message?: unknown;
+  details?: Array<{ reason?: unknown }>;
+};
+
+function safeApiError(raw: unknown): ApiError {
+  if (!raw || typeof raw !== "object") return {};
+  const error = (raw as { error?: unknown }).error;
+  return error && typeof error === "object" ? error as ApiError : {};
+}
+
+/**
+ * Maps third-party errors to actionable, fixed messages in Portuguese.
+ * Never reflect raw provider responses or API keys back to the browser.
+ */
+function providerFailure(provider: Provider, code: number, error: ApiError): string {
+  if (provider === "apify") {
+    if (code === 401) return "Token de API Apify inválido ou revogado. No Apify Console, vá em Settings > API & Integrations, copie um API token ativo e substitua a chave aqui.";
+    if (code === 403) return "A Apify reconheceu a requisição, mas recusou a permissão. Confira se o token da conta tem acesso à API.";
+    if (code === 429) return "Limite de chamadas da Apify atingido. Aguarde e tente reconectar.";
+    if (code >= 500) return "Serviço Apify temporariamente indisponível. Tente novamente em alguns minutos.";
+    return "A Apify recusou o teste (HTTP " + code + "). Cadastre o token de API da conta, não o ID de um Actor.";
+  }
+
+  const providerStatus = typeof error.status === "string" ? error.status.toUpperCase() : "";
+  const providerMessage = typeof error.message === "string" ? error.message.toLowerCase() : "";
+  const reasons = Array.isArray(error.details)
+    ? error.details.map((detail) => typeof detail?.reason === "string" ? detail.reason.toUpperCase() : "")
+    : [];
+
+  if (
+    reasons.some((reason) => /API_KEY_INVALID|API_KEY_EXPIRED|INVALID_API_KEY/.test(reason))
+    || /api key not valid|api key is invalid|invalid api key|api_key_invalid|key has expired/.test(providerMessage)
+  ) return "Chave Gemini inválida ou expirada. Gere uma nova chave de API em aistudio.google.com/api-keys e substitua a chave cadastrada.";
+
+  if (
+    reasons.some((reason) => /API_KEY_LEAKED|API_KEY_REPORTED|API_KEY_BLOCKED/.test(reason))
+    || /api key was reported as leaked|key was blocked|blocked api key/.test(providerMessage)
+  ) return "Esta chave Gemini foi bloqueada pelo Google. Gere uma nova chave de API no Google AI Studio.";
+
+  if (
+    reasons.some((reason) => /API_KEY_HTTP_REFERRER_BLOCKED|API_KEY_IP_ADDRESS_BLOCKED|API_KEY_SERVICE_BLOCKED|API_KEY_(ANDROID|IOS)_APP_BLOCKED/.test(reason))
+    || /requests from referer|ip address.*not allowed|api key.*restriction|api key.*not authorized/.test(providerMessage)
+  ) return "As restrições desta chave impedem o acesso do servidor. No Google AI Studio, verifique se ela é uma chave para a Gemini API e se suas restrições permitem chamadas do backend.";
+
+  if (providerStatus === "SERVICE_DISABLED" || /api has not been used in project|it is disabled|api.*not enabled/.test(providerMessage))
+    return "A API Generative Language (Gemini) está desativada para o projeto da chave. Habilite-a no Google Cloud/AI Studio e tente novamente.";
+
+  if (providerStatus === "FAILED_PRECONDITION" || /billing.*(not enabled|disabled|required)|project.*not active/.test(providerMessage))
+    return "O projeto Google desta chave não atende a um pré-requisito (como faturamento ou ativação da API). Confira o projeto no Google AI Studio.";
+
+  if (code === 401 || code === 403 || providerStatus === "PERMISSION_DENIED")
+    return "A Gemini API recusou a credencial ou suas permissões (HTTP " + code + "). Gere uma chave de API válida no Google AI Studio e confira as restrições.";
+
+  if (code === 404)
+    return "O modelo Gemini configurado não está disponível para esta chave. Verifique o modelo habilitado no Google AI Studio.";
+
+  if (code === 429 || providerStatus === "RESOURCE_EXHAUSTED")
+    return "A cota da API Gemini foi atingida. Confira os limites e o faturamento do projeto.";
+
+  if (code >= 500) return "O serviço Gemini está temporariamente indisponível. Tente novamente.";
+
+  if (code === 400)
+    return "A API Gemini retornou HTTP 400: chave, projeto ou parâmetros da chamada não aceitos. Confira se a chave é do Google AI Studio, se a API está habilitada e se o modelo está acessível.";
+
+  return "A Gemini API recusou o teste (HTTP " + code + "). Confira a chave, o projeto e as permissões no Google AI Studio.";
+}
+
 export async function testProviderKey(provider: Provider, candidate?: string): Promise<ProviderHealth> {
   const checkedAt = new Date().toISOString();
   let key: string | null;
@@ -141,21 +210,21 @@ export async function testProviderKey(provider: Provider, candidate?: string): P
     return {
       status: "disconnected",
       ok: false,
-      message: "Não foi possível consultar a chave salva. Verifique o acesso do projeto às variáveis na Vercel.",
+      message: "A chave foi salva, mas o servidor não conseguiu consultar a credencial na Vercel. Verifique o token de gerenciamento do projeto.",
       checkedAt,
     };
   }
 
-  if (!key) return {
-    status: "not_configured",
-    ok: false,
-    message: "Nenhuma chave cadastrada. Salve uma credencial antes de reconectar.",
-    checkedAt,
-  };
+  if (!key) {
+    return { status: "not_configured", ok: false, message: "Chave não cadastrada.", checkedAt };
+  }
 
-  const selectedGeminiModel = process.env.ACHE_REBRAND_GEMINI_MODEL || "gemini-2.5-flash";
-  const geminiModel = selectedGeminiModel.startsWith("models/") ? selectedGeminiModel.slice(7) : selectedGeminiModel;
-  const validGeminiModel = /^[a-zA-Z0-9._-]+$/.test(geminiModel) ? geminiModel : "gemini-2.5-flash";
+  // New Google AI Studio projects can no longer access legacy 2.5 models.
+  // Keep the analysis and connection probe on the same supported default.
+  const configuredModel = process.env.ACHE_REBRAND_GEMINI_MODEL || "gemini-3.8-flash";
+  const geminiModel = configuredModel.startsWith("models/") ? configuredModel.slice(7) : configuredModel;
+  const validGeminiModel = /^[a-zA-Z0-9._-]+$/.test(geminiModel) ? geminiModel : "gemini-3.8-flash";
+
   const url = provider === "apify"
     ? "https://api.apify.com/v2/users/me"
     : "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(validGeminiModel);
@@ -163,31 +232,34 @@ export async function testProviderKey(provider: Provider, candidate?: string): P
   try {
     const response = await fetch(url, {
       method: "GET",
-      headers: provider === "apify" ? { Authorization: "Bearer " + key } : { "x-goog-api-key": key },
+      headers: provider === "apify"
+        ? { Authorization: "Bearer " + key }
+        : { "x-goog-api-key": key },
       signal: AbortSignal.timeout(12000),
       cache: "no-store",
     });
-    if (response.ok) return {
-      status: "connected",
-      ok: true,
-      message: provider === "apify"
-        ? "Autenticação confirmada pela API do Apify."
-        : "Autenticação e acesso ao modelo " + validGeminiModel + " confirmados.",
-      checkedAt,
-    };
-    const message = response.status === 401 || response.status === 403
-      ? "Credencial recusada ou sem permissão para acessar o serviço."
-      : response.status === 404 && provider === "gemini"
-        ? "O modelo " + validGeminiModel + " não foi encontrado para esta chave."
-        : response.status === 429
-          ? "O provedor limitou as solicitações. Tente novamente mais tarde."
-          : "O provedor retornou HTTP " + response.status + " ao verificar a conexão.";
+
+    if (response.ok) {
+      return {
+        status: "connected",
+        ok: true,
+        message: provider === "apify"
+          ? "Apify online: token validado pela API."
+          : "Gemini online: chave autenticada e modelo " + validGeminiModel + " acessível.",
+        checkedAt,
+      };
+    }
+
+    // A 400 can represent invalid key, denied origin, disabled API, etc.
+    // Read only structured error codes and map them to fixed safe messages.
+    const raw: unknown = await response.json().catch(() => null);
+    const message = providerFailure(provider, response.status, safeApiError(raw));
     return { status: "disconnected", ok: false, message, checkedAt };
   } catch {
     return {
       status: "disconnected",
       ok: false,
-      message: "Não foi possível acessar o provedor. Verifique a disponibilidade da API e tente novamente.",
+      message: "Falha de conexão ou tempo limite ao acessar o provedor. Tente novamente em instantes.",
       checkedAt,
     };
   }
