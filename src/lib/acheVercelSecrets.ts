@@ -6,7 +6,7 @@ export const PROVIDERS: Record<Provider, string> = {
   gemini: "ACHE_REBRAND_GEMINI_API_KEY",
 };
 
-type RemoteVariable = { id: string; key: string; value?: string; target?: string[] | string; updatedAt?: number };
+type RemoteVariable = { id: string; key: string; value?: string; decrypted?: boolean; target?: string[] | string; updatedAt?: number };
 type RemoteList = { envs?: RemoteVariable[] };
 
 export class VaultConfigurationError extends Error {
@@ -60,7 +60,9 @@ async function requestVercel(url: string, init: RequestInit = {}) {
 }
 
 async function getVariables(): Promise<RemoteVariable[]> {
-  const response = await requestVercel(endpoint("", "decrypt=true"));
+  // List returns metadata and can contain encrypted ciphertext even when decrypt=true.
+  // Never use values from this bulk response as provider credentials.
+  const response = await requestVercel(endpoint());
   const body = await response.json() as RemoteList;
   if (!Array.isArray(body?.envs)) throw new Error("A Vercel retornou uma lista de configurações inválida.");
   return body.envs.filter((item) => item && (Array.isArray(item.target) ? item.target.includes("production") : item.target === "production"));
@@ -82,7 +84,9 @@ export async function integrationStatus() {
   const summarize = (provider: Provider) => {
     const item = newest(vars, PROVIDERS[provider]);
     return {
-      configured: Boolean(item && typeof item.value === "string" && item.value.length >= 8),
+      // An encrypted secret is "configured" when its production entry exists;
+      // this does not mean the remote provider has authenticated it.
+      configured: Boolean(item),
       origin: "vercel",
       updatedAt: item?.updatedAt ? new Date(item.updatedAt).toISOString() : null,
     };
@@ -95,8 +99,26 @@ export async function resolveProviderKey(provider: Provider) {
   // value from a previous deployment after a key has been removed.
   if (!vaultConfigured()) return process.env[PROVIDERS[provider]] || null;
   const vars = await getVariables();
-  const value = newest(vars, PROVIDERS[provider])?.value;
-  return typeof value === "string" && value.length >= 8 ? value : null;
+  const entry = newest(vars, PROVIDERS[provider]);
+  if (!entry) return null;
+
+  // Vercel's v10 bulk-list endpoint does NOT reliably decrypt encrypted vars:
+  // the API can report decrypted:false and a long ciphertext in "value".
+  // Request the selected variable by ID using the v1 single-env endpoint.
+  // Never send an encrypted payload as an Apify/Gemini token.
+  const { project, team } = config();
+  const url = "https://api.vercel.com/v1/projects/" + encodeURIComponent(project)
+    + "/env/" + encodeURIComponent(entry.id) + "?teamId=" + encodeURIComponent(team);
+  const response = await requestVercel(url);
+  const detail = await response.json() as RemoteVariable;
+  if (detail.id !== entry.id || detail.key !== PROVIDERS[provider]
+      || detail.decrypted !== true || typeof detail.value !== "string") {
+    throw new Error("A Vercel não autorizou a leitura segura da chave descriptografada. Confira as permissões do token de gerenciamento.");
+  }
+  const value = detail.value.trim();
+  // Fail closed if the API starts returning encrypted bytes, redacted values,
+  // or an accidentally malformed / excessively large secret.
+  return value.length >= 8 && value.length <= 1000 ? value : null;
 }
 
 export async function saveProviderKey(provider: Provider, value: string) {
