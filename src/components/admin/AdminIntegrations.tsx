@@ -204,7 +204,7 @@ export default function AdminIntegrations() {
             <a href="https://vercel.com/account/tokens" target="_blank" rel="noreferrer">1. Criar token na Vercel <ExternalLink size={15} /></a>
             <a href="https://vercel.com/gilfortunatos-projects/ache-propagandista-trainee/settings/environment-variables" target="_blank" rel="noreferrer">2. Configurar variável no Aché <ExternalLink size={15} /></a>
           </div>
-          <p className="acheAdminSetupAlternative"><b>Alternativa imediata:</b> você também pode cadastrar as chaves diretamente nas variáveis de produção da Vercel como <code>ACHE_REBRAND_APIFY_TOKEN</code> e <code>ACHE_REBRAND_GEMINI_API_KEY</code>, seguido de redeploy. Nesse caso, o painel apenas verifica a conexão; o botão de salvamento pela interface continuará pendente.</p>
+          <p className="acheAdminSetupAlternative"><b>Alternativa imediata:</b> você também pode cadastrar as chaves diretamente nas variáveis de produção da Vercel como <code>ACHE_REBRAND_MANUS_API_KEY</code> e <code>ACHE_REBRAND_GEMINI_API_KEY</code>, seguido de redeploy. Nesse caso, o painel apenas verifica a conexão; o botão de salvamento pela interface continuará pendente.</p>
           <small>Nunca envie chaves de API ou tokens pelo chat. O botão “Testar nova chave” funciona sem o token da Vercel e não salva o valor.</small>
         </div>
       )}
