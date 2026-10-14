@@ -1,7 +1,11 @@
+import { redirect } from "next/navigation";
+import { adminSession } from "@/lib/acheAdminAuth";
+import AdminIntegrations from "@/components/admin/AdminIntegrations";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function AdminPage() {
+export default async function AdminPage() {
+  if (!await adminSession()) redirect("/admin/login");
   return (
     <main className="adminPage">
       <header className="simpleHeader">
@@ -23,8 +27,10 @@ export default function AdminPage() {
       <section className="adminHero">
         <p className="eyebrow">Área administrativa</p>
         <h1>Gestão da experiência</h1>
-        <p>POC da estrutura de gestão com dois perfis: participante e administrador.</p>
+        <p>Área restrita para administrar integrações do ReBrand. As demais funcionalidades de gestão permanecem em desenvolvimento.</p>
       </section>
+
+      <AdminIntegrations />
 
       <section className="adminGrid">
         <article><h2>Usuários</h2><p>Gerencie participantes e administradores.</p></article>
@@ -46,12 +52,9 @@ export default function AdminPage() {
         <article><h2>Vagas</h2><p>Publique e organize oportunidades.</p></article>
         <article className="adminRebrandCard">
           <h2>ReBrand / LinkedIn</h2>
-          <p>Diagnóstico independente do projeto comercial, com conectores próprios para análise pública do LinkedIn e IA.</p>
-          <div className="adminRebrandKeys">
-            <code>ACHE_REBRAND_APIFY_TOKEN</code>
-            <code>ACHE_REBRAND_GEMINI_API_KEY</code>
-          </div>
-          <p className="adminRebrandNote">As credenciais devem ser cadastradas somente neste projeto/Vercel. Não reutilize as chaves do Diagnóstico Comercial.</p>
+          <p>Atualize as chaves do Apify e do Gemini pela seção Integrações acima, sem copiar credenciais do projeto comercial.</p>
+          
+          
           <Link href="/rebrand" className="adminCommunityLink">Abrir ReBrand Pessoal</Link>
         </article>
       </section>
