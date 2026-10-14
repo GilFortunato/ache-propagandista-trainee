@@ -9,31 +9,26 @@ type Connection = {
   message: string;
   checkedAt: string;
 };
-type HealthResponse = {
-  providers: Record<Provider, Connection>;
-  refreshSeconds: number;
-};
+type HealthResponse = { providers: Record<Provider, Connection> };
 
-const services: { id: Provider; name: string; description: string }[] = [
-  { id: "apify", name: "LinkedIn (Apify)", description: "Leitura de perfis públicos" },
-  { id: "gemini", name: "Inteligência artificial (Gemini)", description: "Análise e recomendações" },
+const services: { id: Provider; name: string }[] = [
+  { id: "apify", name: "LinkedIn (Apify)" },
+  { id: "gemini", name: "Inteligência artificial (Gemini)" },
 ];
 
-function connectionLabel(status: Connection["status"] | "checking" | "unknown") {
-  switch (status) {
-    case "connected": return "Conexão OK";
-    case "disconnected": return "Indisponível";
-    case "not_configured": return "Não configurada";
-    case "checking": return "Verificando...";
-    default: return "Aguardando teste";
-  }
-}
-
 function ConnectionBadge({ status }: { status: Connection["status"] | "checking" | "unknown" }) {
+  const label = status === "connected" ? "Online"
+    : status === "disconnected" ? "Offline"
+    : status === "not_configured" ? "Não configurada"
+    : status === "checking" ? "Verificando..." : "Aguardando";
   const Icon = status === "connected" ? CheckCircle2 : status === "disconnected" ? AlertCircle : CircleHelp;
-  return <span className={"achePublicConnectionBadge achePublicConnection-" + status} role="status">
-    <Icon size={15} aria-hidden="true" /> {connectionLabel(status)}
-  </span>;
+
+  return (
+    <span className={"achePublicConnectionBadge achePublicConnection-" + status} role="status">
+      <Icon size={15} aria-hidden="true" />
+      {label}
+    </span>
+  );
 }
 
 export function PublicConnectionStatus({ compact = false, showReconnect = true }: { compact?: boolean; showReconnect?: boolean }) {
@@ -44,81 +39,81 @@ export function PublicConnectionStatus({ compact = false, showReconnect = true }
   async function reconnect(provider?: Provider) {
     setError("");
     const providers: Provider[] = provider ? [provider] : ["apify", "gemini"];
-    setLoading((old) => ({ ...old, ...Object.fromEntries(providers.map((id) => [id, true])) }));
+    setLoading((previous) => ({ ...previous, ...Object.fromEntries(providers.map((id) => [id, true])) }));
+
     try {
-      // This GET is shared and server-cached for 30 seconds to prevent
-      // visitors repeatedly querying providers or burning API quota.
+      // Provider health is checked server-side and cached for 30 seconds.
+      // Users never receive API credentials or gain access to their management.
       const response = await fetch("/api/integrations/health", { cache: "no-store" });
       const result = await response.json() as HealthResponse & { error?: string };
-      if (!response.ok) throw new Error(result.error || "Não foi possível consultar as conexões.");
-      if (!result.providers?.apify || !result.providers?.gemini) throw new Error("Resposta incompleta do servidor.");
-      setHealth((old) => provider
-        ? { ...old, [provider]: result.providers[provider] }
+      if (!response.ok || !result.providers?.apify || !result.providers?.gemini) {
+        throw new Error(result.error || "Não foi possível verificar as conexões.");
+      }
+      setHealth((previous) => provider
+        ? { ...previous, [provider]: result.providers[provider] }
         : result.providers);
-    } catch (err) {
-      const message = err instanceof Error ? err.message : "O teste de conexão falhou.";
-      setError(message);
-      setHealth((old) => ({
-        ...old,
+    } catch {
+      setError("Não foi possível verificar as conexões agora. Tente novamente mais tarde.");
+      setHealth((previous) => ({
+        ...previous,
         ...Object.fromEntries(providers.map((id) => [id, {
           status: "disconnected",
-          message: "Não foi possível consultar o status agora.",
+          message: "Status temporariamente indisponível.",
           checkedAt: new Date().toISOString(),
         }])),
       }));
     } finally {
-      setLoading((old) => ({ ...old, ...Object.fromEntries(providers.map((id) => [id, false])) }));
+      setLoading((previous) => ({ ...previous, ...Object.fromEntries(providers.map((id) => [id, false])) }));
     }
   }
 
   useEffect(() => {
     void reconnect();
-    // Initial connection test runs once when the shared widget mounts.
+    // Check automatically only on first display.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const isBusy = loading.apify || loading.gemini;
-  const readyCount = services.filter((service) => health[service.id]?.status === "connected").length;
-  const checked = services.every((service) => health[service.id] !== null);
 
   return (
-    <section className={"achePublicConnections" + (compact ? " achePublicConnectionsCompact" : "")} aria-label="Status das conexões do programa">
+    <section className={"achePublicConnections achePublicConnectionsSlim" + (compact ? " achePublicConnectionsCompact" : "")} aria-label="Status das conexões do programa">
       <div className="achePublicConnectionsHeader">
-        <div>
-          <span className="achePublicConnectionsEyebrow">Disponível para todos os participantes</span>
-          <h2>Conexões do programa</h2>
-          <p>{checked ? readyCount + " de 2 serviços conectados" : "Verificando Apify e Gemini..."}</p>
-        </div>
+        <h2>Conexões do programa</h2>
         {showReconnect && (
-        <button type="button" className="achePublicReconnectAll" disabled={isBusy} onClick={() => void reconnect()}>
-          <RefreshCcw size={17} className={isBusy ? "achePublicSpin" : undefined} aria-hidden="true" />
-          {isBusy ? "Verificando..." : "Reconectar todos"}
-        </button>
+          <button type="button" className="achePublicReconnectAll" disabled={isBusy} onClick={() => void reconnect()}>
+            <RefreshCcw size={15} className={isBusy ? "achePublicSpin" : undefined} aria-hidden="true" />
+            {isBusy ? "Verificando..." : "Reconectar todos"}
+          </button>
         )}
       </div>
+
       <div className="achePublicConnectionsGrid">
         {services.map((service) => {
           const current = health[service.id];
           const pending = loading[service.id];
-          return <article className="achePublicConnectionCard" key={service.id}>
-            <div className="achePublicConnectionTop">
-              <div><h3>{service.name}</h3><p>{service.description}</p></div>
-              <ConnectionBadge status={pending ? "checking" : (current?.status || "unknown")} />
-            </div>
-            <p className="achePublicConnectionMessage">{pending ? "Consultando o serviço..." : current?.message || "Aguardando verificação."}</p>
-            <div className="achePublicConnectionFooter">
-              {current?.checkedAt && <small>Verificado: {new Date(current.checkedAt).toLocaleString("pt-BR")}</small>}
-              {showReconnect && <button type="button" disabled={isBusy} onClick={() => void reconnect(service.id)}>
-                <RefreshCcw size={15} aria-hidden="true" /> Reconectar
-              </button>}
-            </div>
-          </article>;
+          return (
+            <article className="achePublicConnectionCard achePublicConnectionCardSimple" key={service.id}>
+              <h3>{service.name}</h3>
+              <div className="achePublicConnectionControls">
+                <ConnectionBadge status={pending ? "checking" : (current?.status || "unknown")} />
+                {showReconnect && (
+                  <button
+                    type="button"
+                    className="achePublicReconnectButton"
+                    disabled={isBusy}
+                    onClick={() => void reconnect(service.id)}
+                    aria-label={"Reconectar " + service.name}
+                  >
+                    <RefreshCcw size={14} className={pending ? "achePublicSpin" : undefined} aria-hidden="true" />
+                    Reconectar
+                  </button>
+                )}
+              </div>
+            </article>
+          );
         })}
       </div>
       {error && <p className="achePublicConnectionError" role="alert">{error}</p>}
-      <p className="achePublicConnectionsNote">
-        {showReconnect ? "Essas conexões são compartilhadas pelo programa. Reconectar verifica novamente a disponibilidade; não muda sua conta ou as chaves de acesso. O resultado pode permanecer em cache por até 30 segundos. Se continuar indisponível, avise a equipe do Aché." : "O status das integrações é compartilhado pelo programa e atualizado automaticamente ao abrir a página. Se algum serviço estiver indisponível, avise a equipe do Aché."}
-      </p>
     </section>
   );
 }
