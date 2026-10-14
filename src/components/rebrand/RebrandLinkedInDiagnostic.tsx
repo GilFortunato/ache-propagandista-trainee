@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
+import Link from "next/link";
 import { Activity, ArrowRight, CheckCircle2, Link2, LoaderCircle, Sparkles, Target, UserRoundPen } from "lucide-react";
 
 type Dimension = { key: string; label: string; weight: number; score: number | null; status: "evaluated" | "not_evaluated"; rationale: string; evidence: string[]; action: string };
@@ -33,27 +34,105 @@ export function RebrandLinkedInDiagnostic() {
   const [result, setResult] = useState<RebrandResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const [taskId, setTaskId] = useState<string | null>(null);
+  const [quota, setQuota] = useState<{ authenticated: boolean; owner?: boolean; remaining: number | null; storageReady?: boolean; googleReady?: boolean } | null>(null);
+  const [consent, setConsent] = useState(false);
+  const [processing, setProcessing] = useState(false);
 
   const valid = useMemo(() => /^https:\/\/(?:www\.)?linkedin\.com\/in\/[^\s/?#]+\/?(?:[?#].*)?$/i.test(profileUrl.trim()) && objective.trim().length >= 10, [profileUrl, objective]);
+
+  async function loadQuota() {
+    try {
+      const response = await fetch("/api/rebrand/quota", { cache: "no-store" });
+      const status = await response.json();
+      setQuota(status);
+    } catch {
+      setQuota(null);
+    }
+  }
+
+  useEffect(() => {
+    void loadQuota();
+    const saved = window.sessionStorage.getItem("ache-manus-active-task");
+    if (saved && /^[a-zA-Z0-9_-]{8,120}$/.test(saved)) {
+      setTaskId(saved);
+      setProcessing(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!taskId) return;
+    let alive = true;
+    let timeout: ReturnType<typeof setTimeout> | undefined;
+    const poll = async () => {
+      try {
+        const response = await fetch("/api/rebrand/linkedin?taskId=" + encodeURIComponent(taskId), { cache: "no-store" });
+        const payload = await response.json();
+        if (!alive) return;
+        if (!response.ok) throw new Error(payload?.error || "Falha ao acompanhar a pesquisa.");
+        if (payload.state === "complete" && payload.result) {
+          setResult(payload.result as RebrandResult);
+          setTaskId(null);
+          setProcessing(false);
+          window.sessionStorage.removeItem("ache-manus-active-task");
+          void loadQuota();
+          return;
+        }
+        if (payload.state === "failed") {
+          setError(payload.error || "O Manus não conseguiu obter evidências suficientes.");
+          setTaskId(null);
+          setProcessing(false);
+          window.sessionStorage.removeItem("ache-manus-active-task");
+          void loadQuota();
+          return;
+        }
+      } catch (error) {
+        if (!alive) return;
+        setError(error instanceof Error ? error.message : "Não foi possível acompanhar a pesquisa.");
+        // Keep the task ID: the provider may still be working. The participant
+        // can retry by reloading without creating/charging another task.
+      }
+      if (alive) timeout = setTimeout(poll, 8000);
+    };
+    void poll();
+    return () => { alive = false; if (timeout) clearTimeout(timeout); };
+  }, [taskId]);
 
   function run() {
     if (!valid) {
       setError("Informe uma URL válida do LinkedIn e mantenha um objetivo profissional claro.");
       return;
     }
+    if (!consent) {
+      setError("Confirme que autoriza a consulta dos dados profissionais informados pelos serviços Manus e Gemini.");
+      return;
+    }
+    if (!quota?.authenticated) {
+      setError("Entre com sua conta Google para iniciar a pesquisa.");
+      return;
+    }
+    if (!quota.owner && quota.remaining === 0) {
+      setError("Você já utilizou suas três pesquisas.");
+      return;
+    }
     setError(null);
+    setResult(null);
     startTransition(async () => {
       try {
         const response = await fetch("/api/rebrand/linkedin", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ profileUrl, objective, manualContext }),
+          body: JSON.stringify({ profileUrl, objective, manualContext, consent }),
         });
         const payload = await response.json();
-        if (!response.ok) throw new Error(payload?.error || "Não foi possível concluir a avaliação.");
-        setResult(payload);
+        if (!response.ok) throw new Error(payload?.error || "Não foi possível iniciar a pesquisa Manus.");
+        if (payload.state !== "processing" || !payload.taskId) throw new Error("Resposta inesperada do Manus.");
+        setProcessing(true);
+        setTaskId(payload.taskId);
+        window.sessionStorage.setItem("ache-manus-active-task", payload.taskId);
+        void loadQuota();
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Não foi possível concluir a avaliação.");
+        setError(err instanceof Error ? err.message : "Não foi possível iniciar a pesquisa Manus.");
       }
     });
   }
@@ -62,9 +141,9 @@ export function RebrandLinkedInDiagnostic() {
     <div className="rebrandDiagnostic">
       <section className="rebrandFormCard">
         <div className="rebrandCardIcon"><UserRoundPen size={28}/></div>
-        <span className="sectionTag acheTag">Diagnóstico de LinkedIn</span>
+        <span className="sectionTag acheTag">Diagnóstico LinkedIn com Manus</span>
         <h2>Como seu perfil comunica seu potencial para a carreira de Propagandista?</h2>
-        <p>Analisamos apenas evidências realmente recuperadas do perfil. Dados ausentes ficam como não avaliados e nunca viram nota baixa. O foco é desenvolvimento profissional — não seleção ou ranqueamento de candidaturas.</p>
+        <p>O Manus pesquisa fontes públicas do perfil; o Gemini organiza recomendações. Sem evidência verificável, não atribuímos nota. O objetivo é desenvolvimento profissional, não seleção de candidatos.</p>
 
         <label>
           URL do LinkedIn
@@ -79,10 +158,24 @@ export function RebrandLinkedInDiagnostic() {
           <textarea value={manualContext} onChange={(e)=>setManualContext(e.target.value)} rows={4} placeholder="Se a coleta do LinkedIn falhar, descreva sua trajetória real aqui para receber orientações qualitativas, sem nota. Ex.: experiências em atendimento, educação ou vendas."/>
         </label>
 
-        {error && <div className="rebrandError">{error}</div>}
+        <div className="rebrandQuotaInfo" role="status">
+          {!quota ? "Consultando acesso e pesquisas..." : !quota.authenticated
+            ? "Para pesquisar, faça login com Google."
+            : quota.owner ? "Conta administrativa: pesquisas ilimitadas."
+            : typeof quota.remaining === "number"
+              ? quota.remaining + " de 3 pesquisas disponíveis nesta conta."
+              : "Pesquisas ainda não habilitadas para esta conta."}
+          {quota && !quota.authenticated && <p><Link href="/login">Entrar com Google</Link></p>}
+        </div>
+        <label className="rebrandConsent">
+          <input type="checkbox" checked={consent} onChange={(event) => setConsent(event.target.checked)} />
+          Autorizo o envio dos dados profissionais informados para pesquisa pública no Manus e recomendações pelo Gemini. Sei que o Manus pode consumir créditos da plataforma.
+        </label>
+        {processing && <div className="rebrandQuotaInfo" role="status">O Manus está pesquisando. Isso pode levar alguns minutos. Você pode manter a página aberta; acompanhar a tarefa não consome outra pesquisa.</div>}
+                {error && <div className="rebrandError">{error}</div>}
 
-        <button type="button" onClick={run} disabled={isPending || !valid} className="rebrandRun">
-          {isPending ? <><LoaderCircle className="spin" size={18}/> Analisando perfil...</> : <>Gerar meu diagnóstico <ArrowRight size={18}/></>}
+        <button type="button" onClick={run} disabled={isPending || processing || !valid || !consent || !quota?.authenticated || (!quota.owner && quota.remaining === 0)} className="rebrandRun">
+          {isPending || processing ? <><LoaderCircle className="spin" size={18}/> {processing ? "Pesquisando no Manus..." : "Iniciando pesquisa..."}</> : <>Gerar meu diagnóstico <ArrowRight size={18}/></>}
         </button>
       </section>
 
