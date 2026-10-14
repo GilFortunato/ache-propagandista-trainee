@@ -162,7 +162,7 @@ async function generateNarrative(input: {
 }): Promise<Narrative | null> {
   const key = await resolveProviderKey("gemini");
   if (!key) return null;
-  const model = process.env.ACHE_REBRAND_GEMINI_MODEL || "gemini-2.5-flash";
+  const model = process.env.ACHE_REBRAND_GEMINI_MODEL || "gemini-3.8-flash";
   const prompt = [
     "Você é uma orientadora de carreira especializada em LinkedIn e desenvolvimento profissional para a área de propagandista farmacêutico.",
     "Sua missão é apoiar a evolução da pessoa, não selecionar, eliminar, contratar ou prever empregabilidade.",
