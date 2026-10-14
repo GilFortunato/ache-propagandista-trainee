@@ -154,7 +154,7 @@ export async function testProviderKey(provider: Provider, candidate?: string): P
   };
 
   const selectedGeminiModel = process.env.ACHE_REBRAND_GEMINI_MODEL || "gemini-2.5-flash";
-  const geminiModel = selectedGeminiModel.replace(/^models\\//, "");
+  const geminiModel = selectedGeminiModel.startsWith("models/") ? selectedGeminiModel.slice(7) : selectedGeminiModel;
   const validGeminiModel = /^[a-zA-Z0-9._-]+$/.test(geminiModel) ? geminiModel : "gemini-2.5-flash";
   const url = provider === "apify"
     ? "https://api.apify.com/v2/users/me"
