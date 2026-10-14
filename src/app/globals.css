@@ -2580,3 +2580,10 @@ body{min-height:100vh}
 .acheAdminSetupAlternative{border-top:1px solid #e9d3a2;padding-top:.7rem;margin-top:.8rem}
 .acheAdminSaveRequirement{margin:.6rem 0 0;color:#8c5b20;font-size:.79rem;line-height:1.4}
 @media(max-width:650px){.acheAdminSetupLinks{flex-direction:column}.acheAdminSetupLinks a{justify-content:center}}
+
+/* Manus research quota and explicit data-processing consent */
+.rebrandQuotaInfo{border:1px solid #ecc9d8;background:#fff4f8;border-radius:11px;padding:.8rem .9rem;margin:.8rem 0;font-size:.86rem;line-height:1.55;color:#773553}
+.rebrandQuotaInfo p{margin:.35rem 0 0}
+.rebrandQuotaInfo a{color:#a32461;font-weight:800;text-decoration:underline}
+.rebrandFormCard label.rebrandConsent{display:flex;align-items:flex-start;gap:.7rem;margin:.85rem 0;font-size:.81rem;line-height:1.5;color:#67485b;font-weight:500;cursor:pointer}
+.rebrandFormCard label.rebrandConsent input{appearance:auto;width:17px;height:17px;margin:.16rem 0 0;flex-shrink:0;accent-color:#ac2465}

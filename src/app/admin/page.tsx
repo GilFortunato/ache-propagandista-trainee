@@ -52,7 +52,7 @@ export default async function AdminPage() {
         <article><h2>Vagas</h2><p>Publique e organize oportunidades.</p></article>
         <article className="adminRebrandCard">
           <h2>ReBrand / LinkedIn</h2>
-          <p>Atualize as chaves do Apify e do Gemini pela seção Integrações acima, sem copiar credenciais do projeto comercial.</p>
+          <p>Atualize as chaves do Manus e do Gemini pela seção Integrações acima, sem copiar credenciais do projeto comercial.</p>
           
           
           <Link href="/rebrand" className="adminCommunityLink">Abrir ReBrand Pessoal</Link>

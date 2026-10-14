@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { AlertCircle, CheckCircle2, CircleHelp, RefreshCcw } from "lucide-react";
 
-type Provider = "apify" | "gemini";
+type Provider = "manus" | "gemini";
 type Connection = {
   status: "connected" | "disconnected" | "not_configured";
   message: string;
@@ -12,7 +12,7 @@ type Connection = {
 type HealthResponse = { providers: Record<Provider, Connection> };
 
 const services: { id: Provider; name: string }[] = [
-  { id: "apify", name: "LinkedIn (Apify)" },
+  { id: "manus", name: "Pesquisa (Manus)" },
   { id: "gemini", name: "Inteligência artificial (Gemini)" },
 ];
 
@@ -32,13 +32,13 @@ function ConnectionBadge({ status }: { status: Connection["status"] | "checking"
 }
 
 export function PublicConnectionStatus({ compact = false, showReconnect = true }: { compact?: boolean; showReconnect?: boolean }) {
-  const [health, setHealth] = useState<Record<Provider, Connection | null>>({ apify: null, gemini: null });
-  const [loading, setLoading] = useState<Record<Provider, boolean>>({ apify: false, gemini: false });
+  const [health, setHealth] = useState<Record<Provider, Connection | null>>({ manus: null, gemini: null });
+  const [loading, setLoading] = useState<Record<Provider, boolean>>({ manus: false, gemini: false });
   const [error, setError] = useState("");
 
   async function reconnect(provider?: Provider) {
     setError("");
-    const providers: Provider[] = provider ? [provider] : ["apify", "gemini"];
+    const providers: Provider[] = provider ? [provider] : ["manus", "gemini"];
     setLoading((previous) => ({ ...previous, ...Object.fromEntries(providers.map((id) => [id, true])) }));
 
     try {
@@ -46,7 +46,7 @@ export function PublicConnectionStatus({ compact = false, showReconnect = true }
       // Users never receive API credentials or gain access to their management.
       const response = await fetch("/api/integrations/health", { cache: "no-store" });
       const result = await response.json() as HealthResponse & { error?: string };
-      if (!response.ok || !result.providers?.apify || !result.providers?.gemini) {
+      if (!response.ok || !result.providers?.manus || !result.providers?.gemini) {
         throw new Error(result.error || "Não foi possível verificar as conexões.");
       }
       setHealth((previous) => provider
@@ -73,7 +73,7 @@ export function PublicConnectionStatus({ compact = false, showReconnect = true }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const isBusy = loading.apify || loading.gemini;
+  const isBusy = loading.manus || loading.gemini;
 
   return (
     <section className={"achePublicConnections achePublicConnectionsSlim" + (compact ? " achePublicConnectionsCompact" : "")} aria-label="Status das conexões do programa">

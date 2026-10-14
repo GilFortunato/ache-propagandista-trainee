@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 const headers = { "Cache-Control": "no-store" };
 
 function provider(value: unknown): value is Provider {
-  return value === "apify" || value === "gemini";
+  return value === "manus" || value === "gemini";
 }
 
 export async function GET() {

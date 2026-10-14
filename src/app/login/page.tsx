@@ -34,8 +34,9 @@ export default function LoginPage() {
         />
         <h2>Bem-vinda(o) à sua jornada</h2>
         <p>Acesse conteúdos, experiências e ferramentas do programa.</p>
-        <Link className="googleButton" href="/home">Continuar com Google</Link>
-        <small>POC visual — autenticação Google será conectada na próxima etapa.</small>
+        <Link className="googleButton" href="/api/auth/google/start">Continuar com Google</Link>
+        <small>O Google identifica sua conta para proteger o limite de 3 pesquisas do ReBrand.</small>
+        <p><Link href="/admin/login">Sou administradora — entrar no ADM</Link></p>
       </section>
     </main>
   );
