@@ -2567,3 +2567,16 @@ body{min-height:100vh}
 @media(max-width:1100px){.achePublicConnectionsSlim .achePublicConnectionCardSimple{flex-wrap:wrap}.achePublicConnectionsSlim .achePublicConnectionControls{justify-content:space-between;width:100%}}
 @media(max-width:760px){.achePublicConnectionsSlim .achePublicConnectionsHeader{align-items:flex-start}.achePublicConnectionsSlim .achePublicConnectionCardSimple{min-height:unset}.achePublicConnectionsSlim .achePublicConnectionControls{width:100%}}
 @media(prefers-reduced-motion:reduce){.achePublicConnectionsSlim .achePublicSpin{animation:none}}
+
+/* Highlight missing one-time storage authorization instead of an unexplained disabled Save button */
+.acheAdminSetupImportant{scroll-margin-top:1.5rem}
+.acheAdminSetupImportant strong{display:inline-flex;align-items:center;gap:.55rem}
+.acheAdminSetupImportant ol{color:#664f34;line-height:1.65;padding-left:1.35rem}
+.acheAdminSetupImportant li{margin-bottom:.35rem}
+.acheAdminSetupFocused{outline:3px solid #e3ab4e;outline-offset:3px}
+.acheAdminSetupLinks{display:flex;flex-wrap:wrap;gap:.7rem;margin:.85rem 0}
+.acheAdminSetupLinks a{display:inline-flex;align-items:center;gap:.4rem;padding:.63rem .8rem;background:#fff;border:1px solid #d5b57e;border-radius:10px;text-decoration:none;font-size:.86rem}
+.acheAdminSetupImportant small{display:block;line-height:1.5;color:#6b5133}
+.acheAdminSetupAlternative{border-top:1px solid #e9d3a2;padding-top:.7rem;margin-top:.8rem}
+.acheAdminSaveRequirement{margin:.6rem 0 0;color:#8c5b20;font-size:.79rem;line-height:1.4}
+@media(max-width:650px){.acheAdminSetupLinks{flex-direction:column}.acheAdminSetupLinks a{justify-content:center}}
