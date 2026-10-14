@@ -7,12 +7,12 @@ export class ResearchStorageUnavailable extends Error {
   constructor() { super("O controle seguro de pesquisas ainda não foi configurado. A administração precisa ativar o banco de dados do ReBrand."); }
 }
 function db() {
-  const url = process.env.ACHE_REBRAND_DATABASE_URL;
+  const url = process.env.ACHE_REBRAND_DATABASE_URL || process.env.DATABASE_URL;
   if (!url?.startsWith("postgres")) throw new ResearchStorageUnavailable();
   return neon(url);
 }
 export function researchStorageReady() {
-  return Boolean(process.env.ACHE_REBRAND_DATABASE_URL?.startsWith("postgres"));
+  return Boolean((process.env.ACHE_REBRAND_DATABASE_URL || process.env.DATABASE_URL)?.startsWith("postgres"));
 }
 
 export async function quotaFor(identity: Identity) {
