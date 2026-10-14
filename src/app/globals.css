@@ -2381,3 +2381,45 @@ body{min-height:100vh}
   .acheUnifiedContent > .acheHero h1{font-size:clamp(3.25rem,13vw,4.6rem)}
   .acheUnifiedContent > .acheHero .acheHeroArt{height:270px}
 }
+
+
+/* ReBrand Aché: rastreabilidade das evidências e plano de desenvolvimento */
+.rebrandEvidenceNotice{margin-bottom:1.15rem;padding:1.2rem 1.45rem;border:1px solid #e7c8d8;border-radius:18px;background:#fff8fb;color:#412538}
+.rebrandEvidenceTop{display:flex;align-items:flex-start;justify-content:space-between;gap:1.2rem}
+.rebrandEvidenceTop strong{font-size:1.05rem}
+.rebrandEvidenceTop p{margin:.4rem 0 0;color:#70556a;line-height:1.55}
+.rebrandEvidenceTop > span{flex-shrink:0;border-radius:999px;padding:.4rem .7rem;background:#f2dae6;color:#82214f;font-size:.85rem;font-weight:800}
+.rebrandEvidenceMeta{margin:1rem 0 .35rem!important;font-size:.82rem!important;color:#735b6b!important}
+.rebrandEvidenceNotice ul{padding-left:1.1rem;margin:.7rem 0 0;font-size:.86rem;line-height:1.65}
+.rebrandNoScore{font-size:2.5rem!important}
+.rebrandDimensionEvidence{margin:.8rem 0;padding:.8rem .95rem;border-radius:12px;background:#fff7fb}
+.rebrandDimensionEvidence strong{font-size:.77rem;color:#81244f;text-transform:uppercase;letter-spacing:.07em}
+.rebrandDimensionEvidence p{font-size:.82rem!important;margin:.4rem 0 0!important;overflow-wrap:anywhere}
+.rebrandDevelopmentPlan{margin-top:1.5rem;padding:1.4rem;border:1px solid #ebd5df;border-radius:23px;background:#fff}
+.rebrandDevelopmentHeading{display:flex;justify-content:space-between;align-items:flex-start;gap:1.5rem}
+.rebrandDevelopmentHeading span{font-size:.76rem;letter-spacing:.12em;color:#ad2966;font-weight:800}
+.rebrandDevelopmentHeading h3{font-size:1.6rem;margin:.4rem 0}
+.rebrandDevelopmentHeading p{color:#705b68;margin:0;line-height:1.5}
+.rebrandPrintButton{border:1px solid #a52561;border-radius:10px;background:#fff;color:#8c2152;padding:.7rem .9rem;font-weight:750;cursor:pointer;flex-shrink:0}
+.rebrandPrintButton:hover{background:#fff0f6}
+.rebrandWeekGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-top:1.3rem}
+.rebrandWeekGrid article{padding:1.2rem;background:#fff8fb;border:1px solid #f0dce5;border-radius:16px}
+.rebrandWeekGrid article>span{color:#a52561;font-size:.75rem;font-weight:850}
+.rebrandWeekGrid h4{margin:.45rem 0 .7rem;font-size:1.05rem}
+.rebrandWeekGrid ul{padding-left:1.2rem;margin:0;line-height:1.6;font-size:.9rem;color:#654f60}
+.rebrandWeekGrid li{margin-bottom:.45rem}
+@media(max-width:720px){
+  .rebrandEvidenceTop,.rebrandDevelopmentHeading{flex-direction:column}
+  .rebrandWeekGrid{grid-template-columns:1fr}
+  .rebrandPrintButton{width:100%}
+}
+@media print{
+  .rebrandPage{background:#fff!important;color:#111!important}
+  .rebrandPage .experienceHeader,.rebrandPage .rebrandHero,.rebrandPage .rebrandIntro,.rebrandFormCard,.rebrandPrintButton{display:none!important}
+  .rebrandWorkspace{padding:0!important;display:block!important}
+  .rebrandDiagnostic{display:block!important}
+  .rebrandResultArea{width:100%!important;padding:0!important;box-shadow:none!important}
+  .rebrandWeekGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .rebrandWeekGrid article,.rebrandDimensions article,.rebrandScoreCard,.rebrandDevelopmentPlan{break-inside:avoid}
+  @page{size:A4;margin:14mm}
+}
