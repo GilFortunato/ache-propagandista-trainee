@@ -72,6 +72,18 @@ function numberField(obj: Record<string, unknown>, keys: string[]): number | nul
 export function normalizeProfile(data: unknown, postsData: unknown = []): PublicProfile | null {
   const obj = record(data);
   if (!obj) return null;
+
+  // Some LinkedIn actors return a dataset row containing an error message,
+  // including paywall/upgrade notices, even when the HTTP request succeeds.
+  // Never reinterpret such rows as a real person's headline or About section.
+  const providerFailure = [obj.error, obj.message, obj.errorMessage, obj.notice, obj.description, obj.headline, obj.about, obj.text]
+    .filter((value): value is string => typeof value === "string")
+    .join(" ");
+  const collectorPaywall = /(?:this actor requires a paid apify plan|free.plan runs do not scrape|upgrade to any paid apify plan|plans start at \$\d+|apify plan.*(?:scrap|extract|upgrade))/i.test(providerFailure);
+  const collectorError = /(?:^|\\s)(?:actor run failed|actor failed|insufficient plan|subscription required|plan limit reached|rate limit exceeded)(?:\\s|[.!:]|$)/i.test(
+    [obj.error, obj.errorMessage, obj.message].filter((value): value is string => typeof value === "string").join(" ")
+  );
+  if (collectorPaywall || collectorError) return null;
   const experiences = records(obj, ["experience", "experiences", "positions"]).map((item) => ({
     role: field(item, ["role", "title", "position", "jobTitle"]),
     company: field(item, ["companyName", "company", "organization", "employer"]),
