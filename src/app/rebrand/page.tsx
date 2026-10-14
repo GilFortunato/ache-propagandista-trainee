@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { PublicConnectionStatus } from "@/components/integrations/PublicConnectionStatus";
 import Link from "next/link";
 import { ArrowLeft, BadgeCheck, MessageCircle, Stethoscope, Target, UsersRound } from "lucide-react";
 import { RebrandLinkedInDiagnostic } from "@/components/rebrand/RebrandLinkedInDiagnostic";
@@ -37,6 +38,8 @@ export default function RebrandPage() {
         <div><span>03</span><h3>Provas</h3><p>Existem exemplos, resultados ou vivências que sustentam sua narrativa?</p></div>
         <div><span>04</span><h3>Próximo passo</h3><p>O diagnóstico transforma a leitura em ações concretas de melhoria.</p></div>
       </section>
+
+      <PublicConnectionStatus />
 
       <section className="rebrandWorkspace">
         <RebrandLinkedInDiagnostic />
