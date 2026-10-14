@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { PublicConnectionStatus } from "@/components/integrations/PublicConnectionStatus";
 import Link from "next/link";
 import {
   Sparkles,
@@ -50,7 +49,6 @@ export default function HomePage() {
           <p className="eyebrow">Sua jornada começa aqui</p>
           <h1>Mais que contratar,<br />queremos incluir.</h1>
           <p>Explore os módulos da experiência e acompanhe seu desenvolvimento.</p>
-          <PublicConnectionStatus compact showReconnect={false} />
         </section>
 
         <div className="nexusWrap">
