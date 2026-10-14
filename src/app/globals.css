@@ -2499,3 +2499,51 @@ body{min-height:100vh}
 @keyframes acheAdminSpin{to{transform:rotate(360deg)}}
 @media(max-width:650px){.acheAdminHealthOverview{flex-direction:column;align-items:stretch}.acheAdminHealthOverview button{width:100%}}
 @media(prefers-reduced-motion:reduce){.acheAdminSpin{animation:none}}
+
+/* Participant-accessible shared Apify/Gemini status; never exposes credentials */
+.achePublicConnections{max-width:1260px;margin:1.8rem auto 2rem;padding:1.35rem 1.55rem;border-radius:23px;border:1px solid #ecd1df;background:#fff;box-shadow:0 10px 35px rgba(102,25,66,.05);color:#3b2130}
+.achePublicConnectionsHeader{display:flex;justify-content:space-between;align-items:center;gap:1.2rem;margin-bottom:1.1rem}
+.achePublicConnectionsEyebrow{display:block;color:#aa2763;font-size:.73rem;letter-spacing:.07em;font-weight:850;text-transform:uppercase}
+.achePublicConnectionsHeader h2{font-size:1.6rem;line-height:1.2;margin:.25rem 0;color:#361c2c}
+.achePublicConnectionsHeader p{font-size:.88rem;line-height:1.4;color:#745366;margin:0}
+.achePublicReconnectAll{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;background:#a82461;border:1px solid #a82461;color:#fff;border-radius:11px;cursor:pointer;font-weight:800;padding:.7rem .9rem;white-space:nowrap}
+.achePublicReconnectAll:disabled,.achePublicConnectionFooter button:disabled{opacity:.55;cursor:wait}
+.achePublicConnectionsGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem}
+.achePublicConnectionCard{border:1px solid #ecd9e3;border-radius:15px;background:#fffafd;padding:1rem;min-width:0}
+.achePublicConnectionTop{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:.55rem}
+.achePublicConnectionTop h3{font-size:.99rem;line-height:1.3;margin:0;color:#3b2130}
+.achePublicConnectionTop p{font-size:.79rem;margin:.3rem 0 0;color:#73576a}
+.achePublicConnectionBadge{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;font-weight:850;padding:.33rem .55rem;border-radius:999px;background:#f0eaf0;color:#624758;white-space:nowrap}
+.achePublicConnection-connected{background:#e7f6ea;color:#1d6939}
+.achePublicConnection-disconnected{background:#ffe6eb;color:#9d2842}
+.achePublicConnection-not_configured{background:#f1edf1;color:#625262}
+.achePublicConnection-checking{background:#fff0d8;color:#915b19}
+.achePublicConnectionMessage{font-size:.82rem!important;color:#785e6d!important;line-height:1.5;margin:.75rem 0!important}
+.achePublicConnectionFooter{display:flex;align-items:center;justify-content:space-between;gap:.55rem;flex-wrap:wrap}
+.achePublicConnectionFooter small{font-size:.7rem;color:#947986}
+.achePublicConnectionFooter button{display:inline-flex;align-items:center;gap:.35rem;cursor:pointer;border:1px solid #af7195;border-radius:9px;background:#fff;color:#8e2d61;font-size:.78rem;font-weight:800;padding:.5rem .65rem}
+.achePublicConnectionError{border-radius:9px;color:#8b2b45;background:#fff0f4;padding:.65rem;margin:.7rem 0}
+.achePublicConnectionsNote{font-size:.75rem!important;color:#806b76!important;line-height:1.45;margin:.9rem 0 0!important}
+.achePublicSpin{animation:achePublicSpin 1s linear infinite}
+@keyframes achePublicSpin{to{transform:rotate(360deg)}}
+.rebrandPage>.achePublicConnections{max-width:1250px;margin:2rem auto;padding:1.35rem}
+.achePublicConnectionsCompact{max-width:520px;margin:1.5rem 0 0;padding:.85rem;background:rgba(255,255,255,.85);border-radius:18px}
+.achePublicConnectionsCompact .achePublicConnectionsHeader{margin-bottom:.65rem}
+.achePublicConnectionsCompact .achePublicConnectionsHeader h2{font-size:1.15rem}
+.achePublicConnectionsCompact .achePublicConnectionsEyebrow{font-size:.66rem}
+.achePublicConnectionsCompact .achePublicReconnectAll{font-size:.77rem;padding:.55rem .65rem}
+.achePublicConnectionsCompact .achePublicConnectionsGrid{grid-template-columns:1fr;gap:.45rem}
+.achePublicConnectionsCompact .achePublicConnectionCard{padding:.65rem .8rem}
+.achePublicConnectionsCompact .achePublicConnectionTop h3{font-size:.85rem}
+.achePublicConnectionsCompact .achePublicConnectionTop p,.achePublicConnectionsCompact .achePublicConnectionMessage,.achePublicConnectionsCompact .achePublicConnectionFooter small{display:none}
+.achePublicConnectionsCompact .achePublicConnectionFooter{justify-content:flex-end;margin-top:.35rem}
+.achePublicConnectionsCompact .achePublicConnectionFooter button{padding:.32rem .55rem;font-size:.73rem}
+.achePublicConnectionsCompact .achePublicConnectionsNote{font-size:.68rem!important}
+@media(max-width:760px){
+  .achePublicConnectionsGrid{grid-template-columns:1fr}
+  .achePublicConnectionsHeader{flex-wrap:wrap}
+  .achePublicReconnectAll{width:100%}
+  .rebrandPage>.achePublicConnections{margin:1rem}
+  .achePublicConnectionsCompact{max-width:100%}
+}
+@media(prefers-reduced-motion:reduce){.achePublicSpin{animation:none}}
