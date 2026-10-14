@@ -1,12 +1,14 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { assessProfile, cleanText, hasProfileEvidence, normalizeProfile, type PublicProfile } from "@/lib/rebrand/assessment";
-import { adminSession } from "@/lib/acheAdminAuth";
+import { currentResearchIdentity } from "@/lib/acheGoogleAuth";
 import { resolveProviderKey } from "@/lib/acheVercelSecrets";
+import { ManusUnavailable, createManusResearch, pollManusResearch } from "@/lib/rebrand/manus";
+import { findManusTask, quotaFor, refundResearch, reserveResearch, researchStorageReady, ResearchStorageUnavailable, saveManusTask, setManusTaskResult } from "@/lib/rebrand/usage";
 
 export const runtime = "nodejs";
-export const maxDuration = 120;
-
-type Input = { profileUrl?: unknown; objective?: unknown; manualContext?: unknown };
+export const maxDuration = 60;
+export const dynamic = "force-dynamic";
+const noStore = { "Cache-Control": "no-store" };
 
 function validLinkedInUrl(value: unknown): value is string {
   if (typeof value !== "string" || value.length > 600) return false;
@@ -15,109 +17,131 @@ function validLinkedInUrl(value: unknown): value is string {
     return url.protocol === "https:"
       && (url.hostname === "linkedin.com" || url.hostname === "www.linkedin.com")
       && /^\/in\/[^/]+\/?$/.test(url.pathname);
-  } catch {
-    return false;
-  }
+  } catch { return false; }
 }
 
-export async function POST(request: Request) {
-  // Until participant Google login and durable rate limiting are implemented,
-  // paid provider credentials may only be used by the authenticated admin.
-  if (!await adminSession()) return NextResponse.json({
-    error: "O diagnóstico conectado está temporariamente restrito à administração até a ativação do login de participantes.",
-  }, { status: 401 });
-  const body = await request.json().catch(() => null) as Input | null;
-  if (!validLinkedInUrl(body?.profileUrl)) {
-    return NextResponse.json({ error: "Informe uma URL HTTPS válida de perfil pessoal do LinkedIn (linkedin.com/in/...)."}, { status: 400 });
-  }
-  const objective = cleanText(body?.objective, 600);
-  if (objective.length < 10) {
-    return NextResponse.json({ error: "Informe um objetivo profissional mais claro." }, { status: 400 });
-  }
-  const manualContext = cleanText(body?.manualContext, 2500);
+export async function POST(request: NextRequest) {
+  const identity = await currentResearchIdentity();
+  if (!identity) return NextResponse.json({ error: "Faça login com Google para pesquisar. O ADM pode entrar pela senha de administração." }, { status: 401, headers: noStore });
+  if (request.headers.get("origin") !== new URL(request.url).origin)
+    return NextResponse.json({ error: "Origem inválida." }, { status: 403, headers: noStore });
+  if (!researchStorageReady()) return NextResponse.json({
+    error: "Pesquisa Manus ainda em configuração: falta conectar o banco seguro de cotas ao ReBrand.",
+  }, { status: 503, headers: noStore });
+  const input = await request.json().catch(() => null) as { profileUrl?: unknown; objective?: unknown; manualContext?: unknown } | null;
+  if (!validLinkedInUrl(input?.profileUrl))
+    return NextResponse.json({ error: "Informe uma URL HTTPS válida do LinkedIn pessoal." }, { status: 400, headers: noStore });
+  const objective = cleanText(input?.objective, 600);
+  if (objective.length < 10)
+    return NextResponse.json({ error: "Informe seu objetivo profissional." }, { status: 400, headers: noStore });
+  const manualContext = cleanText(input?.manualContext, 2500);
 
-  const profileRaw = await runApifyProfile(body.profileUrl);
-  const postItems = profileRaw && process.env.ACHE_REBRAND_ENABLE_POSTS === "true"
-    ? await runApifyActor(
-      process.env.ACHE_REBRAND_APIFY_POSTS_ACTOR_ID || "harvestapi/linkedin-profile-posts",
-      { targetUrls: [body.profileUrl], maxPosts: 8, includeQuotePosts: true, includeReposts: true },
-      35_000,
-    )
-    : [];
-  const profile = normalizeProfile(profileRaw, postItems);
-  const sourced = hasProfileEvidence(profile);
-
-  if (!sourced && manualContext.length < 30) {
-    return NextResponse.json({
-      error: "Não conseguimos recuperar dados públicos suficientes deste LinkedIn. Confira a URL ou acrescente pelo menos 30 caracteres de experiências reais no campo de contexto para receber orientações sem nota.",
-      code: "INSUFFICIENT_PROFILE_EVIDENCE",
-    }, { status: 422 });
-  }
-
-  const assessment = assessProfile(sourced ? profile : null, manualContext);
-  const ai = await generateNarrative({
-    objective,
-    manualContext,
-    profile: sourced ? profile : null,
-    assessment,
-  });
-  const result = {
-    ...assessment,
-    summary: ai?.summary || assessment.summary,
-    strengths: ai?.strengths?.length ? ai.strengths : assessment.strengths,
-    gaps: ai?.gaps?.length ? ai.gaps : assessment.gaps,
-    recommendations: ai?.recommendations?.length ? ai.recommendations : assessment.recommendations,
-    nextBestAction: {
-      ...assessment.nextBestAction,
-      ...(ai?.nextBestAction ? {
-        title: ai.nextBestAction.title || assessment.nextBestAction.title,
-        reason: ai.nextBestAction.reason || assessment.nextBestAction.reason,
-        actions: ai.nextBestAction.actions.length ? ai.nextBestAction.actions : assessment.nextBestAction.actions,
-      } : {}),
-    },
-    source: (sourced ? (ai ? "linkedin+ai" : "linkedin+local") : (ai ? "manual+ai" : "manual+local")),
-    dataOrigin: sourced ? "linkedin" : "manual",
-    aiUsed: Boolean(ai),
-    collected: {
-      profile: sourced,
-      posts: Boolean(profile?.posts.length),
-      experiences: profile?.experiences.length ?? 0,
-      education: (profile?.education.length ?? 0) + (profile?.certifications.length ?? 0),
-    },
-    generatedAt: new Date().toISOString(),
-  };
-  return NextResponse.json(result, { headers: { "Cache-Control": "no-store" } });
-}
-
-async function runApifyProfile(profileUrl: string) {
-  const actor = process.env.ACHE_REBRAND_APIFY_LINKEDIN_ACTOR_ID || "unseenuser/linkedin-profile";
-  const items = await runApifyActor(actor, { urls: [profileUrl] }, 75_000);
-  const first = items.find((item) => item && typeof item === "object" && !Array.isArray(item));
-  return first ?? null;
-}
-
-async function runApifyActor(actor: string, input: Record<string, unknown>, timeoutMs: number): Promise<unknown[]> {
-  const token = await resolveProviderKey("apify");
-  if (!token) return [];
-  const actorId = actor.trim().replace("/", "~");
-  const endpoint = "https://api.apify.com/v2/acts/" + encodeURIComponent(actorId) + "/run-sync-get-dataset-items?timeout=" + Math.min(120, Math.floor(timeoutMs / 1000));
+  let reserved = false;
+  let createdTask: string | null = null;
   try {
-    const response = await fetch(endpoint, {
-      method: "POST",
-      headers: { Authorization: "Bearer " + token, "Content-Type": "application/json" },
-      body: JSON.stringify(input),
-      signal: AbortSignal.timeout(timeoutMs + 3000),
-      cache: "no-store",
-    });
-    if (!response.ok) {
-      console.warn("[ache-rebrand] Public data collector unavailable", { status: response.status, actor: actorId });
-      return [];
-    }
-    const items: unknown = await response.json();
-    return Array.isArray(items) ? items : [];
+    // Check Manus key before reserving a search: missing config costs nothing.
+    const manusKey = await resolveProviderKey("manus");
+    if (!manusKey) return NextResponse.json({
+      error: "A integração Manus ainda não está configurada. A administração deve cadastrar a API Key do Manus no ADM.",
+    }, { status: 503, headers: noStore });
+    const quota = await reserveResearch(identity);
+    if (!quota.allowed) return NextResponse.json({
+      error: "Você já utilizou suas 3 pesquisas do ReBrand.",
+      code: "RESEARCH_QUOTA_EXCEEDED", remaining: 0,
+    }, { status: 429, headers: noStore });
+    reserved = !identity.owner;
+    createdTask = await createManusResearch(input.profileUrl);
+    await saveManusTask({ taskId: createdTask, identity, profileUrl: input.profileUrl, objective, manualContext });
+    return NextResponse.json({
+      state: "processing", taskId: createdTask,
+      remaining: quota.remaining, unlimited: identity.owner,
+      message: "Pesquisa iniciada no Manus. O processamento pode levar alguns minutos.",
+    }, { status: 202, headers: noStore });
   } catch (error) {
-    console.warn("[ache-rebrand] Public data collector timeout or transport error", { name: error instanceof Error ? error.name : "unknown" });
-    return [];
+    // Refund if the task was never created at Manus. If created, the task may
+    // already cost credits; retain the reserved slot to prevent cost abuse.
+    if (reserved && !createdTask) {
+      try { await refundResearch(identity); } catch { console.error("[rebrand] Quota refund failed"); }
+    }
+    const message = error instanceof ManusUnavailable || error instanceof ResearchStorageUnavailable
+      ? error.message : "Não foi possível iniciar sua pesquisa. Tente novamente mais tarde.";
+    console.error("[rebrand] Manus research initiation failed", { type: error instanceof Error ? error.name : "unknown" });
+    return NextResponse.json({ error: message }, { status: 503, headers: noStore });
+  }
+}
+
+export async function GET(request: NextRequest) {
+  const identity = await currentResearchIdentity();
+  if (!identity) return NextResponse.json({ error: "Faça login para consultar seu diagnóstico." }, { status: 401, headers: noStore });
+  if (!researchStorageReady()) return NextResponse.json({ error: "Banco de pesquisas não configurado." }, { status: 503, headers: noStore });
+  const taskId = request.nextUrl.searchParams.get("taskId") || "";
+  if (!/^[A-Za-z0-9_-]{8,120}$/.test(taskId))
+    return NextResponse.json({ error: "Identificador de pesquisa inválido." }, { status: 400, headers: noStore });
+  try {
+    const task = await findManusTask(taskId, identity);
+    if (!task) return NextResponse.json({ error: "Pesquisa não encontrada nesta conta." }, { status: 404, headers: noStore });
+    if (task.status === "complete") return NextResponse.json({ state: "complete", result: task.result_json }, { headers: noStore });
+    if (task.status === "failed") return NextResponse.json({
+      state: "failed", error: "A pesquisa não pôde recuperar evidências suficientes. Esta tentativa foi registrada.",
+    }, { headers: noStore });
+
+    const poll = await pollManusResearch(taskId, task.profile_url);
+    if (poll.state === "processing") return NextResponse.json({ state: "processing" }, { status: 202, headers: noStore });
+    if (poll.state === "failed") {
+      await setManusTaskResult(taskId, identity, "failed", { reason: poll.message });
+      return NextResponse.json({ state: "failed", error: poll.message }, { headers: noStore });
+    }
+    const profile = normalizeProfile(poll.profile);
+    const sourced = hasProfileEvidence(profile);
+    if (!sourced && task.manual_context.length < 30) {
+      await setManusTaskResult(taskId, identity, "failed", { reason: "no_verified_data" });
+      return NextResponse.json({
+        state: "failed",
+        error: "O Manus não encontrou evidências públicas suficientes. Adicione contexto real e tente novamente quando desejar.",
+      }, { headers: noStore });
+    }
+    const assessment = assessProfile(sourced ? profile : null, task.manual_context);
+    const ai = await generateNarrative({
+      objective: task.objective,
+      manualContext: task.manual_context,
+      profile: sourced ? profile : null,
+      assessment,
+    });
+    const result = {
+      ...assessment,
+      summary: ai?.summary || assessment.summary,
+      strengths: ai?.strengths?.length ? ai.strengths : assessment.strengths,
+      gaps: ai?.gaps?.length ? ai.gaps : assessment.gaps,
+      recommendations: ai?.recommendations?.length ? ai.recommendations : assessment.recommendations,
+      nextBestAction: {
+        ...assessment.nextBestAction,
+        ...(ai?.nextBestAction ? {
+          title: ai.nextBestAction.title || assessment.nextBestAction.title,
+          reason: ai.nextBestAction.reason || assessment.nextBestAction.reason,
+          actions: ai.nextBestAction.actions.length ? ai.nextBestAction.actions : assessment.nextBestAction.actions,
+        } : {}),
+      },
+      limitations: [
+        ...assessment.limitations,
+        ...(sourced ? ["Informações extraídas pelo agente Manus de fontes públicas citadas. Confirme os detalhes diretamente no LinkedIn."] : []),
+      ],
+      source: sourced ? (ai ? "linkedin+ai" : "linkedin+local") : (ai ? "manual+ai" : "manual+local"),
+      dataOrigin: sourced ? "linkedin" : "manual",
+      aiUsed: Boolean(ai),
+      collected: {
+        profile: sourced, posts: false, experiences: profile?.experiences.length ?? 0,
+        education: (profile?.education.length ?? 0) + (profile?.certifications.length ?? 0),
+      },
+      generatedAt: new Date().toISOString(),
+    };
+    await setManusTaskResult(taskId, identity, "complete", result);
+    const quota = await quotaFor(identity);
+    return NextResponse.json({ state: "complete", result, remaining: quota.remaining, unlimited: identity.owner }, { headers: noStore });
+  } catch (error) {
+    console.error("[rebrand] Manus result poll failed", { type: error instanceof Error ? error.name : "unknown" });
+    const message = error instanceof ManusUnavailable || error instanceof ResearchStorageUnavailable
+      ? error.message : "Não foi possível consultar a pesquisa agora. Tente novamente em alguns instantes.";
+    return NextResponse.json({ error: message }, { status: 503, headers: noStore });
   }
 }
 
