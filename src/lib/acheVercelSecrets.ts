@@ -123,26 +123,77 @@ export async function removeProviderKey(provider: Provider) {
   await requestVercel(url, { method: "DELETE" });
 }
 
-export async function testProviderKey(provider: Provider, candidate?: string) {
-  const key = candidate || await resolveProviderKey(provider);
-  if (!key) throw new Error("Cadastre a chave antes de testar a conexão.");
+export type ProviderHealth = {
+  status: "connected" | "disconnected" | "not_configured";
+  ok: boolean;
+  message: string;
+  checkedAt: string;
+};
+
+// This validates provider authentication/endpoint reachability, not a paid
+// LinkedIn extraction or a billed Gemini content generation.
+export async function testProviderKey(provider: Provider, candidate?: string): Promise<ProviderHealth> {
+  const checkedAt = new Date().toISOString();
+  let key: string | null;
+  try {
+    key = candidate || await resolveProviderKey(provider);
+  } catch {
+    return {
+      status: "disconnected",
+      ok: false,
+      message: "Não foi possível consultar a chave salva. Verifique o acesso do projeto às variáveis na Vercel.",
+      checkedAt,
+    };
+  }
+
+  if (!key) return {
+    status: "not_configured",
+    ok: false,
+    message: "Nenhuma chave cadastrada. Salve uma credencial antes de reconectar.",
+    checkedAt,
+  };
+
+  const selectedGeminiModel = process.env.ACHE_REBRAND_GEMINI_MODEL || "gemini-2.5-flash";
+  const geminiModel = selectedGeminiModel.startsWith("models/") ? selectedGeminiModel.slice(7) : selectedGeminiModel;
+  const validGeminiModel = /^[a-zA-Z0-9._-]+$/.test(geminiModel) ? geminiModel : "gemini-2.5-flash";
   const url = provider === "apify"
     ? "https://api.apify.com/v2/users/me"
-    : "https://generativelanguage.googleapis.com/v1beta/models?pageSize=1";
+    : "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(validGeminiModel);
+
   try {
     const response = await fetch(url, {
-      headers: provider === "apify"
-        ? { Authorization: "Bearer " + key }
-        : { "x-goog-api-key": key },
-      signal: AbortSignal.timeout(10000),
+      method: "GET",
+      headers: provider === "apify" ? { Authorization: "Bearer " + key } : { "x-goog-api-key": key },
+      signal: AbortSignal.timeout(12000),
       cache: "no-store",
     });
-    return { ok: response.ok, message: response.ok
-      ? "Conexão validada com o provedor."
-      : response.status === 401 || response.status === 403
-        ? "O provedor recusou a credencial ou as permissões."
-        : "O provedor não validou a conexão (HTTP " + response.status + ")." };
+    if (response.ok) return {
+      status: "connected",
+      ok: true,
+      message: provider === "apify"
+        ? "Autenticação confirmada pela API do Apify."
+        : "Autenticação e acesso ao modelo " + validGeminiModel + " confirmados.",
+      checkedAt,
+    };
+    const message = response.status === 401 || response.status === 403
+      ? "Credencial recusada ou sem permissão para acessar o serviço."
+      : response.status === 404 && provider === "gemini"
+        ? "O modelo " + validGeminiModel + " não foi encontrado para esta chave."
+        : response.status === 429
+          ? "O provedor limitou as solicitações. Tente novamente mais tarde."
+          : "O provedor retornou HTTP " + response.status + " ao verificar a conexão.";
+    return { status: "disconnected", ok: false, message, checkedAt };
   } catch {
-    return { ok: false, message: "O serviço não respondeu a tempo. Confira a conexão e tente novamente." };
+    return {
+      status: "disconnected",
+      ok: false,
+      message: "Não foi possível acessar o provedor. Verifique a disponibilidade da API e tente novamente.",
+      checkedAt,
+    };
   }
+}
+
+export async function reconnectAllProviders(): Promise<Record<Provider, ProviderHealth>> {
+  const [apify, gemini] = await Promise.all([testProviderKey("apify"), testProviderKey("gemini")]);
+  return { apify, gemini };
 }
