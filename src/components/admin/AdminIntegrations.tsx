@@ -46,6 +46,7 @@ export default function AdminIntegrations() {
   const [busy, setBusy] = useState<Provider | null>(null);
   const [notice, setNotice] = useState<Record<Provider, string>>({ apify: "", gemini: "" });
   const [globalError, setGlobalError] = useState("");
+  const [setupHighlighted, setSetupHighlighted] = useState(false);
   const [show, setShow] = useState<Record<Provider, boolean>>({ apify: false, gemini: false });
   const [health, setHealth] = useState<Record<Provider, Health | null>>({ apify: null, gemini: null });
   const [checking, setChecking] = useState<Record<Provider, boolean>>({ apify: false, gemini: false });
@@ -102,6 +103,14 @@ export default function AdminIntegrations() {
 
   async function change(provider: Provider, action: "save" | "remove" | "test") {
     if (busy || checkingAll || checking.apify || checking.gemini) return;
+    if ((action === "save" || action === "remove") && data && !data.connected) {
+      // A disabled button hid the actual configuration requirement. Make the
+      // missing one-time authorization actionable without sending the key.
+      setSetupHighlighted(true);
+      setNotice((old) => ({ ...old, [provider]: "O salvamento ainda precisa ser ativado na Vercel. Siga as instruções no início desta seção." }));
+      document.getElementById("ache-admin-storage-setup")?.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
     if (action === "save" && keys[provider].trim().length < 12) {
       setNotice((old) => ({ ...old, [provider]: "Cole uma chave válida para salvar." }));
       return;
@@ -182,10 +191,21 @@ export default function AdminIntegrations() {
       </div>
 
       {data && !data.connected && (
-        <div className="acheAdminSetup" role="status">
-          <strong>Ativação inicial necessária para salvar ou remover chaves</strong>
-          <p>Você pode verificar as chaves que já estiverem no ambiente. Para salvar e trocar chaves por aqui, configure a variável <code>ACHE_VERCEL_API_TOKEN</code> nas variáveis de ambiente de produção da Vercel e faça um redeploy.</p>
-          <a href="https://vercel.com/gilfortunatos-projects/ache-propagandista-trainee/settings/environment-variables" target="_blank" rel="noreferrer">Abrir configurações da Vercel <ExternalLink size={15} /></a>
+        <div id="ache-admin-storage-setup" className={"acheAdminSetup acheAdminSetupImportant" + (setupHighlighted ? " acheAdminSetupFocused" : "")} role="alert">
+          <strong><AlertCircle size={17} /> Por que não consigo salvar minha chave?</strong>
+          <p>O formulário já está pronto, mas <b>o armazenamento pela interface ainda não foi autorizado na Vercel.</b> Sem essa autorização, nenhuma chave digitada pode ser salva de forma persistente.</p>
+          <p><b>Ativação única para liberar o botão Salvar chave:</b></p>
+          <ol>
+            <li>Na Vercel, crie um token de acesso com as permissões mínimas necessárias para gerenciar as variáveis de ambiente deste projeto.</li>
+            <li>No projeto Aché, adicione <code>ACHE_VERCEL_API_TOKEN</code> como variável de ambiente <b>Production</b>, do tipo criptografado.</li>
+            <li>Faça um <b>redeploy</b> da produção. Depois, atualize esta página e salve a chave normalmente.</li>
+          </ol>
+          <div className="acheAdminSetupLinks">
+            <a href="https://vercel.com/account/tokens" target="_blank" rel="noreferrer">1. Criar token na Vercel <ExternalLink size={15} /></a>
+            <a href="https://vercel.com/gilfortunatos-projects/ache-propagandista-trainee/settings/environment-variables" target="_blank" rel="noreferrer">2. Configurar variável no Aché <ExternalLink size={15} /></a>
+          </div>
+          <p className="acheAdminSetupAlternative"><b>Alternativa imediata:</b> você também pode cadastrar as chaves diretamente nas variáveis de produção da Vercel como <code>ACHE_REBRAND_APIFY_TOKEN</code> e <code>ACHE_REBRAND_GEMINI_API_KEY</code>, seguido de redeploy. Nesse caso, o painel apenas verifica a conexão; o botão de salvamento pela interface continuará pendente.</p>
+          <small>Nunca envie chaves de API ou tokens pelo chat. O botão “Testar nova chave” funciona sem o token da Vercel e não salva o valor.</small>
         </div>
       )}
 
@@ -225,16 +245,17 @@ export default function AdminIntegrations() {
                 <button type="button" className="acheAdminReconnect" disabled={anyChecking} onClick={() => void reconnectOne(service.id)}>
                   <RefreshCcw size={15} className={checking[service.id] ? "acheAdminSpin" : undefined} /> Reconectar
                 </button>
-                <button className="acheAdminSave" type="button" disabled={anyChecking || !data?.connected} onClick={() => void change(service.id, "save")}>
-                  <KeyRound size={15} /> {busy === service.id ? "Processando..." : saved?.configured ? "Substituir chave" : "Salvar chave"}
+                <button className="acheAdminSave" type="button" disabled={anyChecking || !data || !keys[service.id].trim()} onClick={() => void change(service.id, "save")}>
+                  <KeyRound size={15} /> {busy === service.id ? "Processando..." : data && !data.connected ? "Ativar salvamento" : saved?.configured ? "Substituir chave" : "Salvar chave"}
                 </button>
                 <button type="button" disabled={anyChecking || !keys[service.id].trim()} onClick={() => void change(service.id, "test")}>
                   <CheckCircle2 size={15} /> Testar nova chave
                 </button>
-                {saved?.configured && <button className="acheAdminRemove" type="button" disabled={anyChecking || !data?.connected} onClick={() => void change(service.id, "remove")}>
+                {saved?.configured && <button className="acheAdminRemove" type="button" disabled={anyChecking || !data} onClick={() => void change(service.id, "remove")}>
                   <Trash2 size={15} /> Remover
                 </button>}
               </div>
+              {data && !data.connected && <p className="acheAdminSaveRequirement">Para salvar aqui, falta ativar o acesso à Vercel uma única vez.</p>}
               {saved?.updatedAt && <p className="acheAdminUpdated">Última alteração da chave: {new Date(saved.updatedAt).toLocaleString("pt-BR")}</p>}
               {notice[service.id] && <p className="acheAdminNotice" role="status">{notice[service.id]}</p>}
             </article>
