@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { adminSession, validOrigin } from "@/lib/acheAdminAuth";
-import { integrationStatus, removeProviderKey, saveProviderKey, testProviderKey, type Provider, vaultConfigured } from "@/lib/acheVercelSecrets";
+import { integrationStatus, reconnectAllProviders, removeProviderKey, saveProviderKey, testProviderKey, type Provider, vaultConfigured } from "@/lib/acheVercelSecrets";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -22,27 +22,43 @@ export async function GET() {
 export async function POST(request: Request) {
   if (!await adminSession()) return NextResponse.json({ error: "Acesso ADM necessário." }, { status: 401, headers });
   if (!validOrigin(request)) return NextResponse.json({ error: "Origem inválida." }, { status: 403, headers });
-  if (!vaultConfigured()) return NextResponse.json({
-    error: "Configuração inicial pendente: cadastre ACHE_VERCEL_API_TOKEN no painel da Vercel e faça um novo deploy da produção.",
-  }, { status: 503, headers });
+
   const body = await request.json().catch(() => null);
-  if (!provider(body?.provider)) return NextResponse.json({ error: "Provedor inválido." }, { status: 400, headers });
   const action = body?.action;
+
+  // Reconnect only checks the existing credentials. It does not create
+  // tokens, rewrite keys, or depend on enabling Vercel key management.
+  if (action === "reconnect_all") {
+    return NextResponse.json({ providers: await reconnectAllProviders() }, { headers });
+  }
+
+  if (!provider(body?.provider)) return NextResponse.json({ error: "Provedor inválido." }, { status: 400, headers });
+
+  if (action === "reconnect") {
+    return NextResponse.json(await testProviderKey(body.provider), { headers });
+  }
+
   const key = typeof body?.key === "string" ? body.key.trim() : "";
+  if (action === "test") {
+    if (key.length > 1000) return NextResponse.json({ error: "Chave muito longa." }, { status: 400, headers });
+    return NextResponse.json(await testProviderKey(body.provider, key || undefined), { headers });
+  }
+
+  if (action !== "save" && action !== "remove") {
+    return NextResponse.json({ error: "Ação inválida." }, { status: 400, headers });
+  }
+
+  if (!vaultConfigured()) return NextResponse.json({
+    error: "Para salvar ou remover chaves neste painel, configure ACHE_VERCEL_API_TOKEN nas variáveis de produção da Vercel e faça um redeploy.",
+  }, { status: 503, headers });
+
   try {
     if (action === "save") {
       await saveProviderKey(body.provider, key);
-      return NextResponse.json({ message: "Chave atualizada com segurança. O próximo diagnóstico já utilizará a nova credencial." }, { headers });
+      return NextResponse.json({ message: "Chave atualizada. Use Reconectar para validar a conexão." }, { headers });
     }
-    if (action === "remove") {
-      await removeProviderKey(body.provider);
-      return NextResponse.json({ message: "Chave removida. O diagnóstico não utilizará essa integração." }, { headers });
-    }
-    if (action === "test") {
-      if (key.length > 1000) return NextResponse.json({ error: "Chave muito longa." }, { status: 400, headers });
-      return NextResponse.json(await testProviderKey(body.provider, key || undefined), { headers });
-    }
-    return NextResponse.json({ error: "Ação inválida." }, { status: 400, headers });
+    await removeProviderKey(body.provider);
+    return NextResponse.json({ message: "Chave removida do projeto." }, { headers });
   } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : "Não foi possível alterar a integração." }, { status: 503, headers });
   }
