@@ -2476,3 +2476,26 @@ body{min-height:100vh}
 .acheAdminFootnote p{margin:0;font-size:.85rem;line-height:1.55}
 @media(max-width:1050px){.acheAdminServices{grid-template-columns:1fr}}
 @media(max-width:650px){.acheAdminIntHeader{flex-direction:column}.acheAdminServiceTitle{flex-wrap:wrap}.acheAdminIntegrations{padding:1.1rem}.adminLoginPanel{padding:1.4rem}}
+
+/* Live provider status & reconnect panel */
+.acheAdminHealthOverview{display:flex;justify-content:space-between;align-items:center;gap:1.25rem;margin:0 0 1.5rem;border:1px solid #ecd2df;background:#fcf4f8;border-radius:17px;padding:1.1rem 1.3rem}
+.acheAdminHealthOverview strong{color:#391e2d;font-size:1.05rem}
+.acheAdminHealthOverview p{color:#653e55;font-weight:750;margin:.3rem 0}
+.acheAdminHealthOverview small{color:#826e79;font-size:.78rem;line-height:1.5;display:block}
+.acheAdminHealthOverview button{display:inline-flex;align-items:center;justify-content:center;gap:.55rem;border:0;border-radius:11px;background:#a72660;color:#fff;font:inherit;font-weight:800;padding:.8rem 1rem;cursor:pointer;white-space:nowrap}
+.acheAdminHealthOverview button:disabled{opacity:.6;cursor:wait}
+.acheAdminHealthBadge{font-size:.75rem;font-weight:850;display:inline-flex;align-items:center;gap:.4rem;white-space:nowrap;border-radius:999px;padding:.45rem .7rem;background:#eee5eb;color:#65475a}
+.acheAdminHealth-connected{background:#e3f5e8;color:#195c37}
+.acheAdminHealth-disconnected{background:#ffe9eb;color:#982d3d}
+.acheAdminHealth-not_configured{background:#f1edf0;color:#6d5663}
+.acheAdminHealth-checking{background:#f8e9f0;color:#95436a}
+.acheAdminConnectionDetail{border:1px solid #f0dbe5;background:#fff;border-radius:13px;padding:.9rem 1rem;margin-bottom:1.2rem;min-height:102px}
+.acheAdminConnectionDetail strong{font-size:.84rem;color:#5b374c}
+.acheAdminConnectionDetail p{font-size:.86rem;color:#765b6b;line-height:1.5;margin:.35rem 0}
+.acheAdminConnectionDetail small{display:block;color:#896c7b;font-size:.75rem;margin-top:.4rem}
+.acheAdminActions .acheAdminReconnect{border-color:#9f346a;color:#8b245b;background:#fff2f8}
+.acheAdminActions .acheAdminReconnect:hover:not(:disabled){background:#ffe3f0}
+.acheAdminSpin{animation:acheAdminSpin 1.2s linear infinite}
+@keyframes acheAdminSpin{to{transform:rotate(360deg)}}
+@media(max-width:650px){.acheAdminHealthOverview{flex-direction:column;align-items:stretch}.acheAdminHealthOverview button{width:100%}}
+@media(prefers-reduced-motion:reduce){.acheAdminSpin{animation:none}}
