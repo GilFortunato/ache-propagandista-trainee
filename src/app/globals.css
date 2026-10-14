@@ -2580,3 +2580,8 @@ body{min-height:100vh}
 .acheAdminSetupAlternative{border-top:1px solid #e9d3a2;padding-top:.7rem;margin-top:.8rem}
 .acheAdminSaveRequirement{margin:.6rem 0 0;color:#8c5b20;font-size:.79rem;line-height:1.4}
 @media(max-width:650px){.acheAdminSetupLinks{flex-direction:column}.acheAdminSetupLinks a{justify-content:center}}
+
+/* Guidance for incorrect provider credentials */
+.acheAdminCredentialLink{display:block;margin:.55rem 0 0;font-size:.75rem;line-height:1.5;color:#7a6270}
+.acheAdminCredentialLink a{display:inline-flex;align-items:center;gap:.25rem;color:#902957;font-weight:800;text-decoration:underline;text-underline-offset:2px}
+.acheAdminCredentialLink a:hover{color:#b41e65}

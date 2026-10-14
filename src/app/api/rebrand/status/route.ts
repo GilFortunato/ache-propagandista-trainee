@@ -9,7 +9,7 @@ export async function GET() {
     return NextResponse.json({
       gemini: status.gemini.configured,
       apify: status.apify.configured,
-      model: process.env.ACHE_REBRAND_GEMINI_MODEL || "gemini-2.5-flash",
+      model: process.env.ACHE_REBRAND_GEMINI_MODEL || "gemini-3.8-flash",
       actor: process.env.ACHE_REBRAND_APIFY_LINKEDIN_ACTOR_ID || "unseenuser/linkedin-profile",
     }, { headers: { "Cache-Control": "no-store" } });
   } catch {
