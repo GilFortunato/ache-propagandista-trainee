@@ -2547,3 +2547,6 @@ body{min-height:100vh}
   .achePublicConnectionsCompact{max-width:100%}
 }
 @media(prefers-reduced-motion:reduce){.achePublicSpin{animation:none}}
+
+/* Keep the original Nexus hero description styling after adding the reconnect widget. */
+.homePage .hero > p:nth-of-type(2){color:var(--muted);font-size:1.05rem;line-height:1.55;max-width:470px}
