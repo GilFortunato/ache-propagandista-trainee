@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { assessProfile, cleanText, hasProfileEvidence, normalizeProfile, type PublicProfile } from "@/lib/rebrand/assessment";
+import { adminSession } from "@/lib/acheAdminAuth";
+import { resolveProviderKey } from "@/lib/acheVercelSecrets";
 
 export const runtime = "nodejs";
 export const maxDuration = 120;
@@ -19,6 +21,11 @@ function validLinkedInUrl(value: unknown): value is string {
 }
 
 export async function POST(request: Request) {
+  // Until participant Google login and durable rate limiting are implemented,
+  // paid provider credentials may only be used by the authenticated admin.
+  if (!await adminSession()) return NextResponse.json({
+    error: "O diagnóstico conectado está temporariamente restrito à administração até a ativação do login de participantes.",
+  }, { status: 401 });
   const body = await request.json().catch(() => null) as Input | null;
   if (!validLinkedInUrl(body?.profileUrl)) {
     return NextResponse.json({ error: "Informe uma URL HTTPS válida de perfil pessoal do LinkedIn (linkedin.com/in/...)."}, { status: 400 });
@@ -90,7 +97,7 @@ async function runApifyProfile(profileUrl: string) {
 }
 
 async function runApifyActor(actor: string, input: Record<string, unknown>, timeoutMs: number): Promise<unknown[]> {
-  const token = process.env.ACHE_REBRAND_APIFY_TOKEN;
+  const token = await resolveProviderKey("apify");
   if (!token) return [];
   const actorId = actor.trim().replace("/", "~");
   const endpoint = "https://api.apify.com/v2/acts/" + encodeURIComponent(actorId) + "/run-sync-get-dataset-items?timeout=" + Math.min(120, Math.floor(timeoutMs / 1000));
@@ -153,7 +160,7 @@ async function generateNarrative(input: {
   profile: PublicProfile | null;
   assessment: ReturnType<typeof assessProfile>;
 }): Promise<Narrative | null> {
-  const key = process.env.ACHE_REBRAND_GEMINI_API_KEY;
+  const key = await resolveProviderKey("gemini");
   if (!key) return null;
   const model = process.env.ACHE_REBRAND_GEMINI_MODEL || "gemini-2.5-flash";
   const prompt = [
