@@ -12,9 +12,9 @@ type Health = {
   checkedAt: string;
 };
 
-const services: { id: Provider; title: string; description: string; hint: string }[] = [
-  { id: "apify", title: "Apify", description: "Coleta dados públicos de perfis do LinkedIn usados no diagnóstico.", hint: "Token de API da conta Apify" },
-  { id: "gemini", title: "Gemini", description: "Gera a leitura textual e recomendações de desenvolvimento profissional.", hint: "Chave de API do Google AI Studio" },
+const services: { id: Provider; title: string; description: string; hint: string; credentialUrl: string; credentialLabel: string }[] = [
+  { id: "apify", title: "Apify", description: "Coleta dados públicos de perfis do LinkedIn usados no diagnóstico.", hint: "Token de API da conta Apify", credentialUrl: "https://console.apify.com/account/integrations", credentialLabel: "Encontrar API token no Apify" },
+  { id: "gemini", title: "Gemini", description: "Gera a leitura textual e recomendações de desenvolvimento profissional.", hint: "Chave de API do Google AI Studio", credentialUrl: "https://aistudio.google.com/api-keys", credentialLabel: "Criar chave da API Gemini" },
 ];
 
 async function postAction(payload: Record<string, unknown>) {
@@ -241,6 +241,10 @@ export default function AdminIntegrations() {
                 </button>
               </div>
 
+              <p className="acheAdminCredentialLink">
+                <a href={service.credentialUrl} target="_blank" rel="noopener noreferrer">{service.credentialLabel} <ExternalLink size={13} /></a>
+                {service.id === "gemini" ? " · É necessária uma chave de API, não apenas assinatura do Gemini." : " · Utilize o token da sua conta, não o identificador de um Actor."}
+              </p>
               <div className="acheAdminActions">
                 <button type="button" className="acheAdminReconnect" disabled={anyChecking} onClick={() => void reconnectOne(service.id)}>
                   <RefreshCcw size={15} className={checking[service.id] ? "acheAdminSpin" : undefined} /> Reconectar
