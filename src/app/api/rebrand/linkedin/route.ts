@@ -28,13 +28,14 @@ export async function POST(request: NextRequest) {
   if (!researchStorageReady()) return NextResponse.json({
     error: "Pesquisa Manus ainda em configuração: falta conectar o banco seguro de cotas ao ReBrand.",
   }, { status: 503, headers: noStore });
-  const input = await request.json().catch(() => null) as { profileUrl?: unknown; objective?: unknown; manualContext?: unknown } | null;
+  const input = await request.json().catch(() => null) as { profileUrl?: unknown; objective?: unknown; manualContext?: unknown; consent?: unknown } | null;
   if (!validLinkedInUrl(input?.profileUrl))
     return NextResponse.json({ error: "Informe uma URL HTTPS válida do LinkedIn pessoal." }, { status: 400, headers: noStore });
   const objective = cleanText(input?.objective, 600);
   if (objective.length < 10)
     return NextResponse.json({ error: "Informe seu objetivo profissional." }, { status: 400, headers: noStore });
   const manualContext = cleanText(input?.manualContext, 2500);
+  if (input?.consent !== true) return NextResponse.json({ error: "É necessário autorizar o processamento dos dados informados pelo Manus e Gemini." }, { status: 400, headers: noStore });
 
   let reserved = false;
   let createdTask: string | null = null;
