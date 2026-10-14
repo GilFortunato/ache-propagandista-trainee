@@ -1,8 +1,8 @@
 import "server-only";
 
-export type Provider = "apify" | "gemini";
+export type Provider = "manus" | "gemini";
 export const PROVIDERS: Record<Provider, string> = {
-  apify: "ACHE_REBRAND_APIFY_TOKEN",
+  manus: "ACHE_REBRAND_MANUS_API_KEY",
   gemini: "ACHE_REBRAND_GEMINI_API_KEY",
 };
 
@@ -76,7 +76,7 @@ export async function integrationStatus() {
   if (!vaultConfigured()) {
     return {
       connected: false,
-      apify: { configured: Boolean(process.env.ACHE_REBRAND_APIFY_TOKEN), origin: "deployment" },
+      manus: { configured: Boolean(process.env.ACHE_REBRAND_MANUS_API_KEY), origin: "deployment" },
       gemini: { configured: Boolean(process.env.ACHE_REBRAND_GEMINI_API_KEY), origin: "deployment" },
     };
   }
@@ -91,7 +91,7 @@ export async function integrationStatus() {
       updatedAt: item?.updatedAt ? new Date(item.updatedAt).toISOString() : null,
     };
   };
-  return { connected: true, apify: summarize("apify"), gemini: summarize("gemini") };
+  return { connected: true, manus: summarize("manus"), gemini: summarize("gemini") };
 }
 
 export async function resolveProviderKey(provider: Provider) {
@@ -178,22 +178,22 @@ export async function testProviderKey(provider: Provider, candidate?: string): P
   const selectedGeminiModel = process.env.ACHE_REBRAND_GEMINI_MODEL || "gemini-2.5-flash";
   const geminiModel = selectedGeminiModel.startsWith("models/") ? selectedGeminiModel.slice(7) : selectedGeminiModel;
   const validGeminiModel = /^[a-zA-Z0-9._-]+$/.test(geminiModel) ? geminiModel : "gemini-2.5-flash";
-  const url = provider === "apify"
-    ? "https://api.apify.com/v2/users/me"
+  const url = provider === "manus"
+    ? "https://api.manus.ai/v2/task.list?limit=1"
     : "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(validGeminiModel);
 
   try {
     const response = await fetch(url, {
       method: "GET",
-      headers: provider === "apify" ? { Authorization: "Bearer " + key } : { "x-goog-api-key": key },
+      headers: provider === "manus" ? { "x-manus-api-key": key } : { "x-goog-api-key": key },
       signal: AbortSignal.timeout(12000),
       cache: "no-store",
     });
     if (response.ok) return {
       status: "connected",
       ok: true,
-      message: provider === "apify"
-        ? "Autenticação confirmada pela API do Apify."
+      message: provider === "manus"
+        ? "Autenticação confirmada pela API do Manus. As pesquisas consomem créditos Manus."
         : "Autenticação e acesso ao modelo " + validGeminiModel + " confirmados.",
       checkedAt,
     };
@@ -216,6 +216,6 @@ export async function testProviderKey(provider: Provider, candidate?: string): P
 }
 
 export async function reconnectAllProviders(): Promise<Record<Provider, ProviderHealth>> {
-  const [apify, gemini] = await Promise.all([testProviderKey("apify"), testProviderKey("gemini")]);
-  return { apify, gemini };
+  const [manus, gemini] = await Promise.all([testProviderKey("manus"), testProviderKey("gemini")]);
+  return { manus, gemini };
 }
