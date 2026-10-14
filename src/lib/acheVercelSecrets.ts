@@ -187,7 +187,7 @@ export async function testProviderKey(provider: Provider, candidate?: string): P
   const geminiModel = selectedGeminiModel.startsWith("models/") ? selectedGeminiModel.slice(7) : selectedGeminiModel;
   const validGeminiModel = /^[a-zA-Z0-9._-]+$/.test(geminiModel) ? geminiModel : "gemini-2.5-flash";
   const url = provider === "manus"
-    ? "https://api.manus.ai/v2/task.list?limit=1"
+    ? "https://api.manus.ai/v2/user.me"
     : "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(validGeminiModel);
 
   try {
@@ -205,6 +205,25 @@ export async function testProviderKey(provider: Provider, candidate?: string): P
         : "Autenticação e acesso ao modelo " + validGeminiModel + " confirmados.",
       checkedAt,
     };
+    // Only the HTTP status and documented error code are logged. Never log
+    // raw responses, headers or the API key.
+    if (provider === "manus") {
+      const body = await response.json().catch(() => null) as { error?: { code?: unknown } } | null;
+      const errorCode = typeof body?.error?.code === "string"
+        ? body.error.code.slice(0, 60).replace(/[^a-zA-Z0-9_-]/g, "")
+        : "unknown";
+      console.warn("[ache-integrations] Manus identity health failed", { status: response.status, code: errorCode });
+      return {
+        status: "disconnected",
+        ok: false,
+        message: response.status === 401 || response.status === 403
+          ? "O Manus recusou a chave de API (HTTP " + response.status + "). Confira sua API Key no Manus."
+          : response.status === 402 || response.status === 429
+            ? "A conta Manus apresentou restrição de créditos ou limite de chamadas (HTTP " + response.status + ")."
+            : "O Manus respondeu HTTP " + response.status + " ao validar a chave. Verifique sua conta Manus.",
+        checkedAt,
+      };
+    }
     const message = response.status === 401 || response.status === 403
       ? "Credencial recusada ou sem permissão para acessar o serviço."
       : response.status === 404 && provider === "gemini"
