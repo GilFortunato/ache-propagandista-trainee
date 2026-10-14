@@ -6,7 +6,7 @@ export const PROVIDERS: Record<Provider, string> = {
   gemini: "ACHE_REBRAND_GEMINI_API_KEY",
 };
 
-type RemoteVariable = { id: string; key: string; value?: string; decrypted?: boolean; target?: string[] | string; updatedAt?: number };
+type RemoteVariable = { id: string; key: string; type?: string; value?: string; decrypted?: boolean; target?: string[] | string; updatedAt?: number };
 type RemoteList = { envs?: RemoteVariable[] };
 
 export class VaultConfigurationError extends Error {
@@ -101,6 +101,14 @@ export async function resolveProviderKey(provider: Provider) {
   const vars = await getVariables();
   const entry = newest(vars, PROVIDERS[provider]);
   if (!entry) return null;
+
+  // Vercel Sensitive variables cannot be decrypted through its management API.
+  // They ARE injected as plaintext into the protected server runtime at deploy
+  // time. Use that server-only value; rotation in the Vercel UI requires redeploy.
+  if (entry.type === "sensitive") {
+    const fromRuntime = process.env[PROVIDERS[provider]]?.trim() || "";
+    return fromRuntime.length >= 8 && fromRuntime.length <= 1000 ? fromRuntime : null;
+  }
 
   // Vercel's v10 bulk-list endpoint does NOT reliably decrypt encrypted vars:
   // the API can report decrypted:false and a long ciphertext in "value".
