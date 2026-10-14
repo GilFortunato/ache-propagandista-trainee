@@ -80,7 +80,7 @@ export function normalizeProfile(data: unknown, postsData: unknown = []): Public
     .filter((value): value is string => typeof value === "string")
     .join(" ");
   const collectorPaywall = /(?:this actor requires a paid apify plan|free.plan runs do not scrape|upgrade to any paid apify plan|plans start at \$\d+|apify plan.*(?:scrap|extract|upgrade))/i.test(providerFailure);
-  const collectorError = /(?:^|\\s)(?:actor run failed|actor failed|insufficient plan|subscription required|plan limit reached|rate limit exceeded)(?:\\s|[.!:]|$)/i.test(
+  const collectorError = /(?:^|\s)(?:actor run failed|actor failed|insufficient plan|subscription required|plan limit reached|rate limit exceeded)(?:\s|[.!:]|$)/i.test(
     [obj.error, obj.errorMessage, obj.message].filter((value): value is string => typeof value === "string").join(" ")
   );
   if (collectorPaywall || collectorError) return null;
