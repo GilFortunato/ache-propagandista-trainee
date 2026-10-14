@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 const checkSharedProviders = unstable_cache(
   async () => {
     const checks = await reconnectAllProviders();
-    const summarize = (provider: "apify" | "gemini") => ({
+    const summarize = (provider: "manus" | "gemini") => ({
       status: checks[provider].status,
       checkedAt: checks[provider].checkedAt,
       message: checks[provider].status === "connected"
@@ -21,7 +21,7 @@ const checkSharedProviders = unstable_cache(
           : "Não foi possível confirmar a conexão. Tente novamente ou avise a equipe do programa.",
     });
     return {
-      apify: summarize("apify"),
+      manus: summarize("manus"),
       gemini: summarize("gemini"),
     };
   },
