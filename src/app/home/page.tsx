@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { PublicConnectionStatus } from "@/components/integrations/PublicConnectionStatus";
 import Link from "next/link";
 import {
   Sparkles,
@@ -50,6 +51,8 @@ export default function HomePage() {
           <h1>Mais que contratar,<br />queremos incluir.</h1>
           <p>Explore os módulos da experiência e acompanhe seu desenvolvimento.</p>
         </section>
+
+        <PublicConnectionStatus compact />
 
         <div className="nexusWrap">
           <section className="nexus" aria-label="Nexus do programa">
