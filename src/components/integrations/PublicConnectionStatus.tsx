@@ -36,7 +36,7 @@ function ConnectionBadge({ status }: { status: Connection["status"] | "checking"
   </span>;
 }
 
-export function PublicConnectionStatus({ compact = false }: { compact?: boolean }) {
+export function PublicConnectionStatus({ compact = false, showReconnect = true }: { compact?: boolean; showReconnect?: boolean }) {
   const [health, setHealth] = useState<Record<Provider, Connection | null>>({ apify: null, gemini: null });
   const [loading, setLoading] = useState<Record<Provider, boolean>>({ apify: false, gemini: false });
   const [error, setError] = useState("");
@@ -89,10 +89,12 @@ export function PublicConnectionStatus({ compact = false }: { compact?: boolean 
           <h2>Conexões do programa</h2>
           <p>{checked ? readyCount + " de 2 serviços conectados" : "Verificando Apify e Gemini..."}</p>
         </div>
+        {showReconnect && (
         <button type="button" className="achePublicReconnectAll" disabled={isBusy} onClick={() => void reconnect()}>
           <RefreshCcw size={17} className={isBusy ? "achePublicSpin" : undefined} aria-hidden="true" />
           {isBusy ? "Verificando..." : "Reconectar todos"}
         </button>
+        )}
       </div>
       <div className="achePublicConnectionsGrid">
         {services.map((service) => {
@@ -106,16 +108,16 @@ export function PublicConnectionStatus({ compact = false }: { compact?: boolean 
             <p className="achePublicConnectionMessage">{pending ? "Consultando o serviço..." : current?.message || "Aguardando verificação."}</p>
             <div className="achePublicConnectionFooter">
               {current?.checkedAt && <small>Verificado: {new Date(current.checkedAt).toLocaleString("pt-BR")}</small>}
-              <button type="button" disabled={isBusy} onClick={() => void reconnect(service.id)}>
+              {showReconnect && <button type="button" disabled={isBusy} onClick={() => void reconnect(service.id)}>
                 <RefreshCcw size={15} aria-hidden="true" /> Reconectar
-              </button>
+              </button>}
             </div>
           </article>;
         })}
       </div>
       {error && <p className="achePublicConnectionError" role="alert">{error}</p>}
       <p className="achePublicConnectionsNote">
-        Essas conexões são compartilhadas pelo programa. Reconectar verifica novamente a disponibilidade; não muda sua conta ou as chaves de acesso. O resultado pode permanecer em cache por até 30 segundos. Se continuar indisponível, avise a equipe do Aché.
+        {showReconnect ? "Essas conexões são compartilhadas pelo programa. Reconectar verifica novamente a disponibilidade; não muda sua conta ou as chaves de acesso. O resultado pode permanecer em cache por até 30 segundos. Se continuar indisponível, avise a equipe do Aché." : "O status das integrações é compartilhado pelo programa e atualizado automaticamente ao abrir a página. Se algum serviço estiver indisponível, avise a equipe do Aché."}
       </p>
     </section>
   );
