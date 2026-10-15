@@ -8,7 +8,20 @@ type Dimension = { key: string; label: string; weight: number; score: number | n
 type DevelopmentWeek = { week: number; title: string; focus: string; actions: string[] };
 type PlanDay = { day: number; phase: string; title: string; action: string; deliverable: string; minutes: number };
 type Plan30Days = { title: string; objective: string; personalized: boolean; generatedWith: "gemini" | "guided"; days: PlanDay[] };
+type CareerTransitionReview = {
+  targetRole: string;
+  headlineStatus: "aligned" | "partially_aligned" | "needs_repositioning" | "not_evaluated";
+  headlineLabel: string;
+  currentHeadline: string;
+  explanation: string;
+  transferableStrengths: string[];
+  developmentPriorities: string[];
+  headlineSuggestions: string[];
+  aboutSuggestion: string;
+  disclaimer: string;
+};
 type RebrandResult = {
+  careerTransition?: CareerTransitionReview;
   profileName?: string;
   headline?: string;
   overallScore: number | null;
@@ -31,7 +44,7 @@ type RebrandResult = {
 
 export function RebrandLinkedInDiagnostic() {
   const [profileUrl, setProfileUrl] = useState("");
-  const [objective, setObjective] = useState("Fortalecer meu posicionamento profissional para oportunidades como Propagandista Trainee, destacando comunicação, relacionamento, conhecimento em saúde, capacidade de aprendizado e orientação para resultados.");
+  const [objective, setObjective] = useState("Estou em transição de carreira e quero me posicionar no LinkedIn para oportunidades como Propagandista Trainee, valorizando minhas experiências anteriores, competências transferíveis e disposição para aprender sobre a área farmacêutica.");
   const [manualContext, setManualContext] = useState("");
   const [result, setResult] = useState<RebrandResult | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -201,8 +214,8 @@ export function RebrandLinkedInDiagnostic() {
       <section className="rebrandFormCard">
         <div className="rebrandCardIcon"><UserRoundPen size={28}/></div>
         <span className="sectionTag acheTag">Diagnóstico LinkedIn com Manus</span>
-        <h2>Como seu perfil comunica seu potencial para a carreira de Propagandista?</h2>
-        <p>O Manus pesquisa fontes públicas do perfil; o Gemini organiza recomendações. Sem evidência verificável, não atribuímos nota. O objetivo é desenvolvimento profissional, não seleção de candidatos.</p>
+        <h2>Seu LinkedIn comunica sua transição para Propagandista Trainee?</h2>
+        <p>Compare seu título, trajetória e competências transferíveis com o posicionamento desejado para Propagandista Trainee. Receba sugestões de headline, texto Sobre e próximos passos — sem exigir experiência prévia na indústria farmacêutica.</p>
 
         <label>
           URL do LinkedIn
@@ -270,7 +283,62 @@ export function RebrandLinkedInDiagnostic() {
               <div className="rebrandScore">{result.overallScore === null ? <><strong className="rebrandNoScore">N/A</strong><small>{result.classification}</small></> : <><strong>{result.overallScore}</strong><span>/100</span><small>{result.classification}</small></>}</div>
             </div>
 
-            <div className="rebrandSummary"><Activity size={23}/><p>{result.summary}</p></div>
+            <section className="rebrandCareerTransition" aria-labelledby="rebrand-transition-title">
+              <div className="rebrandTransitionHeader">
+                <span className="sectionTag acheTag">ORIENTAÇÃO PARA MUDANÇA DE CARREIRA</span>
+                <h3 id="rebrand-transition-title">Seu LinkedIn para Propagandista Trainee</h3>
+                <p>Como seu histórico e seu título atual comunicam a transição — sem precisar já ter atuado na indústria farmacêutica.</p>
+              </div>
+              {result.careerTransition ? (
+                <>
+                  <div className="rebrandHeadlineComparison">
+                    <div>
+                      <small>Título atual do LinkedIn</small>
+                      <strong>{result.careerTransition.currentHeadline || "Não recuperado"}</strong>
+                    </div>
+                    <div>
+                      <small>Leitura para o objetivo profissional</small>
+                      <strong>{result.careerTransition.headlineLabel}</strong>
+                      <p>{result.careerTransition.explanation}</p>
+                    </div>
+                  </div>
+                  {result.careerTransition.headlineSuggestions.length > 0 && (
+                    <div className="rebrandHeadlineSuggestions">
+                      <h4>Sugestões de título para copiar e adaptar</h4>
+                      <p>Exemplos de intenção profissional, não de cargos já exercidos.</p>
+                      {result.careerTransition.headlineSuggestions.map((title, i) => (
+                        <div className="rebrandHeadlineOption" key={i}>
+                          <span>{title}</span>
+                          <button type="button" aria-label={"Copiar sugestão de título " + (i + 1)} onClick={() => void navigator.clipboard?.writeText(title)}>
+                            Copiar
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <div className="rebrandTransitionColumns">
+                    <div>
+                      <h4>Competências transferíveis com indícios no perfil</h4>
+                      {result.careerTransition.transferableStrengths.length ? (
+                        <ul>{result.careerTransition.transferableStrengths.map(item => <li key={item}>{item}</li>)}</ul>
+                      ) : <p>Não foram recuperados exemplos suficientes. Você pode documentar experiências reais de comunicação, atendimento, vendas, organização ou saúde.</p>}
+                    </div>
+                    <div>
+                      <h4>Como melhorar seu posicionamento</h4>
+                      <ul>{result.careerTransition.developmentPriorities.map(item => <li key={item}>{item}</li>)}</ul>
+                    </div>
+                  </div>
+                  <div className="rebrandAboutTemplate">
+                    <h4>Modelo para reescrever o “Sobre”</h4>
+                    <p>{result.careerTransition.aboutSuggestion}</p>
+                    <small>Substitua os campos entre colchetes apenas por informações verdadeiras sobre sua trajetória.</small>
+                  </div>
+                  <p className="rebrandTransitionDisclaimer">{result.careerTransition.disclaimer}</p>
+                </>
+              ) : <p>Essa avaliação fica disponível nos diagnósticos gerados após a atualização. Seu plano de desenvolvimento continua acessível.</p>}
+            </section>
+
+                        <div className="rebrandSummary"><Activity size={23}/><p>{result.summary}</p></div>
 
             <div className="rebrandDimensions">
               {result.dimensions.map((item) => (
