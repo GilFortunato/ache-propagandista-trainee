@@ -92,7 +92,7 @@ export async function GET(request: NextRequest) {
       await setManusTaskResult(taskId, identity, "failed", { reason: poll.message });
       return NextResponse.json({ state: "failed", error: poll.message }, { headers: noStore });
     }
-    const profile = normalizeProfile(poll.profile);
+    const profile = normalizeProfile(poll.profile, poll.posts ?? []);
     const sourced = hasProfileEvidence(profile);
     if (!sourced && task.manual_context.length < 30) {
       await setManusTaskResult(taskId, identity, "failed", { reason: "no_verified_data" });
@@ -130,7 +130,7 @@ export async function GET(request: NextRequest) {
       dataOrigin: sourced ? "linkedin" : "manual",
       aiUsed: Boolean(ai),
       collected: {
-        profile: sourced, posts: false, experiences: profile?.experiences.length ?? 0,
+        profile: sourced, posts: (profile?.posts.length ?? 0) > 0, experiences: profile?.experiences.length ?? 0,
         education: (profile?.education.length ?? 0) + (profile?.certifications.length ?? 0),
       },
       generatedAt: new Date().toISOString(),
