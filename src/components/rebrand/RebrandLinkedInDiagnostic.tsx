@@ -104,7 +104,9 @@ export function RebrandLinkedInDiagnostic() {
       return;
     }
     if (!consent) {
-      setError("Confirme que autoriza a consulta dos dados profissionais informados pelos serviços Manus e Gemini.");
+      setError("Antes de gerar o diagnóstico, marque a caixa de autorização para Manus e Gemini.");
+      document.getElementById("rebrand-manus-consent")?.focus();
+      document.getElementById("rebrand-consent-panel")?.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
     if (!quota?.authenticated) {
@@ -167,14 +169,30 @@ export function RebrandLinkedInDiagnostic() {
               : "Pesquisas ainda não habilitadas para esta conta."}
           {quota && !quota.authenticated && <p><Link href="/login">Entrar com Google</Link></p>}
         </div>
-        <label className="rebrandConsent">
-          <input type="checkbox" checked={consent} onChange={(event) => setConsent(event.target.checked)} />
-          Autorizo o envio dos dados profissionais informados para pesquisa pública no Manus e recomendações pelo Gemini. Sei que o Manus pode consumir créditos da plataforma.
-        </label>
+        <div className="rebrandConsentPanel" id="rebrand-consent-panel" role="group" aria-labelledby="rebrand-consent-title">
+          <strong id="rebrand-consent-title" className="rebrandConsentTitle">Autorização para análise</strong>
+          <label className="rebrandConsentOption" htmlFor="rebrand-manus-consent">
+            <input
+              id="rebrand-manus-consent"
+              type="checkbox"
+              checked={consent}
+              onChange={(event) => {
+                setConsent(event.target.checked);
+                if (event.target.checked) setError(null);
+              }}
+            />
+            <span>
+              <b>Autorizo a análise do meu perfil.</b> Concordo com o envio dos dados profissionais que informei ao
+              Manus para pesquisar fontes públicas e ao Gemini para gerar orientações. A pesquisa Manus pode consumir
+              créditos do programa.
+            </span>
+          </label>
+          <p>O aceite é obrigatório para iniciar a pesquisa, mas não é marcado automaticamente.</p>
+        </div>
         {processing && <div className="rebrandQuotaInfo" role="status">O Manus está pesquisando. Isso pode levar alguns minutos. Você pode manter a página aberta; acompanhar a tarefa não consome outra pesquisa.</div>}
-                {error && <div className="rebrandError">{error}</div>}
+        {error && <div className="rebrandError" role="alert">{error}</div>}
 
-        <button type="button" onClick={run} disabled={isPending || processing || !valid || !consent || !quota?.authenticated || (!quota.owner && quota.remaining === 0)} className="rebrandRun">
+        <button type="button" onClick={run} disabled={isPending || processing || !valid || !quota?.authenticated || (!quota.owner && quota.remaining === 0)} className="rebrandRun">
           {isPending || processing ? <><LoaderCircle className="spin" size={18}/> {processing ? "Pesquisando no Manus..." : "Iniciando pesquisa..."}</> : <>Gerar meu diagnóstico <ArrowRight size={18}/></>}
         </button>
       </section>
