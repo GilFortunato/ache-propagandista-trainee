@@ -2585,5 +2585,23 @@ body{min-height:100vh}
 .rebrandQuotaInfo{border:1px solid #ecc9d8;background:#fff4f8;border-radius:11px;padding:.8rem .9rem;margin:.8rem 0;font-size:.86rem;line-height:1.55;color:#773553}
 .rebrandQuotaInfo p{margin:.35rem 0 0}
 .rebrandQuotaInfo a{color:#a32461;font-weight:800;text-decoration:underline}
-.rebrandFormCard label.rebrandConsent{display:flex;align-items:flex-start;gap:.7rem;margin:.85rem 0;font-size:.81rem;line-height:1.5;color:#67485b;font-weight:500;cursor:pointer}
-.rebrandFormCard label.rebrandConsent input{appearance:auto;width:17px;height:17px;margin:.16rem 0 0;flex-shrink:0;accent-color:#ac2465}
+
+
+/* Three-attempt notice. Single-step action; no extra consent checkbox. */
+.rebrandFormCard .rebrandAttemptsNotice{
+  margin:1rem 0 .5rem;
+  padding:.85rem 1rem;
+  border:1px solid #e8c4d6;
+  border-radius:12px;
+  background:#fff2f8;
+  color:#74254e;
+  font-size:.89rem;
+  font-weight:800;
+  line-height:1.5;
+}
+.rebrandFormCard .rebrandProcessingNotice{
+  margin:.35rem 0 0;
+  color:#7a6170;
+  font-size:.75rem;
+  line-height:1.5;
+}
