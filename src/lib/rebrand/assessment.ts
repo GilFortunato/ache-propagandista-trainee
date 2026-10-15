@@ -194,12 +194,15 @@ function careerHeadlineReview(profile: PublicProfile | null): CareerTransitionRe
         ? "O título público existe, porém não mostra ao leitor que a pessoa pretende migrar para Propagandista Trainee. Isso é uma oportunidade de comunicação, não uma avaliação de aptidão."
         : "O Manus não recuperou um título público verificável; oferecemos exemplos de escrita, mas não concluímos que o perfil esteja inadequado.";
 
-  const verifiedAnchor = transferableStrengths.includes("Atendimento e escuta de clientes")
-    ? "Experiências em atendimento"
-    : transferableStrengths.includes("Vivência comercial e organização")
-      ? "Experiências comerciais"
-      : transferableStrengths.includes("Relacionamento e comunicação")
-        ? "Comunicação e relacionamento"
+  const careerEvidence = (profile?.experiences || []).map(item => [item.role, item.description].join(" ")).join(" ");
+  // Only describe prior work as "experiência" when the work section has that evidence;
+  // mentioning a skill in About or a course is not a verified previous position.
+  const verifiedAnchor = /atend|client|suporte|customer|paciente/i.test(careerEvidence)
+    ? "Experiência em atendimento"
+    : /venda|comercial|meta|crm|carteira|prospec/i.test(careerEvidence)
+      ? "Experiência comercial"
+      : /relacion|comunic|apresenta|negocia|instrut/i.test(careerEvidence)
+        ? "Experiência em comunicação e relacionamento"
         : "";
   const headlineSuggestions = [
     "Em transição para Propagandista Trainee | Interesse em saúde, comunicação e relacionamento",
@@ -254,17 +257,17 @@ export function assessProfile(profile: PublicProfile | null, manualContext: stri
       experiences.length ? "Experiências identificadas; resultados mensuráveis contam somente quando documentados." : "Experiências públicas não recuperadas.",
       experiences.slice(0, 3).map((item) => [item.role, item.company, item.description].filter(Boolean).join(" · ")),
       "Descreva experiências reais usando contexto, ação e resultado, sem inventar números."),
-    dimension("role_fit", "Competências transferíveis à carreira", 20, careerText.length >= 30 ? 36 + Math.min(48, matched.length * 8) : null,
+    dimension("role_fit", "Competências transferíveis para Propagandista", 20, careerText.length >= 30 ? 36 + Math.min(48, matched.length * 8) : null,
       careerText.length >= 30 ? "Sinais textuais de comunicação, relacionamento, saúde, organização e resultados; não é uma decisão de contratação." : "Dados profissionais insuficientes para avaliar competências transferíveis.",
       matched.length ? ["Sinais identificados: " + matched.join(", ")] : [headline],
       "Relacione experiências verdadeiras de atendimento, comunicação, aprendizado técnico ou relacionamento à atuação de propagandista."),
-    dimension("communication", "Comunicação e clareza", 15, headline || about ? 40 + (headline.length >= 30 ? 20 : 0) + (about.length >= 100 ? 24 : about ? 8 : 0) : null,
+    dimension("communication", "Comunicação para a nova carreira", 15, headline || about ? 40 + (headline.length >= 30 ? 20 : 0) + (about.length >= 100 ? 24 : about ? 8 : 0) : null,
       headline || about ? "Leitura da organização e clareza da narrativa escrita disponível." : "Texto público insuficiente para examinar a comunicação escrita.",
       [headline, about], "Revise a legibilidade, retire jargões e dê exemplos concretos de sua comunicação."),
     dimension("content", "Conteúdo profissional", 10, posts.length ? 45 + Math.min(25, posts.length * 5) + (posts.some((item) => item.text.length > 250) ? 12 : 0) : null,
       posts.length ? "Somente as publicações públicas efetivamente recuperadas foram analisadas." : "Publicações não recuperadas. Isso não significa que a pessoa não publique ou se comunique mal.",
       posts.slice(0, 3).map((item) => item.text + (item.url ? " · Fonte: " + item.url : "")), "Se fizer sentido para sua carreira, compartilhe aprendizados e experiências reais, sem obrigação de publicar diariamente."),
-    dimension("development", "Formação e desenvolvimento", 15, education.length || skills.length ? 43 + Math.min(30, education.length * 10) + Math.min(15, skills.length * 3) : null,
+    dimension("development", "Formação para a transição", 15, education.length || skills.length ? 43 + Math.min(30, education.length * 10) + Math.min(15, skills.length * 3) : null,
       education.length || skills.length ? "Formações, certificações e competências declaradas foram consideradas; ausência de registro não prova falta de qualificação." : "Formação e competências não recuperadas.",
       [...education.slice(0, 3), ...skills.slice(0, 2)], "Destaque estudos, formações e habilidades relevantes que você consegue comprovar."),
   ] satisfies EvidenceDimension[];
