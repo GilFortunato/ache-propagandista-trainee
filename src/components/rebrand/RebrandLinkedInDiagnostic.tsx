@@ -6,6 +6,8 @@ import { Activity, ArrowRight, CheckCircle2, Link2, LoaderCircle, Sparkles, Targ
 
 type Dimension = { key: string; label: string; weight: number; score: number | null; status: "evaluated" | "not_evaluated"; rationale: string; evidence: string[]; action: string };
 type DevelopmentWeek = { week: number; title: string; focus: string; actions: string[] };
+type PlanDay = { day: number; phase: string; title: string; action: string; deliverable: string; minutes: number };
+type Plan30Days = { title: string; objective: string; personalized: boolean; generatedWith: "gemini" | "guided"; days: PlanDay[] };
 type RebrandResult = {
   profileName?: string;
   headline?: string;
@@ -37,6 +39,12 @@ export function RebrandLinkedInDiagnostic() {
   const [taskId, setTaskId] = useState<string | null>(null);
   const [quota, setQuota] = useState<{ authenticated: boolean; owner?: boolean; remaining: number | null; storageReady?: boolean; googleReady?: boolean } | null>(null);
   const [processing, setProcessing] = useState(false);
+  const [completedTaskId, setCompletedTaskId] = useState<string | null>(null);
+  const [plan30, setPlan30] = useState<Plan30Days | null>(null);
+  const [generatingPlan, setGeneratingPlan] = useState(false);
+  const [planError, setPlanError] = useState<string | null>(null);
+  const [completedDays, setCompletedDays] = useState<number[]>([]);
+
 
   const valid = useMemo(() => /^https:\/\/(?:www\.)?linkedin\.com\/in\/[^\s/?#]+\/?(?:[?#].*)?$/i.test(profileUrl.trim()) && objective.trim().length >= 10, [profileUrl, objective]);
 
@@ -52,7 +60,8 @@ export function RebrandLinkedInDiagnostic() {
 
   useEffect(() => {
     void loadQuota();
-    const saved = window.sessionStorage.getItem("ache-manus-active-task");
+    const saved = window.sessionStorage.getItem("ache-manus-active-task")
+      || window.sessionStorage.getItem("ache-manus-last-task");
     if (saved && /^[a-zA-Z0-9_-]{8,120}$/.test(saved)) {
       setTaskId(saved);
       setProcessing(true);
@@ -71,6 +80,11 @@ export function RebrandLinkedInDiagnostic() {
         if (!response.ok) throw new Error(payload?.error || "Falha ao acompanhar a pesquisa.");
         if (payload.state === "complete" && payload.result) {
           setResult(payload.result as RebrandResult);
+          setCompletedTaskId(taskId);
+          window.sessionStorage.setItem("ache-manus-last-task", taskId);
+          setPlan30(null);
+          setCompletedDays([]);
+          setPlanError(null);
           setTaskId(null);
           setProcessing(false);
           window.sessionStorage.removeItem("ache-manus-active-task");
@@ -112,6 +126,11 @@ export function RebrandLinkedInDiagnostic() {
     }
     setError(null);
     setResult(null);
+    setPlan30(null);
+    setCompletedTaskId(null);
+    setCompletedDays([]);
+    setPlanError(null);
+    window.sessionStorage.removeItem("ache-manus-last-task");
     startTransition(async () => {
       try {
         const response = await fetch("/api/rebrand/linkedin", {
@@ -131,6 +150,49 @@ export function RebrandLinkedInDiagnostic() {
       } catch (err) {
         setError(err instanceof Error ? err.message : "Não foi possível iniciar a pesquisa Manus.");
       }
+    });
+  }
+
+  async function generatePlan() {
+    if (!completedTaskId || !result || generatingPlan || plan30) return;
+    setPlanError(null);
+    setGeneratingPlan(true);
+    try {
+      const response = await fetch("/api/rebrand/plan", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ taskId: completedTaskId }),
+        cache: "no-store",
+      });
+      const body = await response.json();
+      if (!response.ok) throw new Error(body?.error || "Não foi possível gerar seu plano.");
+      const value = body.plan as Plan30Days | undefined;
+      if (!value || !Array.isArray(value.days) || value.days.length !== 30)
+        throw new Error("O plano ainda não está completo. Tente novamente.");
+      setPlan30(value);
+      const storageKey = "ache-manus-plan-days-" + completedTaskId;
+      const existing = window.localStorage.getItem(storageKey);
+      if (existing) {
+        const parsed: unknown = JSON.parse(existing);
+        if (Array.isArray(parsed)) {
+          setCompletedDays(parsed.filter((x): x is number => typeof x === "number" && Number.isInteger(x) && x>=1 && x<=30));
+        }
+      }
+    } catch (error) {
+      setPlanError(error instanceof Error ? error.message : "Não foi possível gerar o plano agora.");
+    } finally {
+      setGeneratingPlan(false);
+    }
+  }
+
+  function toggleDay(day: number, checked: boolean) {
+    if (!completedTaskId) return;
+    setCompletedDays(previous => {
+      const next = checked
+        ? [...new Set([...previous, day])].sort((a, b) => a - b)
+        : previous.filter(item => item !== day);
+      window.localStorage.setItem("ache-manus-plan-days-" + completedTaskId, JSON.stringify(next));
+      return next;
     });
   }
 
@@ -235,18 +297,57 @@ export function RebrandLinkedInDiagnostic() {
               <ol>{result.nextBestAction.actions.map(x=><li key={x}>{x}</li>)}</ol>
             </div>
 
-            <section className="rebrandDevelopmentPlan">
+            <section className="rebrandDevelopmentPlan rebrandPlan30">
               <div className="rebrandDevelopmentHeading">
-                <div><span>PLANO DE DESENVOLVIMENTO</span><h3>Próximas quatro semanas</h3><p>Um roteiro de evolução do perfil e das competências profissionais, não um compromisso de contratação.</p></div>
-                <button type="button" onClick={() => window.print()} className="rebrandPrintButton">Imprimir / salvar em PDF</button>
+                <div>
+                  <span>DESENVOLVIMENTO PROFISSIONAL</span>
+                  <h3>Seu plano de 30 dias</h3>
+                  <p>Um roteiro diário, prático e adaptado ao diagnóstico. Gerá-lo não consome outra tentativa do Manus.</p>
+                </div>
+                {plan30 && <button type="button" onClick={() => window.print()} className="rebrandPrintButton">Imprimir / salvar em PDF</button>}
               </div>
-              <div className="rebrandWeekGrid">
-                {result.developmentPlan.map((week) => <article key={week.week}>
-                  <span>Semana {week.week} · {week.focus}</span>
-                  <h4>{week.title}</h4>
-                  <ul>{week.actions.map((action) => <li key={action}>{action}</li>)}</ul>
-                </article>)}
-              </div>
+              {!plan30 ? (
+                <div className="rebrandPlanStart">
+                  <p>Transforme os pontos de melhoria em tarefas de 15 a 40 minutos por dia, com uma entrega concreta e revisão do progresso.</p>
+                  <button type="button" className="rebrandPlanGenerate" disabled={!completedTaskId || generatingPlan} onClick={() => void generatePlan()}>
+                    {generatingPlan ? <><LoaderCircle className="spin" size={17}/> Preparando 30 dias...</> : <><Sparkles size={17}/> Gerar meu plano de 30 dias</>}
+                  </button>
+                  {planError && <p className="rebrandError" role="alert">{planError}</p>}
+                  <small>A personalização usa o Gemini quando disponível; caso contrário, você recebe um roteiro orientativo completo, sem alterar suas notas.</small>
+                </div>
+              ) : (
+                <>
+                  <div className="rebrandPlanProgress">
+                    <div><strong>{completedDays.length} de 30 dias concluídos</strong><p>Acompanhe suas tarefas no próprio navegador, sem iniciar novas pesquisas.</p></div>
+                    <div className="rebrandPlanProgressBar" role="progressbar" aria-label="Dias concluídos" aria-valuenow={completedDays.length} aria-valuemin={0} aria-valuemax={30}><span style={{ width: (completedDays.length / 30 * 100) + "%" }}/></div>
+                  </div>
+                  {[
+                    { first: 1, last: 7, title: "Semana 1 · Identidade e diagnóstico" },
+                    { first: 8, last: 14, title: "Semana 2 · LinkedIn e resultados" },
+                    { first: 15, last: 21, title: "Semana 3 · Repertório e relacionamentos" },
+                    { first: 22, last: 28, title: "Semana 4 · Comunicação e prática" },
+                    { first: 29, last: 30, title: "Dias 29 e 30 · Revisão e continuidade" },
+                  ].map(group => (
+                    <div className="rebrandPlanPhase" key={group.first}>
+                      <h4>{group.title}</h4>
+                      <div className="rebrandPlanDays">
+                        {plan30.days.filter(day => day.day >= group.first && day.day <= group.last).map(day => (
+                          <article key={day.day} className={completedDays.includes(day.day) ? "isComplete" : ""}>
+                            <div className="rebrandPlanDayHeader">
+                              <strong>Dia {day.day}</strong><span>{day.minutes} min</span>
+                            </div>
+                            <h5>{day.title}</h5>
+                            <p>{day.action}</p>
+                            <p className="rebrandPlanDeliverable"><b>Entrega:</b> {day.deliverable}</p>
+                            <label className="rebrandDayCheckbox"><input type="checkbox" checked={completedDays.includes(day.day)} onChange={event => toggleDay(day.day, event.target.checked)}/> Concluído</label>
+                          </article>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                  <p className="rebrandPlanFootnote">Este plano é orientação de desenvolvimento, não previsão de contratação. Itens sem dados verificáveis devem ser tratados como oportunidades de documentação, não como falta de competência.</p>
+                </>
+              )}
             </section>
           </>
         )}

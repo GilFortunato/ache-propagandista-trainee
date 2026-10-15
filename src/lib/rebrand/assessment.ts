@@ -1,4 +1,4 @@
-export type ProfilePost = { text: string; publishedAt: string; reactions: number | null; comments: number | null; reposts: number | null };
+export type ProfilePost = { text: string; publishedAt: string; url: string; reactions: number | null; comments: number | null; reposts: number | null };
 export type ProfileExperience = { role: string; company: string; description: string };
 export type PublicProfile = {
   name: string;
@@ -102,6 +102,7 @@ export function normalizeProfile(data: unknown, postsData: unknown = []): Public
     .map((item) => ({
       text: field(item, ["text", "content", "commentary", "postText", "description"]),
       publishedAt: field(item, ["publishedAt", "postedAt", "date", "createdAt"]),
+      url: field(item, ["url", "postUrl", "link"]),
       reactions: numberField(item, ["reactions", "reactionCount", "numLikes", "likes"]),
       comments: numberField(item, ["comments", "commentCount", "numComments"]),
       reposts: numberField(item, ["reposts", "repostCount", "numShares", "shares"]),
@@ -165,7 +166,7 @@ export function assessProfile(profile: PublicProfile | null, manualContext: stri
       [headline, about], "Revise a legibilidade, retire jargões e dê exemplos concretos de sua comunicação."),
     dimension("content", "Conteúdo profissional", 10, posts.length ? 45 + Math.min(25, posts.length * 5) + (posts.some((item) => item.text.length > 250) ? 12 : 0) : null,
       posts.length ? "Somente as publicações públicas efetivamente recuperadas foram analisadas." : "Publicações não recuperadas. Isso não significa que a pessoa não publique ou se comunique mal.",
-      posts.slice(0, 2).map((item) => item.text), "Se fizer sentido para sua carreira, compartilhe aprendizados e experiências reais, sem obrigação de publicar diariamente."),
+      posts.slice(0, 3).map((item) => item.text + (item.url ? " · Fonte: " + item.url : "")), "Se fizer sentido para sua carreira, compartilhe aprendizados e experiências reais, sem obrigação de publicar diariamente."),
     dimension("development", "Formação e desenvolvimento", 15, education.length || skills.length ? 43 + Math.min(30, education.length * 10) + Math.min(15, skills.length * 3) : null,
       education.length || skills.length ? "Formações, certificações e competências declaradas foram consideradas; ausência de registro não prova falta de qualificação." : "Formação e competências não recuperadas.",
       [...education.slice(0, 3), ...skills.slice(0, 2)], "Destaque estudos, formações e habilidades relevantes que você consegue comprovar."),
