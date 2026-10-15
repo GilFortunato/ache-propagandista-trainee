@@ -165,7 +165,7 @@ export async function pollManusResearch(taskId: string, profileUrl: string):
       return claimedSources.some((candidateSource) => {
         const source = safeRecord(candidateSource);
         if (!source || source.url !== item.url || typeof source.snippet !== "string") return false;
-        const words = item.text.toLocaleLowerCase("pt-BR").split(/[^\\p{L}\\p{N}]+/u).filter((word) => word.length > 4);
+        const words = item.text.toLocaleLowerCase("pt-BR").split(/[^\p{L}\p{N}]+/u).filter((word) => word.length > 4);
         const snippet = source.snippet.toLocaleLowerCase("pt-BR");
         return words.length >= 3 && words.slice(0, 12).filter((word) => snippet.includes(word)).length >= 3;
       });
