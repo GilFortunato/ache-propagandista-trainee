@@ -2605,3 +2605,38 @@ body{min-height:100vh}
   font-size:.75rem;
   line-height:1.5;
 }
+
+/* Thirty-day professional development roadmap */
+.rebrandPlan30 .rebrandDevelopmentHeading{align-items:center}
+.rebrandPlanStart{margin-top:1.15rem;padding:1rem 1.2rem;background:#fff6fa;border:1px solid #f0d6e4;border-radius:15px}
+.rebrandPlanStart>p{font-size:.92rem;line-height:1.55;color:#705364;margin:0 0 1rem}
+.rebrandPlanStart>small{display:block;margin-top:.75rem;color:#866775;font-size:.76rem;line-height:1.5}
+.rebrandPlanGenerate{display:inline-flex;align-items:center;justify-content:center;gap:.55rem;border:0;border-radius:12px;background:#a71960;color:#fff;font:inherit;font-weight:850;padding:.85rem 1.1rem;cursor:pointer}
+.rebrandPlanGenerate:disabled{opacity:.55;cursor:wait}
+.rebrandPlanProgress{display:flex;align-items:center;justify-content:space-between;gap:1.2rem;margin-top:1.25rem;border:1px solid #f0d8e4;background:#fff8fb;padding:1rem 1.2rem;border-radius:15px}
+.rebrandPlanProgress strong{font-size:1rem;color:#672347}
+.rebrandPlanProgress p{font-size:.78rem;color:#816c76;margin:.28rem 0 0;line-height:1.4}
+.rebrandPlanProgressBar{width:min(28%,160px);flex:0 0 145px;height:10px;border-radius:100px;overflow:hidden;background:#efdae5}
+.rebrandPlanProgressBar span{display:block;background:#b02167;height:100%;border-radius:100px;transition:width .2s ease}
+.rebrandPlanPhase{margin-top:1.4rem}
+.rebrandPlanPhase>h4{font-size:1.06rem;color:#6e2448;margin:.2rem 0 .8rem}
+.rebrandPlanDays{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.85rem}
+.rebrandPlanDays article{padding:1rem;background:#fff8fb;border:1px solid #f0dce5;border-radius:15px;min-width:0;break-inside:avoid}
+.rebrandPlanDays article.isComplete{border-color:#c4dfcc;background:#f8fdf9}
+.rebrandPlanDayHeader{display:flex;align-items:center;justify-content:space-between;gap:.75rem;color:#a82766;font-size:.75rem}
+.rebrandPlanDayHeader span{color:#826372}
+.rebrandPlanDays h5{font-size:1.01rem;color:#402538;line-height:1.35;margin:.55rem 0}
+.rebrandPlanDays article>p{font-size:.83rem;line-height:1.55;color:#66505f;margin:.5rem 0;overflow-wrap:anywhere}
+.rebrandPlanDays .rebrandPlanDeliverable{background:#fff;border-radius:10px;padding:.65rem .75rem;font-size:.79rem;border:1px solid #f1e4eb}
+.rebrandPlanDeliverable b{color:#843656}
+.rebrandDayCheckbox{margin:.7rem 0 0;display:inline-flex;align-items:center;gap:.45rem;font-size:.8rem;font-weight:700;color:#5d4655;cursor:pointer}
+.rebrandDayCheckbox input{width:17px;height:17px;accent-color:#a71960}
+.rebrandPlanFootnote{font-size:.8rem;color:#7c6472;line-height:1.6;margin:1.25rem 0 0}
+@media(max-width:1000px){.rebrandPlanDays{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.rebrandPlanDays{grid-template-columns:1fr}.rebrandPlanProgress{flex-direction:column;align-items:stretch}.rebrandPlanProgressBar{flex:0 0 10px;width:100%}.rebrandPlanGenerate{width:100%}}
+@media print{
+  .rebrandPlanStart,.rebrandDayCheckbox,.rebrandPlanGenerate{display:none!important}
+  .rebrandPlanDays{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .rebrandPlanDays article{background:#fff;page-break-inside:avoid;break-inside:avoid}
+  .rebrandPlanPhase{page-break-inside:avoid}
+}
