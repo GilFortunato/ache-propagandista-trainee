@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     if (!task || task.status !== "complete" || !task.result_json || typeof task.result_json !== "object")
       return NextResponse.json({ error: "Conclua seu diagnóstico antes de gerar o plano." }, { status: 404, headers });
 
-    const report = task.result_json as Record<string, unknown>;
+    const report = task.result_json as Record<string, unknown> & Parameters<typeof generate30DayPlan>[0];
     if (isPlan30Days(report.plan30Days))
       return NextResponse.json({ plan: report.plan30Days, cached: true, remainingSearchesUnchanged: true }, { headers });
 
