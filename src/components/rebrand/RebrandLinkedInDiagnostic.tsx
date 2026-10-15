@@ -50,7 +50,9 @@ export function RebrandLinkedInDiagnostic() {
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const [taskId, setTaskId] = useState<string | null>(null);
-  const [quota, setQuota] = useState<{ authenticated: boolean; owner?: boolean; remaining: number | null; storageReady?: boolean; googleReady?: boolean } | null>(null);
+  const [quota, setQuota] = useState<{ authenticated: boolean; owner?: boolean; remaining: number | null; storageReady?: boolean; googleReady?: boolean; error?: string } | null>(null);
+  const [quotaLoading, setQuotaLoading] = useState(true);
+  const [quotaError, setQuotaError] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [completedTaskId, setCompletedTaskId] = useState<string | null>(null);
   const [plan30, setPlan30] = useState<Plan30Days | null>(null);
@@ -62,12 +64,19 @@ export function RebrandLinkedInDiagnostic() {
   const valid = useMemo(() => /^https:\/\/(?:www\.)?linkedin\.com\/in\/[^\s/?#]+\/?(?:[?#].*)?$/i.test(profileUrl.trim()) && objective.trim().length >= 10, [profileUrl, objective]);
 
   async function loadQuota() {
+    setQuotaLoading(true);
+    setQuotaError(false);
     try {
       const response = await fetch("/api/rebrand/quota", { cache: "no-store" });
       const status = await response.json();
+      if (!status || typeof status.authenticated !== "boolean") throw new Error("Saldo não disponível");
       setQuota(status);
+      if (!response.ok) setQuotaError(true);
     } catch {
       setQuota(null);
+      setQuotaError(true);
+    } finally {
+      setQuotaLoading(false);
     }
   }
 
@@ -90,7 +99,24 @@ export function RebrandLinkedInDiagnostic() {
         const response = await fetch("/api/rebrand/linkedin?taskId=" + encodeURIComponent(taskId), { cache: "no-store" });
         const payload = await response.json();
         if (!alive) return;
-        if (!response.ok) throw new Error(payload?.error || "Falha ao acompanhar a pesquisa.");
+        if (!response.ok) {
+          // An expired session or an old task from a different account must
+          // not freeze the "Gerar" button indefinitely.
+          if (response.status === 401 || response.status === 403 || response.status === 404) {
+            setTaskId(null);
+            setProcessing(false);
+            window.sessionStorage.removeItem("ache-manus-last-task");
+            if (response.status === 404) window.sessionStorage.removeItem("ache-manus-active-task");
+            void loadQuota();
+            setError(response.status === 401
+              ? "Sua sessão expirou. Entre novamente com Google e recupere seu diagnóstico."
+              : response.status === 404
+                ? "A pesquisa anterior não pertence a esta conta ou já não está disponível. Você pode gerar um novo diagnóstico se tiver tentativas restantes."
+                : "Não foi possível acompanhar a pesquisa nesta sessão.");
+            return;
+          }
+          throw new Error(payload?.error || "Falha ao acompanhar a pesquisa.");
+        }
         if (payload.state === "complete" && payload.result) {
           setResult(payload.result as RebrandResult);
           setCompletedTaskId(taskId);
@@ -126,15 +152,29 @@ export function RebrandLinkedInDiagnostic() {
 
   function run() {
     if (!valid) {
-      setError("Informe uma URL válida do LinkedIn e mantenha um objetivo profissional claro.");
+      setError(!/^https:\/\/(?:www\.)?linkedin\.com\/in\/[^\s/?#]+\/?(?:[?#].*)?$/i.test(profileUrl.trim())
+        ? "Cole o link público do seu perfil no formato https://www.linkedin.com/in/seu-perfil."
+        : "Descreva seu objetivo de transição de carreira em pelo menos 10 caracteres.");
       return;
     }
-    if (!quota?.authenticated) {
-      setError("Entre com sua conta Google para iniciar a pesquisa.");
+    if (!quota || quotaLoading || quotaError && !quota.authenticated) {
+      setError("Não foi possível confirmar seu acesso. Clique em 'Verificar acesso' e tente novamente.");
+      return;
+    }
+    if (!quota.authenticated) {
+      setError("Faça login com Google (ou entre no ADM) para iniciar o diagnóstico. Isso protege suas 3 tentativas.");
+      return;
+    }
+    if (!quota.storageReady) {
+      setError("O controle de pesquisas está temporariamente indisponível. Tente novamente mais tarde.");
       return;
     }
     if (!quota.owner && quota.remaining === 0) {
-      setError("Suas 3 tentativas terminaram. Não é possível iniciar outra pesquisa nesta conta.");
+      setError("Suas 3 tentativas terminaram. Não é possível iniciar outra pesquisa nesta conta. Você ainda pode consultar seus diagnósticos anteriores.");
+      return;
+    }
+    if (!quota.owner && (typeof quota.remaining !== "number" || quotaError)) {
+      setError("Não foi possível verificar suas tentativas com segurança. Clique em 'Verificar acesso' para tentar novamente.");
       return;
     }
     setError(null);
@@ -167,7 +207,11 @@ export function RebrandLinkedInDiagnostic() {
   }
 
   async function generatePlan() {
-    if (!completedTaskId || !result || generatingPlan || plan30) return;
+    if (generatingPlan || plan30) return;
+    if (!completedTaskId || !result) {
+      setPlanError("Não foi possível recuperar a identificação do diagnóstico anterior. Atualize a página para buscá-lo novamente; isso não usa uma nova tentativa.");
+      return;
+    }
     setPlanError(null);
     setGeneratingPlan(true);
     try {
@@ -231,24 +275,38 @@ export function RebrandLinkedInDiagnostic() {
         </label>
 
         <div className="rebrandQuotaInfo rebrandAttemptsNotice" role="status" aria-live="polite">
-          {!quota
-            ? "Consultando suas tentativas..."
-            : !quota.authenticated
-              ? "Faça login com Google para ter acesso às suas 3 tentativas."
-              : quota.owner
-                ? "Sua conta tem pesquisas ilimitadas."
-                : typeof quota.remaining === "number"
-                  ? quota.remaining === 0
-                    ? "Suas 3 tentativas terminaram. Você não pode iniciar outras pesquisas."
-                    : "Você tem " + quota.remaining + " de 3 tentativas disponíveis. Quando acabarem, não poderá fazer novas pesquisas."
-                  : "Não foi possível consultar suas tentativas."}
-          {quota && !quota.authenticated && <p><Link href="/login">Entrar com Google</Link></p>}
+          <strong>
+            {quotaLoading ? "Verificando acesso e tentativas..."
+              : !quota || quotaError && !quota.authenticated ? "Não foi possível verificar seu acesso"
+                : !quota.authenticated ? "Faça login para gerar o diagnóstico"
+                  : !quota.storageReady || quotaError && !quota.owner ? "Não foi possível confirmar suas tentativas"
+                    : quota.owner ? "Sua conta administrativa possui pesquisas ilimitadas"
+                      : quota.remaining === 0 ? "Você utilizou suas 3 tentativas"
+                        : typeof quota.remaining === "number" ? "Você tem " + quota.remaining + " de 3 tentativas disponíveis"
+                          : "Não foi possível consultar suas tentativas"}
+          </strong>
+          <p>
+            {quota?.authenticated && quota.storageReady && !quotaError && quota.remaining === 0 && !quota.owner
+              ? "O limite por conta foi atingido. Não será cobrada uma nova pesquisa. Você pode recuperar um diagnóstico anterior, se disponível."
+              : !quota?.authenticated
+                ? "Conecte sua conta Google ou entre no ADM antes de gerar um diagnóstico."
+                : !quota?.owner && quota?.remaining !== null && typeof quota?.remaining === "number"
+                  ? "Quando as três tentativas acabarem, não será possível iniciar uma nova pesquisa."
+                  : quota?.owner ? "Você pode iniciar novas análises sem descontar tentativas."
+                    : "O diagnóstico só começa quando o servidor confirmar seu saldo de pesquisas."}
+          </p>
+          <div className="rebrandAccessActions">
+            {quota && !quota.authenticated && <Link href="/login">Entrar com Google</Link>}
+            <button type="button" disabled={quotaLoading} onClick={() => void loadQuota()}>
+              {quotaLoading ? "Verificando..." : "Verificar acesso"}
+            </button>
+          </div>
         </div>
         <p className="rebrandProcessingNotice">Ao clicar em “Gerar meu diagnóstico”, você solicita a pesquisa dos dados profissionais informados pelo Manus e a análise pelo Gemini.</p>
         {processing && <div className="rebrandQuotaInfo" role="status">O Manus está pesquisando. Isso pode levar alguns minutos. Você pode manter a página aberta; acompanhar a tarefa não consome outra pesquisa.</div>}
         {error && <div className="rebrandError" role="alert">{error}</div>}
 
-        <button type="button" onClick={run} disabled={isPending || processing || !valid || !quota?.authenticated || (!quota.owner && quota.remaining === 0)} className="rebrandRun">
+        <button type="button" onClick={run} disabled={isPending || processing} className="rebrandRun">
           {isPending || processing ? <><LoaderCircle className="spin" size={18}/> {processing ? "Pesquisando no Manus..." : "Iniciando pesquisa..."}</> : <>Gerar meu diagnóstico <ArrowRight size={18}/></>}
         </button>
       </section>
@@ -377,7 +435,7 @@ export function RebrandLinkedInDiagnostic() {
               {!plan30 ? (
                 <div className="rebrandPlanStart">
                   <p>Transforme os pontos de melhoria em tarefas de 15 a 40 minutos por dia, com uma entrega concreta e revisão do progresso.</p>
-                  <button type="button" className="rebrandPlanGenerate" disabled={!completedTaskId || generatingPlan} onClick={() => void generatePlan()}>
+                  <button type="button" className="rebrandPlanGenerate" disabled={generatingPlan} onClick={() => void generatePlan()}>
                     {generatingPlan ? <><LoaderCircle className="spin" size={17}/> Preparando 30 dias...</> : <><Sparkles size={17}/> Gerar meu plano de 30 dias</>}
                   </button>
                   {planError && <p className="rebrandError" role="alert">{planError}</p>}
