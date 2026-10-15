@@ -76,14 +76,24 @@ export function guidedPlan(report: RebrandReport, objective: string): Plan30Days
     .sort((a, b) => (a.score ?? 0) - (b.score ?? 0))[0];
   const focus = cleanText(weak?.label || report.nextBestAction?.title || "clareza do posicionamento", 90);
   const action = cleanText(weak?.action || report.recommendations?.[0] || "", 180);
-  const days: PlanDay[] = agenda.map(([title, task, deliverable, minutes], i) => ({
-    day: i + 1,
-    phase: phases[Math.min(4, Math.floor(i / 7))],
-    title: i === 6 ? "Revisão da primeira semana: " + focus : title,
-    action: i === 6 && action ? task + " Priorize também: " + action : task,
-    deliverable,
-    minutes,
-  }));
+  const priorities = (report.recommendations || [])
+    .filter((value): value is string => typeof value === "string" && value.trim().length > 12)
+    .map(value => cleanText(value, 175))
+    .slice(0, 3);
+  if (action && !priorities.includes(action)) priorities.unshift(action);
+  const reinforcementDays = new Map<number, number>([[6, 0], [13, 1], [20, 2], [27, 0], [29, 1]]);
+  const days: PlanDay[] = agenda.map(([title, task, deliverable, minutes], i) => {
+    const priorityIndex = reinforcementDays.get(i);
+    const priority = priorityIndex !== undefined ? priorities[priorityIndex % (priorities.length || 1)] : "";
+    return {
+      day: i + 1,
+      phase: phases[Math.min(4, Math.floor(i / 7))],
+      title: i === 6 ? "Revisão da primeira semana: " + focus : title,
+      action: priority ? task + " Nesta etapa, trabalhe também este ponto do diagnóstico: " + priority : task,
+      deliverable,
+      minutes,
+    };
+  });
   return {
     title: "Seu plano de desenvolvimento de 30 dias",
     objective: cleanText(objective, 240),
