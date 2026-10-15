@@ -36,7 +36,6 @@ export function RebrandLinkedInDiagnostic() {
   const [isPending, startTransition] = useTransition();
   const [taskId, setTaskId] = useState<string | null>(null);
   const [quota, setQuota] = useState<{ authenticated: boolean; owner?: boolean; remaining: number | null; storageReady?: boolean; googleReady?: boolean } | null>(null);
-  const [consent, setConsent] = useState(false);
   const [processing, setProcessing] = useState(false);
 
   const valid = useMemo(() => /^https:\/\/(?:www\.)?linkedin\.com\/in\/[^\s/?#]+\/?(?:[?#].*)?$/i.test(profileUrl.trim()) && objective.trim().length >= 10, [profileUrl, objective]);
@@ -103,18 +102,12 @@ export function RebrandLinkedInDiagnostic() {
       setError("Informe uma URL válida do LinkedIn e mantenha um objetivo profissional claro.");
       return;
     }
-    if (!consent) {
-      setError("Antes de gerar o diagnóstico, marque a caixa de autorização para Manus e Gemini.");
-      document.getElementById("rebrand-manus-consent")?.focus();
-      document.getElementById("rebrand-consent-panel")?.scrollIntoView({ behavior: "smooth", block: "center" });
-      return;
-    }
     if (!quota?.authenticated) {
       setError("Entre com sua conta Google para iniciar a pesquisa.");
       return;
     }
     if (!quota.owner && quota.remaining === 0) {
-      setError("Você já utilizou suas três pesquisas.");
+      setError("Suas 3 tentativas terminaram. Não é possível iniciar outra pesquisa nesta conta.");
       return;
     }
     setError(null);
@@ -124,7 +117,9 @@ export function RebrandLinkedInDiagnostic() {
         const response = await fetch("/api/rebrand/linkedin", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ profileUrl, objective, manualContext, consent }),
+          // Clicking the clearly described action opts in to the Manus/Gemini analysis.
+          // The server still rejects requests without this explicit action signal.
+          body: JSON.stringify({ profileUrl, objective, manualContext, consent: true }),
         });
         const payload = await response.json();
         if (!response.ok) throw new Error(payload?.error || "Não foi possível iniciar a pesquisa Manus.");
@@ -160,35 +155,21 @@ export function RebrandLinkedInDiagnostic() {
           <textarea value={manualContext} onChange={(e)=>setManualContext(e.target.value)} rows={4} placeholder="Se a coleta do LinkedIn falhar, descreva sua trajetória real aqui para receber orientações qualitativas, sem nota. Ex.: experiências em atendimento, educação ou vendas."/>
         </label>
 
-        <div className="rebrandQuotaInfo" role="status">
-          {!quota ? "Consultando acesso e pesquisas..." : !quota.authenticated
-            ? "Para pesquisar, faça login com Google."
-            : quota.owner ? "Conta administrativa: pesquisas ilimitadas."
-            : typeof quota.remaining === "number"
-              ? quota.remaining + " de 3 pesquisas disponíveis nesta conta."
-              : "Pesquisas ainda não habilitadas para esta conta."}
+        <div className="rebrandQuotaInfo rebrandAttemptsNotice" role="status" aria-live="polite">
+          {!quota
+            ? "Consultando suas tentativas..."
+            : !quota.authenticated
+              ? "Faça login com Google para ter acesso às suas 3 tentativas."
+              : quota.owner
+                ? "Sua conta tem pesquisas ilimitadas."
+                : typeof quota.remaining === "number"
+                  ? quota.remaining === 0
+                    ? "Suas 3 tentativas terminaram. Você não pode iniciar outras pesquisas."
+                    : "Você tem " + quota.remaining + " de 3 tentativas disponíveis. Quando acabarem, não poderá fazer novas pesquisas."
+                  : "Não foi possível consultar suas tentativas."}
           {quota && !quota.authenticated && <p><Link href="/login">Entrar com Google</Link></p>}
         </div>
-        <div className="rebrandConsentPanel" id="rebrand-consent-panel" role="group" aria-labelledby="rebrand-consent-title">
-          <strong id="rebrand-consent-title" className="rebrandConsentTitle">Autorização para análise</strong>
-          <label className="rebrandConsentOption" htmlFor="rebrand-manus-consent">
-            <input
-              id="rebrand-manus-consent"
-              type="checkbox"
-              checked={consent}
-              onChange={(event) => {
-                setConsent(event.target.checked);
-                if (event.target.checked) setError(null);
-              }}
-            />
-            <span>
-              <b>Autorizo a análise do meu perfil.</b> Concordo com o envio dos dados profissionais que informei ao
-              Manus para pesquisar fontes públicas e ao Gemini para gerar orientações. A pesquisa Manus pode consumir
-              créditos do programa.
-            </span>
-          </label>
-          <p>O aceite é obrigatório para iniciar a pesquisa, mas não é marcado automaticamente.</p>
-        </div>
+        <p className="rebrandProcessingNotice">Ao clicar em “Gerar meu diagnóstico”, você solicita a pesquisa dos dados profissionais informados pelo Manus e a análise pelo Gemini.</p>
         {processing && <div className="rebrandQuotaInfo" role="status">O Manus está pesquisando. Isso pode levar alguns minutos. Você pode manter a página aberta; acompanhar a tarefa não consome outra pesquisa.</div>}
         {error && <div className="rebrandError" role="alert">{error}</div>}
 
