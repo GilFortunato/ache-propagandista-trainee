@@ -2670,3 +2670,17 @@ body{min-height:100vh}
 @media(max-width:840px){.rebrandHeadlineComparison,.rebrandTransitionColumns{grid-template-columns:1fr}}
 @media(max-width:530px){.rebrandCareerTransition{padding:1rem}.rebrandHeadlineOption{align-items:flex-start;flex-direction:column}.rebrandHeadlineOption button{align-self:flex-end}}
 @media print{.rebrandHeadlineOption button{display:none!important}.rebrandHeadlineOption,.rebrandTransitionColumns>div{break-inside:avoid}}
+
+/* ReBrand: actionable authentication/quota states instead of an inert generate button */
+.rebrandFormCard .rebrandAccessActions{display:flex;gap:.65rem;align-items:center;flex-wrap:wrap;margin-top:.8rem}
+.rebrandFormCard .rebrandAccessActions a,.rebrandFormCard .rebrandAccessActions button{
+  display:inline-flex;align-items:center;justify-content:center;min-height:37px;
+  padding:.5rem .8rem;border:1px solid #bc7296;border-radius:10px;
+  background:#fff;color:#7e2352;font:inherit;font-size:.8rem;font-weight:850;
+  text-decoration:none;cursor:pointer
+}
+.rebrandFormCard .rebrandAccessActions a{background:#9b205e;color:white}
+.rebrandFormCard .rebrandAccessActions button:disabled{opacity:.55;cursor:wait}
+.rebrandFormCard .rebrandAccessActions button:hover:not(:disabled){background:#fff0f6}
+.rebrandFormCard .rebrandAttemptsNotice>strong{display:block;font-size:.93rem;color:#78214f}
+.rebrandFormCard .rebrandAttemptsNotice>p{font-weight:500;line-height:1.55}
