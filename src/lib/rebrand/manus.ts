@@ -49,13 +49,24 @@ const sources = {
   },
 };
 
+const publicPosts = {
+  type: "array",
+  items: {
+    type: "object",
+    properties: { text: stringField, url: stringField, publishedAt: stringField },
+    required: ["text", "url", "publishedAt"],
+    additionalProperties: false,
+  },
+};
+
 const schema = {
   type: "object",
   properties: {
     fullName: stringField, headline: stringField, about: stringField, experiences,
-    education: stringArray, certifications: stringArray, skills: stringArray, sources,
+    education: stringArray, certifications: stringArray, skills: stringArray,
+    posts: publicPosts, sources,
   },
-  required: ["fullName", "headline", "about", "experiences", "education", "certifications", "skills", "sources"],
+  required: ["fullName", "headline", "about", "experiences", "education", "certifications", "skills", "posts", "sources"],
   additionalProperties: false,
 };
 
@@ -65,6 +76,9 @@ export async function createManusResearch(profileUrl: string) {
     "Pesquise SOMENTE o perfil público do LinkedIn informado. Não tente burlar login, paywalls, CAPTCHA ou configurações de privacidade.",
     "Link: " + profileUrl,
     "Extraia apenas dados publicamente acessíveis da própria pessoa: nome, headline, texto Sobre, experiências profissionais (cargo, empresa, descrição), formação, certificados e competências.",
+    "Se existirem publicações próprias visíveis SEM login, tente recuperar até 5 posts profissionais recentes com texto literal, URL pública direta do post e data; caso inacessíveis, retorne posts como []. Não infira frequência, alcance, autoria ou engajamento.",
+    "Avalie apenas os próprios posts da pessoa cujo URL foi informado. Para cada post, inclua em sources a URL do post com um snippet que corresponda ao seu texto; não use posts de homônimos nem publicações reproduzidas por terceiros.",
+    "Para cada experiência retornada, inclua ao menos uma citação no perfil LinkedIn com trecho que confirme o cargo ou a empresa. Se não conseguir corroborar, não inclua a experiência.",
     "Para cada evidência encontrada, forneça sources com URL e snippet pequeno e fiel à página encontrada.",
     "Se a página não permitir acesso ou não puder confirmar informações, retorne strings vazias e listas vazias. NUNCA invente uma informação, use perfis homônimos, dados de terceiros ou copie propaganda de serviços de scraping.",
     "Não use conteúdo de publicidade, erros de robots, vendas de planos, documentação ou resultados não relacionados como evidência profissional.",
@@ -111,7 +125,7 @@ function publicLinkedInSource(candidate: unknown, targetUrl: string) {
 }
 
 export async function pollManusResearch(taskId: string, profileUrl: string):
-  Promise<{ state: "processing" | "failed" | "complete"; profile?: unknown; message?: string }> {
+  Promise<{ state: "processing" | "failed" | "complete"; profile?: unknown; posts?: unknown[]; message?: string }> {
   const params = new URLSearchParams({ task_id: taskId });
   const detail = await manusRequest("/task.detail?" + params.toString());
   const task = safeRecord(detail.task);
@@ -136,5 +150,26 @@ export async function pollManusResearch(taskId: string, profileUrl: string):
   const claimedSources = Array.isArray(result.sources) ? result.sources : [];
   if (!claimedSources.some((value) => publicLinkedInSource(value, profileUrl)))
     return { state: "complete", profile: null, message: "O Manus não encontrou uma fonte pública verificável para o perfil." };
-  return { state: "complete", profile: result };
+  // Individual content must have its own direct public LinkedIn citation.
+  // If posts are hidden or not cited, they stay unevaluated, not a low score.
+  const citedPosts = Array.isArray(result.posts) ? result.posts : [];
+  const verifiedPosts = citedPosts.filter((candidate) => {
+    const item = safeRecord(candidate);
+    if (!item || typeof item.text !== "string" || item.text.trim().length < 35 || typeof item.url !== "string") return false;
+    try {
+      const url = new URL(item.url);
+      const sourceValid = url.protocol === "https:"
+        && (url.hostname === "linkedin.com" || url.hostname === "www.linkedin.com")
+        && (/^\\/posts\\//.test(url.pathname) || /^\\/feed\\/update\\//.test(url.pathname));
+      if (!sourceValid) return false;
+      return claimedSources.some((candidateSource) => {
+        const source = safeRecord(candidateSource);
+        if (!source || source.url !== item.url || typeof source.snippet !== "string") return false;
+        const words = item.text.toLocaleLowerCase("pt-BR").split(/\\W+/).filter((word) => word.length > 4);
+        const snippet = source.snippet.toLocaleLowerCase("pt-BR");
+        return words.length >= 3 && words.slice(0, 12).filter((word) => snippet.includes(word)).length >= 3;
+      });
+    } catch { return false; }
+  }).slice(0, 5);
+  return { state: "complete", profile: result, posts: verifiedPosts };
 }
