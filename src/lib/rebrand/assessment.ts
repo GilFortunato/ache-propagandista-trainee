@@ -23,6 +23,19 @@ export type EvidenceDimension = {
 };
 
 export type DevelopmentWeek = { week: number; title: string; focus: string; actions: string[] };
+export type CareerTransitionReview = {
+  targetRole: string;
+  headlineStatus: "aligned" | "partially_aligned" | "needs_repositioning" | "not_evaluated";
+  headlineLabel: string;
+  currentHeadline: string;
+  explanation: string;
+  transferableStrengths: string[];
+  developmentPriorities: string[];
+  headlineSuggestions: string[];
+  aboutSuggestion: string;
+  disclaimer: string;
+};
+
 
 const limits = { text: 4000, item: 200 };
 const roleTerms = ["comunica", "relacion", "atend", "venda", "cliente", "saúde", "saude", "farmac", "ciênc", "cienc", "educa", "apresent", "planeja", "organiza", "negocia", "resultado", "ética", "etica"];
@@ -137,6 +150,83 @@ function dimension(key: string, label: string, weight: number, score: number | n
   };
 }
 
+
+const transitionCompetencies: Array<{ label: string; pattern: RegExp }> = [
+  { label: "Atendimento e escuta de clientes", pattern: /atend|client|escut|suporte|customer|paciente/i },
+  { label: "Relacionamento e comunicação", pattern: /relacion|comunic|apresenta[cç]|negocia|palestr|instrut|doc[eê]nc|educa/i },
+  { label: "Vivência comercial e organização", pattern: /venda|comercial|meta|crm|carteira|planejam|organiza|prospe[cç]/i },
+  { label: "Repertório em saúde e ciências", pattern: /sa[uú]de|farm[aá]c|biolog|qu[ií]mic|medicin|pesquisa|ci[eê]nc|laborat[oó]r/i },
+  { label: "Aprendizado e desenvolvimento contínuo", pattern: /capacita|curso|treinam|formac|forma[cç][aã]o|certific|aprend|estud/i },
+];
+
+function careerHeadlineReview(profile: PublicProfile | null): CareerTransitionReview {
+  const headline = cleanText(profile?.headline, 240);
+  const verifiedText = [
+    ...(profile?.experiences || []).map(item => [item.role,item.description].join(" ")),
+    ...(profile?.skills || []), ...(profile?.education || []), ...(profile?.certifications || []),
+    profile?.about || "",
+  ].join(" ");
+  // These signals describe what is documented, not suitability or hiring potential.
+  const transferableStrengths = transitionCompetencies
+    .filter(item => item.pattern.test(verifiedText))
+    .map(item => item.label);
+  const roleIsMentioned = /propagandist|representante farmac[eê]utic|visita[cç][aã]o m[eé]dic/i.test(headline);
+  const ambitionIsClear = /transi[cç][aã]o|interesse|em forma[cç][aã]o|busco|busca|objetivo|rumo a|aspirant|trainee/i.test(headline);
+  const hasHeadline = headline.length >= 8;
+  const headlineStatus: CareerTransitionReview["headlineStatus"] = !hasHeadline
+    ? "not_evaluated"
+    : roleIsMentioned && ambitionIsClear
+      ? "aligned"
+      : roleIsMentioned
+        ? "partially_aligned"
+        : "needs_repositioning";
+
+  const headlineLabel = headlineStatus === "aligned" ? "Objetivo de transição explícito"
+    : headlineStatus === "partially_aligned" ? "Área de destino mencionada; intenção pode ficar mais clara"
+      : headlineStatus === "needs_repositioning" ? "O título ainda não comunica a transição"
+        : "Título não recuperado — sem avaliação";
+
+  const explanation = headlineStatus === "aligned"
+    ? "O título já comunica a direção para Propagandista Trainee. Confirme que expressões como 'experiência em' descrevem somente funções realmente exercidas."
+    : headlineStatus === "partially_aligned"
+      ? "O título menciona a área farmacêutica, mas pode explicitar que se trata de uma transição ou objetivo de carreira, sem assumir que a função já é exercida."
+      : headlineStatus === "needs_repositioning"
+        ? "O título público existe, porém não mostra ao leitor que a pessoa pretende migrar para Propagandista Trainee. Isso é uma oportunidade de comunicação, não uma avaliação de aptidão."
+        : "O Manus não recuperou um título público verificável; oferecemos exemplos de escrita, mas não concluímos que o perfil esteja inadequado.";
+
+  const careerEvidence = (profile?.experiences || []).map(item => [item.role, item.description].join(" ")).join(" ");
+  // Only describe prior work as "experiência" when the work section has that evidence;
+  // mentioning a skill in About or a course is not a verified previous position.
+  const verifiedAnchor = /atend|client|suporte|customer|paciente/i.test(careerEvidence)
+    ? "Experiência em atendimento"
+    : /venda|comercial|meta|crm|carteira|prospec/i.test(careerEvidence)
+      ? "Experiência comercial"
+      : /relacion|comunic|apresenta|negocia|instrut/i.test(careerEvidence)
+        ? "Experiência em comunicação e relacionamento"
+        : "";
+  const headlineSuggestions = [
+    "Em transição para Propagandista Trainee | Interesse em saúde, comunicação e relacionamento",
+    "Objetivo profissional: Propagandista Trainee | Desenvolvimento na indústria farmacêutica",
+    verifiedAnchor
+      ? verifiedAnchor + " | Transição de carreira para Propagandista Trainee"
+      : "Transição para Propagandista Trainee | Aprendizado contínuo e relacionamento profissional",
+  ];
+  return {
+    targetRole: "Propagandista Trainee",
+    headlineStatus, headlineLabel, currentHeadline: headline,
+    explanation,
+    transferableStrengths,
+    developmentPriorities: [
+      "Deixe explícita no título a direção profissional sem apresentar a função desejada como cargo já exercido.",
+      "Conecte experiências reais de outras áreas às competências úteis à rotina de propagandista, com exemplos e resultados documentados.",
+      "No Sobre, explique de onde vem, por que escolheu essa transição e qual repertório pretende construir em saúde e comunicação ética.",
+    ],
+    headlineSuggestions,
+    aboutSuggestion: "Minha trajetória até aqui inclui [experiência real comprovável]. Nela, desenvolvi [competência com exemplo concreto]. Estou direcionando minha carreira para oportunidades como Propagandista Trainee, buscando aprofundar conhecimentos sobre saúde, relacionamento profissional e comunicação responsável. Meu próximo passo é [ação concreta de desenvolvimento].",
+    disclaimer: "Análise do posicionamento escrito para transição de carreira, não classificação de candidatura. Sugestões de título não atestam experiência nem qualificações.",
+  };
+}
+
 export function assessProfile(profile: PublicProfile | null, manualContext: string) {
   const sourced = hasProfileEvidence(profile);
   const p = sourced ? profile! : null;
@@ -149,25 +239,35 @@ export function assessProfile(profile: PublicProfile | null, manualContext: stri
   const about = p?.about ?? "";
   const posts = p?.posts ?? [];
   const education = [...(p?.education ?? []), ...(p?.certifications ?? [])];
+  const careerTransition = careerHeadlineReview(p);
   const dimensions = [
-    dimension("positioning", "Posicionamento profissional", 20, headline || about ? 35 + (headline.length >= 35 ? 25 : headline ? 12 : 0) + (about.length >= 150 ? 25 : about ? 12 : 0) : null,
-      headline || about ? "Clareza avaliada pelos textos públicos da headline e do Sobre." : "Headline e Sobre não recuperados.",
-      [headline, about], "Escreva uma headline objetiva e um Sobre com trajetória, competências e direção profissional."),
+    dimension("positioning", "Posicionamento para a transição", 20,
+      headline || about
+        ? 30 + (headline.length >= 30 ? 12 : headline ? 6 : 0)
+          + (about.length >= 100 ? 16 : about ? 7 : 0)
+          + (careerTransition.headlineStatus === "aligned" ? 24
+            : careerTransition.headlineStatus === "partially_aligned" ? 14 : 0)
+        : null,
+      headline || about
+        ? "Avalia se os textos públicos comunicam uma mudança de carreira rumo a Propagandista Trainee, sem medir adequação para contratação."
+        : "Título e Sobre não recuperados; posicionamento de transição não avaliado.",
+      [headline, about],
+      "Explique na headline a transição para Propagandista Trainee; no Sobre, conecte competências transferíveis com experiências comprováveis."),
     dimension("evidence", "Experiências e resultados", 20, experiences.length ? 42 + Math.min(27, experiences.length * 8) + (measurable.length ? 18 : 0) : null,
       experiences.length ? "Experiências identificadas; resultados mensuráveis contam somente quando documentados." : "Experiências públicas não recuperadas.",
       experiences.slice(0, 3).map((item) => [item.role, item.company, item.description].filter(Boolean).join(" · ")),
       "Descreva experiências reais usando contexto, ação e resultado, sem inventar números."),
-    dimension("role_fit", "Competências transferíveis à carreira", 20, careerText.length >= 30 ? 36 + Math.min(48, matched.length * 8) : null,
+    dimension("role_fit", "Competências transferíveis para Propagandista", 20, careerText.length >= 30 ? 36 + Math.min(48, matched.length * 8) : null,
       careerText.length >= 30 ? "Sinais textuais de comunicação, relacionamento, saúde, organização e resultados; não é uma decisão de contratação." : "Dados profissionais insuficientes para avaliar competências transferíveis.",
       matched.length ? ["Sinais identificados: " + matched.join(", ")] : [headline],
       "Relacione experiências verdadeiras de atendimento, comunicação, aprendizado técnico ou relacionamento à atuação de propagandista."),
-    dimension("communication", "Comunicação e clareza", 15, headline || about ? 40 + (headline.length >= 30 ? 20 : 0) + (about.length >= 100 ? 24 : about ? 8 : 0) : null,
+    dimension("communication", "Comunicação para a nova carreira", 15, headline || about ? 40 + (headline.length >= 30 ? 20 : 0) + (about.length >= 100 ? 24 : about ? 8 : 0) : null,
       headline || about ? "Leitura da organização e clareza da narrativa escrita disponível." : "Texto público insuficiente para examinar a comunicação escrita.",
       [headline, about], "Revise a legibilidade, retire jargões e dê exemplos concretos de sua comunicação."),
     dimension("content", "Conteúdo profissional", 10, posts.length ? 45 + Math.min(25, posts.length * 5) + (posts.some((item) => item.text.length > 250) ? 12 : 0) : null,
       posts.length ? "Somente as publicações públicas efetivamente recuperadas foram analisadas." : "Publicações não recuperadas. Isso não significa que a pessoa não publique ou se comunique mal.",
       posts.slice(0, 3).map((item) => item.text + (item.url ? " · Fonte: " + item.url : "")), "Se fizer sentido para sua carreira, compartilhe aprendizados e experiências reais, sem obrigação de publicar diariamente."),
-    dimension("development", "Formação e desenvolvimento", 15, education.length || skills.length ? 43 + Math.min(30, education.length * 10) + Math.min(15, skills.length * 3) : null,
+    dimension("development", "Formação para a transição", 15, education.length || skills.length ? 43 + Math.min(30, education.length * 10) + Math.min(15, skills.length * 3) : null,
       education.length || skills.length ? "Formações, certificações e competências declaradas foram consideradas; ausência de registro não prova falta de qualificação." : "Formação e competências não recuperadas.",
       [...education.slice(0, 3), ...skills.slice(0, 2)], "Destaque estudos, formações e habilidades relevantes que você consegue comprovar."),
   ] satisfies EvidenceDimension[];
@@ -183,6 +283,8 @@ export function assessProfile(profile: PublicProfile | null, manualContext: stri
   const weak = [...evaluated].sort((a, b) => a.score - b.score);
   const strong = [...evaluated].sort((a, b) => b.score - a.score);
   const recommendations = unique([
+    ...(careerTransition.headlineStatus === "aligned" ? [] : ["Atualize o título do LinkedIn para comunicar claramente a transição para Propagandista Trainee, sem alegar experiência que ainda não tem."]),
+    "No Sobre do LinkedIn, conecte sua trajetória anterior ao objetivo de Propagandista Trainee usando exemplos reais.",
     ...weak.slice(0, 3).map((item) => item.action),
     ...dimensions.filter((item) => item.status === "not_evaluated").slice(0, 2).map((item) => "Complete os dados de " + item.label.toLowerCase() + " para permitir avaliação."),
   ], 6);
@@ -195,6 +297,7 @@ export function assessProfile(profile: PublicProfile | null, manualContext: stri
   return {
     profileName: p?.name || "",
     headline,
+    careerTransition,
     overallScore,
     scoreCoverage: sourced ? scoreCoverage : 0,
     classification: overallScore === null ? "Dados insuficientes para nota geral" : overallScore >= 75 ? "Posicionamento bem evidenciado" : overallScore >= 55 ? "Boa base para desenvolver" : "Posicionamento em construção",
