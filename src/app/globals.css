@@ -2640,3 +2640,33 @@ body{min-height:100vh}
   .rebrandPlanDays article{background:#fff;page-break-inside:avoid;break-inside:avoid}
   .rebrandPlanPhase{page-break-inside:avoid}
 }
+
+/* ReBrand: career transition interpretation, not candidate selection. */
+.rebrandCareerTransition{margin:1.25rem 0;padding:1.35rem;background:#fff;border:1px solid #eed7e4;border-radius:22px;min-width:0}
+.rebrandTransitionHeader .sectionTag{font-size:.7rem}
+.rebrandTransitionHeader h3{font-size:1.4rem;color:#401d33;margin:.4rem 0 .45rem;line-height:1.2}
+.rebrandTransitionHeader>p{font-size:.86rem;color:#775869;line-height:1.5;margin:0 0 1rem}
+.rebrandHeadlineComparison{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem;margin:1rem 0}
+.rebrandHeadlineComparison>div{padding:1rem;background:#fff8fb;border:1px solid #f0dce5;border-radius:14px;min-width:0}
+.rebrandHeadlineComparison small{font-size:.71rem;color:#9f3265;letter-spacing:.03em;text-transform:uppercase;font-weight:850;display:block;margin-bottom:.5rem}
+.rebrandHeadlineComparison strong{font-size:1.01rem;line-height:1.45;color:#392135;display:block;overflow-wrap:anywhere}
+.rebrandHeadlineComparison p{font-size:.79rem;line-height:1.5;color:#765a6d;margin:.55rem 0 0}
+.rebrandHeadlineSuggestions{padding:1rem;border-radius:14px;background:#fdf4f9;border:1px solid #efd9e4}
+.rebrandHeadlineSuggestions h4,.rebrandTransitionColumns h4,.rebrandAboutTemplate h4{font-size:1.03rem;color:#792850;margin:0 0 .5rem}
+.rebrandHeadlineSuggestions>p{font-size:.77rem;color:#846476;line-height:1.5;margin:0 0 .7rem}
+.rebrandHeadlineOption{display:flex;align-items:center;justify-content:space-between;gap:.75rem;background:#fff;border:1px solid #efdbe6;border-radius:10px;padding:.75rem;margin:.55rem 0 0}
+.rebrandHeadlineOption span{font-size:.82rem;color:#422839;line-height:1.5;overflow-wrap:anywhere;min-width:0}
+.rebrandHeadlineOption button{border:1px solid #af3b70;background:#fff;color:#8b2454;border-radius:8px;padding:.42rem .6rem;white-space:nowrap;font-size:.75rem;cursor:pointer;font-weight:800}
+.rebrandHeadlineOption button:hover{background:#fff0f6}
+.rebrandTransitionColumns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin:1.25rem 0}
+.rebrandTransitionColumns>div{padding:1rem;border:1px solid #f0dce5;border-radius:14px}
+.rebrandTransitionColumns ul{margin:.55rem 0 0;padding-left:1.3rem;font-size:.84rem;color:#665162;line-height:1.65}
+.rebrandTransitionColumns li{margin-bottom:.45rem}
+.rebrandTransitionColumns p{font-size:.83rem;line-height:1.5;color:#715d69}
+.rebrandAboutTemplate{padding:1.05rem;border-left:3px solid #bc3576;background:#fff7fb;border-radius:6px 12px 12px 6px}
+.rebrandAboutTemplate p{white-space:pre-wrap;font-size:.85rem;line-height:1.65;margin:.65rem 0;color:#513445}
+.rebrandAboutTemplate small{display:block;color:#846978;font-size:.75rem;line-height:1.45}
+.rebrandTransitionDisclaimer{font-size:.75rem;line-height:1.5;color:#826a78;margin:1rem 0 0}
+@media(max-width:840px){.rebrandHeadlineComparison,.rebrandTransitionColumns{grid-template-columns:1fr}}
+@media(max-width:530px){.rebrandCareerTransition{padding:1rem}.rebrandHeadlineOption{align-items:flex-start;flex-direction:column}.rebrandHeadlineOption button{align-self:flex-end}}
+@media print{.rebrandHeadlineOption button{display:none!important}.rebrandHeadlineOption,.rebrandTransitionColumns>div{break-inside:avoid}}
