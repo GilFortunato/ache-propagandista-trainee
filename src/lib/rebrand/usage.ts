@@ -73,3 +73,15 @@ export async function setManusTaskResult(taskId: string, identity: Identity, sta
     [status,JSON.stringify(result),taskId,identity.id],
   );
 }
+
+/** Store one plan in the existing report JSON. No schema change or additional Manus task. */
+export async function persist30DayPlan(taskId: string, identity: Identity, plan: unknown) {
+  const sql = db();
+  const rows = await sql.query(
+    "UPDATE ache_rebrand_tasks SET result_json=jsonb_set(result_json, '{plan30Days}', $3::jsonb, true),updated_at=now() " +
+    "WHERE task_id=$1 AND user_id=$2 AND status='complete' " +
+    "AND result_json->'plan30Days' IS NULL RETURNING task_id",
+    [taskId, identity.id, JSON.stringify(plan)],
+  );
+  return rows.length > 0;
+}
