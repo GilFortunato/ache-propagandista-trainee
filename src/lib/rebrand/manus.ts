@@ -171,5 +171,23 @@ export async function pollManusResearch(taskId: string, profileUrl: string):
       });
     } catch { return false; }
   }).slice(0, 5);
-  return { state: "complete", profile: result, posts: verifiedPosts };
+  // A role must also have public evidence on the same profile page. A name
+  // plus an unrelated job description is not sufficient for a career score.
+  const publicProfileSnippets = claimedSources
+    .filter((source) => publicLinkedInSource(source, profileUrl))
+    .map((source) => {
+      const row = safeRecord(source);
+      return typeof row?.snippet === "string" ? row.snippet.toLocaleLowerCase("pt-BR") : "";
+    });
+  const verifiedExperiences = (Array.isArray(result.experiences) ? result.experiences : [])
+    .filter((candidate) => {
+      const experience = safeRecord(candidate);
+      if (!experience) return false;
+      const role = typeof experience.role === "string" ? experience.role.trim().toLocaleLowerCase("pt-BR") : "";
+      const company = typeof experience.company === "string" ? experience.company.trim().toLocaleLowerCase("pt-BR") : "";
+      if (!role || !company) return false;
+      return publicProfileSnippets.some((snippet) => snippet.includes(role) || snippet.includes(company));
+    }).slice(0, 20);
+  const documented = { ...result, experiences: verifiedExperiences };
+  return { state: "complete", profile: documented, posts: verifiedPosts };
 }
