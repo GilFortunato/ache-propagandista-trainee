@@ -207,7 +207,11 @@ export function RebrandLinkedInDiagnostic() {
   }
 
   async function generatePlan() {
-    if (!completedTaskId || !result || generatingPlan || plan30) return;
+    if (generatingPlan || plan30) return;
+    if (!completedTaskId || !result) {
+      setPlanError("Não foi possível recuperar a identificação do diagnóstico anterior. Atualize a página para buscá-lo novamente; isso não usa uma nova tentativa.");
+      return;
+    }
     setPlanError(null);
     setGeneratingPlan(true);
     try {
@@ -431,7 +435,7 @@ export function RebrandLinkedInDiagnostic() {
               {!plan30 ? (
                 <div className="rebrandPlanStart">
                   <p>Transforme os pontos de melhoria em tarefas de 15 a 40 minutos por dia, com uma entrega concreta e revisão do progresso.</p>
-                  <button type="button" className="rebrandPlanGenerate" disabled={!completedTaskId || generatingPlan} onClick={() => void generatePlan()}>
+                  <button type="button" className="rebrandPlanGenerate" disabled={generatingPlan} onClick={() => void generatePlan()}>
                     {generatingPlan ? <><LoaderCircle className="spin" size={17}/> Preparando 30 dias...</> : <><Sparkles size={17}/> Gerar meu plano de 30 dias</>}
                   </button>
                   {planError && <p className="rebrandError" role="alert">{planError}</p>}
