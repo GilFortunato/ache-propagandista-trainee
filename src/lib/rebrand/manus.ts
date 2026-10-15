@@ -156,16 +156,18 @@ export async function pollManusResearch(taskId: string, profileUrl: string):
   const verifiedPosts = citedPosts.filter((candidate) => {
     const item = safeRecord(candidate);
     if (!item || typeof item.text !== "string" || item.text.trim().length < 35 || typeof item.url !== "string") return false;
+    const postText = item.text;
+    const postUrl = item.url;
     try {
-      const url = new URL(item.url);
+      const url = new URL(postUrl);
       const sourceValid = url.protocol === "https:"
         && (url.hostname === "linkedin.com" || url.hostname === "www.linkedin.com")
         && (url.pathname.startsWith("/posts/") || url.pathname.startsWith("/feed/update/"));
       if (!sourceValid) return false;
       return claimedSources.some((candidateSource) => {
         const source = safeRecord(candidateSource);
-        if (!source || source.url !== item.url || typeof source.snippet !== "string") return false;
-        const words = item.text.toLocaleLowerCase("pt-BR").split(/[^\p{L}\p{N}]+/u).filter((word) => word.length > 4);
+        if (!source || source.url !== postUrl || typeof source.snippet !== "string") return false;
+        const words = postText.toLocaleLowerCase("pt-BR").split(/[^\p{L}\p{N}]+/u).filter((word) => word.length > 4);
         const snippet = source.snippet.toLocaleLowerCase("pt-BR");
         return words.length >= 3 && words.slice(0, 12).filter((word) => snippet.includes(word)).length >= 3;
       });
